@@ -1,6 +1,7 @@
 
 const API_URL = process.env.REACT_APP_API;
-import Header from './Header';
+import Header from './components/Header.js';
+import searchBar from './components/searchBar.js';
 
 
 function App() {
@@ -8,7 +9,6 @@ function App() {
     <>
     <div>
       <Header/>
-      <div>Hello world</div>
       <searchBar/>
     </div>
     </>

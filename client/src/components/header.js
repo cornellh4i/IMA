@@ -11,7 +11,7 @@ function Title({ value }) {
 
 function Header() {
     return (
-      <div className="header">
+      <div className="Header">
           <img src="h4hilogo.png" alt="Company Logo" className="logo" />
           <Title value="Alumni Archive" />
           <Title value="Directory" />

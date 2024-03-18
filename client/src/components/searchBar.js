@@ -1,7 +1,7 @@
 import * as React from 'react';
 import "./SearchBar.css";
 
-const [searchInput, setSearchInput] = useState("")
+// const [searchInput, setSearchInput] = useState("")
 
 function handleChange(event){
     event.preventDefault();
