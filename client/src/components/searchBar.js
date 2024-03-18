@@ -11,12 +11,15 @@ function handleChange(event){
 function searchBar(){
     return <>
 	<div>
-        <input type = "text" 
-        placeholder = "Search"
-        onchange = "{handleChange}"
-        value = "{searchInput}">
-
-        </input>
+        <form id = "form">
+            <input type = "text" 
+            placeholder = "Search"
+            onchange = "{handleChange}"
+            value = "{searchInput}">
+            </input>
+            <button>Search</button>
+        </form>
+        
     </div>
      </>
 }

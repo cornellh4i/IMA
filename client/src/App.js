@@ -7,7 +7,7 @@ function App() {
     <>
     <div>
       <div>Hello world</div>
-
+      <searchBar/>
     </div>
     </>
   )
