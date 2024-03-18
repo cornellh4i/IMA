@@ -9,7 +9,7 @@ function App() {
     <div>
       <Header/>
       <div>Hello world</div>
-
+      <searchBar/>
     </div>
     </>
   )
