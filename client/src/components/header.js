@@ -1,11 +1,23 @@
 import * as React from 'react';
 import "./Header.css";
 
+function Title({ value }) {
+  function handleClick() {
+    console.log('clicked!');
+  }
+  return <button className="title" onClick = {handleClick}>{value}</button>;
 
-function header() {
-    return <>
-	<div>your code goes here</div>
-     </>
 }
 
-export default header
+function Header() {
+    return (
+      <div className="header">
+          <img src="h4hilogo.png" alt="Company Logo" className="logo" />
+          <Title value="Alumni Archive" />
+          <Title value="Directory" />
+          <img src="tools_icon.png" alt="Tools icon" className="logo" />
+      </div>
+  );
+}
+
+export default Header;
