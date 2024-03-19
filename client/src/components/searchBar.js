@@ -3,20 +3,20 @@ import "./SearchBar.css";
 
 // const [searchInput, setSearchInput] = useState("")
 
-function handleChange(event){
-    event.preventDefault();
-    setSearchInput(event.target.value);
-}
+// function handleChange(event){
+//     event.preventDefault();
+//     setSearchInput(event.target.value);
+// }
 
 function searchBar(){
     return <>
 	<div>
         <form id = "form">
-            <input type = "text" 
+            {/* <input type = "text" 
             placeholder = "Search"
             onchange = "{handleChange}"
             value = "{searchInput}">
-            </input>
+            </input> */}
             <button>Search</button>
         </form>
         
