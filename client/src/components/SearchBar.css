@@ -1,23 +1,53 @@
-form {
-    background-color: #D4D3D3;
-    width: 300px;
+#searchBar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#form {
+    width: 500px;
     height: 44px;
-    border-radius: 5px;
+    margin-top: 20px;
+    margin-left: 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
   }
 
-  input {
-    all: unset;
-    font: 16px system-ui;
-    color: #fff;
-    height: 100%;
-    width: 100%;
-    padding: 6px 10px;
+  #searchInput {
+    background-color: #E8E8E8;
+    color: black;
+    height: 30px;
+    width: 500px;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-family: "Arial", sans-serif;
+    font-weight: lighter;
+    border-color: transparent;
+    font-size: 17px;
   }
 
-  ::placeholder {
-    color: #fff;
-    opacity: 0.7; 
+ #submit {
+    background-color: white;
+    width: 130px;
+    border: 1px solid #AFD0FF;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 20px;
+    font-size: 17px;
+    font-family: "Arial", sans-serif;
+    font-weight: lighter;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+  #submit:hover{
+    background-color: #AFD0FF;
+  }
+
+  #submit:placeholder {
+    color: black;
+    opacity: 0.8; 
   }

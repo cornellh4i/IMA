@@ -1,8 +1,6 @@
 import * as React from 'react';
 import "./Header.css";
 
-
-
 function Header() {
   function Title({ value }) {
     function handleClick() {
