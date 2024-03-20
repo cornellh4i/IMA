@@ -1,4 +1,4 @@
-import Header from './components/Header.js';
+import Header from './components/header.js';
 import SearchBar from './components/searchBar.js';
 const API_URL = process.env.REACT_APP_API;
 
