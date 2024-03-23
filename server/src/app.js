@@ -17,8 +17,8 @@ mongoose.connect("mongodb+srv://h4i-ima:h4iIMA2024@ima.pejjbfw.mongodb.net/", {
         console.log(err)
     }
 })
-			app.listen(3000, () => {
-    				console.log("on port 3000")
+app.listen(3000, () => {
+    console.log("on port 3000")
 })
 
 const usersSchema = new Schema({
