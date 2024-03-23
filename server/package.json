@@ -8,8 +8,9 @@
   "license": "ISC",
   "dependencies": {
     "cors": "^2.8.5",
-    "express": "^4.18.1",
-    "mongoose": "^6.6.5",
+    "express": "^4.19.1",
+    "mongodb": "^6.5.0",
+    "mongoose": "^6.12.7",
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.0.0",
     "swagger-ui-express": "^4.5.0"
