@@ -1,12 +1,13 @@
-import Sidebar from './components (rs2443)/Sidebar'
+import Sidebar from "./components/Sidebar";
 const API_URL = process.env.REACT_APP_API;
 
-
 function App() {
-  return(
+  return (
     <>
-    <Sidebar/>
+      <div class="container">
+        <Sidebar />
+      </div>
     </>
-  )
+  );
 }
 export default App;
