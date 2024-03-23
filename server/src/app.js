@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -19,3 +20,21 @@ mongoose.connect(
 app.listen(3000, () => {
   console.log("on port 3000");
 });
+
+
+const { Schema } = mongoose;
+
+const userSchema = new Schema({
+  name: String, 
+  email: String,
+  id: Number
+});
+const users = mongoose.model('users', userSchema);
+
+router.post('ADD', (req, res) => {
+  const data = new userSchema({
+      name: req.body.name,
+      email: req.body.email,
+      id: req.body.id,
+  })
+})
