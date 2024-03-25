@@ -41,9 +41,24 @@ const userSchema = new mongoose.Schema({
         }
         else{
             console.log(result)
+            res.send(result)
         }
     })
   })
 
+
+ //Get all Method
+ app.get('/getMember', function (req, res) {
+
+    users.find(function (err, docs) { 
+        if (err){ 
+            console.log(err); 
+        } 
+        else{ 
+            console.log(docs); 
+            res.send(docs)
+        } 
+    }); 
+})
 
 
