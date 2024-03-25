@@ -2,7 +2,6 @@ const express=require('express');
 const app = express();
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-const users = mongoose.model('users', usersSchema);
 
 
 app.use(express.json())
@@ -21,15 +20,30 @@ app.listen(3000, () => {
     console.log("on port 3000")
 })
 
-const usersSchema = new Schema({
+const userSchema = new mongoose.Schema({
     name: String, // String is shorthand for {type: String}
     email: String,
-    id: Number,
-    comments: [{ body: String, date: Date }],
-    date: { type: Date, default: Date.now },
-    hidden: Boolean,
-    meta: {
-      votes: Number,
-      favs: Number
-    }
+    id: Number
   });
+
+  const users = mongoose.model('users', userSchema);
+
+  app.post('/addMember', function (req, res) {
+    const data = new users({
+        name: req.body.name,
+        email: req.body.email,
+        id: req.body.id
+    })
+
+    data.save(function(err,result){
+        if (err){
+            console.log(err);
+        }
+        else{
+            console.log(result)
+        }
+    })
+  })
+
+
+
