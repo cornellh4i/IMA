@@ -47,14 +47,15 @@ app.post("/addMember", async (req, res) => {
 //deleteAll function, have to test
 app.delete("/deleteAll", (req, res) => {
   console.log("trying to delete docs");
-  try {
-    const data = users.deleteMany();
-    if (data.deletedCount === 0) {
-      res.send("No documents found to delete");
-    } else {
-      res.send(`All data deleted.`);
-    }
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  users
+    .deleteMany({})
+    .then((result) => {
+      console.log(`${result.deletedCount} documents were deleted.`);
+    })
+    .catch((error) => {
+      console.error(`An error occurred: ${error.message}`);
+    });
+  console.log("skip");
 });
+
+//deleteAll function part 2
