@@ -44,15 +44,17 @@ app.post("/addMember", async (req, res) => {
   }
 });
 
-//delete member function, have to test
-router.delete('/delete/:id', async (req, res) => {
+//deleteAll function, have to test
+app.delete("/deleteAll", (req, res) => {
+  console.log("trying to delete docs");
   try {
-      const id = req.params.id;
-      const data = await Model.findByIdAndDelete(id)
-      res.send(`${data.name} data deleted.`)
+    const data = users.deleteMany();
+    if (data.deletedCount === 0) {
+      res.send("No documents found to delete");
+    } else {
+      res.send(`All data deleted.`);
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
   }
-  catch (error) {
-      res.status(400).json({ message: error.message })
-  }
-})
-
+});
