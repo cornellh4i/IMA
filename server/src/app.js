@@ -44,6 +44,15 @@ app.post("/addMember", async (req, res) => {
   }
 });
 
-//add try and catch block
-
 //delete member function, have to test
+router.delete('/delete/:id', async (req, res) => {
+  try {
+      const id = req.params.id;
+      const data = await Model.findByIdAndDelete(id)
+      res.send(`${data.name} data deleted.`)
+  }
+  catch (error) {
+      res.status(400).json({ message: error.message })
+  }
+})
+
