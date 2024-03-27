@@ -27,9 +27,10 @@ const userSchema = new mongoose.Schema({
   id: Number,
 });
 
+//user model
 const users = mongoose.model("users", userSchema);
 
-//add member function, have to test
+//add member function
 app.post("/addMember", async (req, res) => {
   const data = new users({
     name: req.body.name,
@@ -44,18 +45,20 @@ app.post("/addMember", async (req, res) => {
   }
 });
 
-//deleteAll function, have to test
+//deleteAll function
 app.delete("/deleteAll", (req, res) => {
   console.log("trying to delete docs");
   users
     .deleteMany({})
     .then((result) => {
       console.log(`${result.deletedCount} documents were deleted.`);
+      res
+        .status(200)
+        .json({ message: `${result.deletedCount} documents were deleted.` });
     })
     .catch((error) => {
       console.error(`An error occurred: ${error.message}`);
+      res.status(500).json({ message: `An error occurred: ${error.message}` });
     });
   console.log("skip");
 });
-
-//deleteAll function part 2
