@@ -1,0 +1,55 @@
+.container {
+  padding: 10px;
+}
+
+#sidebar {
+  width: 290px;
+  height: 100vh; /* 100% of the viewheight, change after merge of the header and search */
+  flex-shrink: 0;
+  border-radius: 30px;
+  border: 2px solid #72aaff;
+  background: var(--M3-sys-light-on-primary, #fff);
+  display: flex;
+  flex-direction: column;
+  padding-top: 10px;
+}
+
+/* format for the categories */
+.component {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 20px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.component h2 {
+  margin: 0;
+  font-size: 20px;
+  font-family: "Roboto", sans-serif;
+  font-size: 18px;
+  color: #000;
+  font-weight: 525;
+  font-style: normal;
+  line-height: 48px;
+}
+
+.component svg {
+  /* Style for the chevron icon */
+  transition: transform 0.3s ease;
+  width: 24px;
+  height: 24px;
+}
+
+.component svg.open {
+  transform: rotate(90deg);
+}
+
+.dropdown {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  padding: 0px 20px 20px;
+  align-items: self-start;
+}

@@ -1,15 +1,13 @@
-
+import Sidebar from "./components/Sidebar";
 const API_URL = process.env.REACT_APP_API;
 
-
 function App() {
-  return(
+  return (
     <>
-    <div>
-      <div>Hello world</div>
-
-    </div>
+      <div class="container">
+        <Sidebar />
+      </div>
     </>
-  )
+  );
 }
 export default App;
