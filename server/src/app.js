@@ -62,3 +62,20 @@ app.delete("/deleteAll", (req, res) => {
     });
   console.log("skip");
 });
+
+
+ //Get all Method
+ app.get('/getMember', function (req, res) {
+
+    users.find(function (err, docs) { 
+        if (err){ 
+            console.log(err); 
+        } 
+        else{ 
+            console.log(docs); 
+            res.send(docs)
+        } 
+    }); 
+})
+
+
