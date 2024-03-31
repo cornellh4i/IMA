@@ -25,9 +25,9 @@
   .logo{
     background-color: #B0D0FF;
     margin: 0;
-    align-items: right;
     color: #000;
     font-weight: 600;
-    font-style: poppins;
-    line-height: 52px;
+    line-height: 45px;
+    width: 45px;
+    height: 45px;
   }
