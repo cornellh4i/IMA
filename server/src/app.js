@@ -62,3 +62,27 @@ app.delete("/deleteAll", (req, res) => {
     });
   console.log("skip");
 });
+
+//edit function
+app.put("/editMember/:id", async (req, res) => {
+  const { id } = req.params;
+  const updateData = {
+    name: req.body.name,
+    email: req.body.email,
+  };
+
+  try {
+    const updatedUser = await users.findOneAndUpdate(
+      { id: id }, //custom id that was created,
+      { $set: updateData }, //passing in the updated dataset
+      { new: true } //returns the updated dataset
+    );
+    if (!updatedUser) {
+      return res.status(404).send("Member not found with the given id");
+    }
+    res.json(updatedUser);
+  } catch (error) {
+    console.error("Error in updating member: ", error);
+    res.status(400).json({ message: error.message });
+  }
+});
