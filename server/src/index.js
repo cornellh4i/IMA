@@ -23,6 +23,8 @@ app.listen(3000, () => {
 
 const userSchema = new mongoose.Schema({
   name: String,
+  year: String,
+  role: String,
   email: String,
   id: Number,
 });
@@ -34,6 +36,8 @@ const users = mongoose.model("users", userSchema);
 app.post("/addMember", async (req, res) => {
   const data = new users({
     name: req.body.name,
+    year: req.body.class,
+    role: req.body.currentPosition,
     email: req.body.email,
     id: req.body.id,
   });
@@ -63,8 +67,7 @@ app.delete("/deleteAll", (req, res) => {
   console.log("skip");
 });
 
-
- //Get all Method
+//  Get all Method
  app.get('/getMember', function (req, res) {
 
     users.find(function (err, docs) { 
@@ -77,5 +80,6 @@ app.delete("/deleteAll", (req, res) => {
         } 
     }); 
 })
+
 
 
