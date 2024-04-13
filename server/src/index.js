@@ -81,7 +81,6 @@ app.delete("/deleteAll", (req, res) => {
     }); 
 })
 
-
 app.get('/getMemberByName', function (req, res) {
 
   users.find({ name: req.body.name }, function (err, docs) {
