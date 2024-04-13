@@ -17,7 +17,10 @@ function Card(props){
           </div>
           <div className="bottom">
             <h3 className="detail">{props.school}</h3>
+            &#160;
             <h3 className = "detail">{props.career}</h3>
+          {/* <button>startups</button>
+          <button>research</button> */}
           </div>
         </div>
         </div>
