@@ -81,5 +81,26 @@ app.delete("/deleteAll", (req, res) => {
     }); 
 })
 
+// filter members by year 
+router.get('/filterByYear', async (req, res) => {
+  try {
+    const { year } = req.body;
+    const users = await User.find({ year: { $regex: year, $options: 'i' } });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: `An error occurred: ${error.message}` });
+  }
+});
+
+// filter members by role 
+router.get('/filterByYear', async (req, res) => {
+  try {
+    const { role } = req.body;
+    const users = await User.find({ role: { $regex: role, $options: 'i' } });
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: `An error occurred: ${error.message}` });
+  }
+});
 
 
