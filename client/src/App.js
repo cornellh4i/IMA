@@ -12,9 +12,11 @@ function createCard(contact) {
     <Card
       key={contact.id}
       name={contact.name}
+      year={contact.year}
+      role={contact.role}
       image={contact.imgURL}
-      school={contact.school}
-      career={contact.career}
+      // school={contact.school}
+      // career={contact.career}
     />
   );
 }
