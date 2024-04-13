@@ -82,7 +82,7 @@ app.delete("/deleteAll", (req, res) => {
 })
 
 
-app.post('/getMemberByName', function (req, res) {
+app.get('/getMemberByName', function (req, res) {
 
   users.find({ name: req.body.name }, function (err, docs) {
       if (err) {
@@ -94,11 +94,3 @@ app.post('/getMemberByName', function (req, res) {
       }
   });
 });
-
-//Similar to the getMember endpoint that you have previously worked on, implement the getMemberByName endpoint
-// The endpoint will take in a JSON with one field, name, i.e. 
-//req.body.name will be the parameter to the find mongoose method
-// We want the returned users to have name that matches the 
-//search query in a regular expression patter. Refer to this link 
-//for more information: https://stackoverflow.com/questions/38497650/how-to-find-items-using-regex-in-mongoose
-// Test the endpoint in Postman
