@@ -36,8 +36,8 @@ const users = mongoose.model("users", userSchema);
 app.post("/addMember", async (req, res) => {
   const data = new users({
     name: req.body.name,
-    year: req.body.class,
-    role: req.body.currentPosition,
+    year: req.body.year,
+    role: req.body.role,
     email: req.body.email,
     id: req.body.id,
   });
@@ -82,4 +82,23 @@ app.delete("/deleteAll", (req, res) => {
 })
 
 
+app.post('/getMemberByName', function (req, res) {
 
+  users.find({ name: req.body.name }, function (err, docs) {
+      if (err) {
+          console.log(err);
+          res.status(500).send('Error retrieving members');
+      } else {
+          console.log(docs);
+          res.send(docs);
+      }
+  });
+});
+
+//Similar to the getMember endpoint that you have previously worked on, implement the getMemberByName endpoint
+// The endpoint will take in a JSON with one field, name, i.e. 
+//req.body.name will be the parameter to the find mongoose method
+// We want the returned users to have name that matches the 
+//search query in a regular expression patter. Refer to this link 
+//for more information: https://stackoverflow.com/questions/38497650/how-to-find-items-using-regex-in-mongoose
+// Test the endpoint in Postman
