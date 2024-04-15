@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   year: String,
   role: String,
   email: String,
-  id: Number,
+  m_id: Number,
 });
 
 //user model
@@ -35,11 +35,11 @@ const users = mongoose.model("users", userSchema);
 //add member function
 app.post("/addMember", async (req, res) => {
   const data = new users({
+    m_id: req.body.m_id,
     name: req.body.name,
     year: req.body.year,
     role: req.body.role,
     email: req.body.email,
-    id: req.body.id,
   });
   try {
     const savedData = await data.save();
@@ -82,16 +82,18 @@ app.delete("/deleteAll", (req, res) => {
 })
 
 //edit function
-app.put("/editMember/:id", async (req, res) => {
-  const { id } = req.params;
+app.put("/editMember/:m_id", async (req, res) => {
+  const { m_id } = req.params;
   const updateData = {
     name: req.body.name,
     email: req.body.email,
+    year: req.body.year,
+    role: req.body.role
   };
 
   try {
     const updatedUser = await users.findOneAndUpdate(
-      { id: id }, //custom id that was created,
+      { m_id: m_id }, //custom id that was created,
       { $set: updateData }, //passing in the updated dataset
       { new: true } //returns the updated dataset
     );
