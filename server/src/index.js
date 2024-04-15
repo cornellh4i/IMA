@@ -36,8 +36,8 @@ const users = mongoose.model("users", userSchema);
 app.post("/addMember", async (req, res) => {
   const data = new users({
     name: req.body.name,
-    year: req.body.class,
-    role: req.body.currentPosition,
+    year: req.body.year,
+    role: req.body.role,
     email: req.body.email,
     id: req.body.id,
   });
