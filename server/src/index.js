@@ -23,6 +23,8 @@ app.listen(3000, () => {
 
 const userSchema = new mongoose.Schema({
   name: String,
+  year: String,
+  role: String,
   email: String,
   id: Number,
 });
@@ -34,6 +36,8 @@ const users = mongoose.model("users", userSchema);
 app.post("/addMember", async (req, res) => {
   const data = new users({
     name: req.body.name,
+    year: req.body.year,
+    role: req.body.role,
     email: req.body.email,
     id: req.body.id,
   });
@@ -63,26 +67,19 @@ app.delete("/deleteAll", (req, res) => {
   console.log("skip");
 });
 
-//edit function
-app.put("/editMember/:id", async (req, res) => {
-  const { id } = req.params;
-  const updateData = {
-    name: req.body.name,
-    email: req.body.email,
-  };
+//  Get all Method
+ app.get('/getMember', function (req, res) {
 
-  try {
-    const updatedUser = await users.findOneAndUpdate(
-      { id: id }, //custom id that was created,
-      { $set: updateData }, //passing in the updated dataset
-      { new: true } //returns the updated dataset
-    );
-    if (!updatedUser) {
-      return res.status(404).send("Member not found with the given id");
-    }
-    res.json(updatedUser);
-  } catch (error) {
-    console.error("Error in updating member: ", error);
-    res.status(400).json({ message: error.message });
-  }
-});
+    users.find(function (err, docs) { 
+        if (err){ 
+            console.log(err); 
+        } 
+        else{ 
+            console.log(docs); 
+            res.send(docs)
+        } 
+    }); 
+})
+
+
+
