@@ -1,19 +1,14 @@
-import Header from './components/header.js';
-import Sidebar from "./components/Sidebar";
-import SearchBar from './components/searchBar.js';
-import './App.css'
+import SideBar from "./components/Sidebar.js";
+import AddMemberPage from "./components/AddMemberPage.js";
 const API_URL = process.env.REACT_APP_API;
 
 function App() {
   return (
     <>
-    <div class = "container">
-      <Header/>
-      <div class = "top">
-        <Sidebar />
-        <SearchBar/>
+      <div>
+        {/* <SideBar/> */}
+        <AddMemberPage />
       </div>
-    </div>
     </>
   );
 }
