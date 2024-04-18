@@ -68,39 +68,39 @@ app.delete("/deleteAll", (req, res) => {
 });
 
 //  Get all Method
- app.get('/getMember', function (req, res) {
-
-    users.find(function (err, docs) { 
-        if (err){ 
-            console.log(err); 
-        } 
-        else{ 
-            console.log(docs); 
-            res.send(docs)
-        } 
-    }); 
-})
-
-// filter members by year 
-router.get('/filterByYear', async (req, res) => {
-  try {
-    const { year } = req.body;
-    const users = await User.find({ year: { $regex: year, $options: 'i' } });
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: `An error occurred: ${error.message}` });
-  }
+app.get("/getMember", function (req, res) {
+  users.find(function (err, docs) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
 });
 
-// filter members by role 
-router.get('/filterByYear', async (req, res) => {
-  try {
-    const { role } = req.body;
-    const users = await User.find({ role: { $regex: role, $options: 'i' } });
-    res.json(users);
-  } catch (error) {
-    res.status(500).json({ message: `An error occurred: ${error.message}` });
-  }
+// get members by year
+app.get("/getMemberByYear", async (req, res) => {
+  users.find({ year: req.body.year }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retreving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
 });
 
-
+// get members by role
+app.get("/getMemberByRole", async (req, res) => {
+  users.find({ role: req.body.role }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retreving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
+});

@@ -47,7 +47,7 @@
 .sectionLabel {
   font-size: 1.5rem;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 525;
   font-family: Roboto;
   margin-bottom: 1.5rem;
   border-radius: 15px;
@@ -85,7 +85,7 @@
 
 .field {
   display: block;
-  width: 86%;
+  width: 85%;
   padding: 0.75rem;
   border: 1.5px solid #ccc;
   border-radius: 6px;

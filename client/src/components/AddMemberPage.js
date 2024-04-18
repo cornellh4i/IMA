@@ -1,10 +1,10 @@
 import React from "react";
 import "./addMemberPage.css";
-import { useState } from "react";
+import { useState, useRef } from "react";
 
 function AddMemberPage() {
-  const defaultImage = "/assets/defaultprofilepic_icon.png"; //case for no image upload
-  const [image, setImage] = useState(defaultImage);
+  const [image, setImage] = useState(null);
+  const inputRef = useRef(null);
 
   const handleImageChange = (e) => {
     if (e.target.files && e.target.files[0]) {
