@@ -13,6 +13,7 @@
     "mongoose": "^8.2.3",
     "react": "^18.0.0-rc.3",
     "react-dom": "^18.0.0-rc.3",
+    "react-image-crop": "^11.0.5",
     "react-scripts": "^5.0.0",
     "styled-components": "^5.3.5"
   },

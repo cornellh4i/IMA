@@ -68,54 +68,39 @@ app.delete("/deleteAll", (req, res) => {
 });
 
 //  Get all Method
- app.get('/getMember', function (req, res) {
-
-    users.find(function (err, docs) { 
-        if (err){ 
-            console.log(err); 
-        } 
-        else{ 
-            console.log(docs); 
-            res.send(docs)
-        } 
-    }); 
-})
-
-//edit function
-app.put("/editMember/:m_id", async (req, res) => {
-  const { m_id } = req.params;
-  const updateData = {
-    name: req.body.name,
-    email: req.body.email,
-    year: req.body.year,
-    role: req.body.role
-  };
-
-  try {
-    const updatedUser = await users.findOneAndUpdate(
-      { m_id: m_id }, //custom id that was created,
-      { $set: updateData }, //passing in the updated dataset
-      { new: true } //returns the updated dataset
-    );
-    if (!updatedUser) {
-      return res.status(404).send("Member not found with the given id");
+app.get("/getMember", function (req, res) {
+  users.find(function (err, docs) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log(docs);
+      res.send(docs);
     }
-    res.json(updatedUser);
-  } catch (error) {
-    console.error("Error in updating member: ", error);
-    res.status(400).json({ message: error.message });
-  }
+  });
 });
 
-app.get('/getMemberByName', function (req, res) {
+// get members by year
+app.get("/getMemberByYear", async (req, res) => {
+  users.find({ year: req.body.year }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retreving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
+});
 
-  users.find({ name: req.body.name }, function (err, docs) {
-      if (err) {
-          console.log(err);
-          res.status(500).send('Error retrieving members');
-      } else {
-          console.log(docs);
-          res.send(docs);
-      }
+// get members by role
+app.get("/getMemberByRole", async (req, res) => {
+  users.find({ role: req.body.role }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retreving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
   });
 });

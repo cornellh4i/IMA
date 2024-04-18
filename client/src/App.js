@@ -1,7 +1,5 @@
-import Header from './components/header.js';
-import Sidebar from "./components/Sidebar";
-import SearchBar from './components/searchBar.js';
-import './App.css'
+import SideBar from "./components/Sidebar.js";
+import AddMemberPage from "./components/AddMemberPage.js";
 import Card from "./components/Card";
 import contacts from "./components/contacts";
 
@@ -24,18 +22,15 @@ function createCard(contact) {
 function App() {
   return (
     <>
-    <div class = "container">
-      <Header/>
-      <div class = "top">
-        <Sidebar />
+      <div>
+        {/* <SideBar/> */}
         <div class = "middle">
-        <SearchBar/>
+        <AddMemberPage />
         <div class = "cards">
       {contacts.map(createCard)}
       </div>
         </div>
-      </div>
-      {/* {contacts.map(createCard)} */}
+        {/* {contacts.map(createCard)} */}
     </div>
     </>
   );
