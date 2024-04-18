@@ -1,22 +1,13 @@
 import * as React from 'react';
 import "./SearchBar.css";
 
-// const [searchInput, setSearchInput] = React.useState("")
-
-// function handleChange(event){
-//     event.preventDefault();
-//     setSearchInput(event.target.value);
-// }
-
-function searchBar(){
+function SearchBar(){
     return (
-        <div class = "searchBar">
+        <div className = "searchBar">
             <form id = "form">
                 <input type = "text" 
                 id = "searchInput"
                 placeholder = "Search"
-                // onchange = "{handleChange}"
-                // value = "{searchInput}"
                 >
                 </input>
                 <button id = "submit">Search</button>
@@ -26,4 +17,4 @@ function searchBar(){
 	
 }
 
-export default searchBar;
+export default SearchBar;

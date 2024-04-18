@@ -1,8 +1,10 @@
-import SideBar from "./components/Sidebar.js";
+import Sidebar from "./components/Sidebar.js";
 import AddMemberPage from "./components/AddMemberPage.js";
+import SearchBar from "./components/searchBar.js"
 import Card from "./components/Card";
 import contacts from "./components/contacts";
-
+import Header from "./components/header.js"
+import "./App.css"
 const API_URL = process.env.REACT_APP_API;
 
 function createCard(contact) {
@@ -22,15 +24,18 @@ function createCard(contact) {
 function App() {
   return (
     <>
-      <div>
-        {/* <SideBar/> */}
+    <div class = "container">
+      <Header/>
+      <div class = "top">
+        <Sidebar />
         <div class = "middle">
-        <AddMemberPage />
+        <SearchBar/>
         <div class = "cards">
       {contacts.map(createCard)}
       </div>
         </div>
-        {/* {contacts.map(createCard)} */}
+      </div>
+      {/* {contacts.map(createCard)} */}
     </div>
     </>
   );

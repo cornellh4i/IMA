@@ -56,8 +56,8 @@ function Sidebar() {
   };
 
   return (
-    <div className="container">
-      <div id="sidebar">
+    // <div className="container">
+      <div className="sidebar">
         {Object.entries(categories).map(([key, values]) => (
           <div
             key={key}
@@ -90,7 +90,7 @@ function Sidebar() {
           </div>
         ))}
       </div>
-    </div>
+    // </div>
   );
 }
 
