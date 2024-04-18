@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
   year: String,
   role: String,
   email: String,
-  id: Number,
+  m_id: Number,
 });
 
 //user model
@@ -35,11 +35,11 @@ const users = mongoose.model("users", userSchema);
 //add member function
 app.post("/addMember", async (req, res) => {
   const data = new users({
+    m_id: req.body.m_id,
     name: req.body.name,
-    year: req.body.class,
-    role: req.body.currentPosition,
+    year: req.body.year,
+    role: req.body.role,
     email: req.body.email,
-    id: req.body.id,
   });
   try {
     const savedData = await data.save();
