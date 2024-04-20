@@ -10,7 +10,7 @@ function Card(props){
     function Avatar(props) {
         return <img class="fit-img" src={props.image} alt="avatar_img" />;
       }      
-      function Modal({value}){
+      function Modal({value}, props){
         const [modal, setModal] = useState(false);
 
         const toggleModal = () => {
@@ -25,7 +25,7 @@ function Card(props){
 
         return (
           <>
-            <button onClick={toggleModal} className="btn-modal">
+            <button onClick={toggleModal} className="bottombutton">
               {value}
             </button>
       
@@ -33,7 +33,7 @@ function Card(props){
               <div className="modal">
                 <div onClick={toggleModal} className="overlay"></div>
                 <div className="modal-content">
-                  <h2>Hello Modal</h2>
+                  <h2>{value}</h2>
                   <p>
                     Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
                     perferendis suscipit officia recusandae, eveniet quaerat assumenda
@@ -48,14 +48,11 @@ function Card(props){
                 </div>
               </div>
             )}
-            <p>Lorem ipsu.</p>
           </>
         );
 
       }
-    // function Details(props) {
-    //     return <p className="info">{props.detailInfo}</p>;
-    //   }      
+    
     return (
       <div className = "card">
         <div className="elements">
@@ -68,10 +65,9 @@ function Card(props){
             <h3 className = "detail">{props.role}</h3>
             &nbsp;
             <div className = "bottom">
-            {/* <Modal title="Research" /> */}
-            <button className = "bottombutton">Startups</button>
+              <Modal value="Startups"/> 
             &nbsp;
-            <button className = "bottombutton">Research</button> 
+            <Modal value="Research" /> 
         </div>
           </div>
         </div>

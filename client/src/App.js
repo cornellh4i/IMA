@@ -34,9 +34,9 @@ function App() {
         <div class = "middle">
         <SearchBar/>
         <div class = "cards">
-      {contacts.map(createCard)}
+        {contacts.map(createCard)}
       </div>
-        </div>
+      </div>
       </div>
       {/* {contacts.map(createCard)} */}
     </div>
