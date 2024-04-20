@@ -27,6 +27,11 @@ const userSchema = new mongoose.Schema({
   role: String,
   email: String,
   m_id: Number,
+  pronoun: String, 
+  location: String, 
+  linkedin: String,
+  slack: String,
+
 });
 
 //user model
@@ -40,6 +45,10 @@ app.post("/addMember", async (req, res) => {
     year: req.body.year,
     role: req.body.role,
     email: req.body.email,
+    pronoun: req.body.pronouns, 
+    location: req.body.location, 
+    linkedin: req.body.linkedin,
+    slack: req.body.slack, 
   });
   try {
     const savedData = await data.save();

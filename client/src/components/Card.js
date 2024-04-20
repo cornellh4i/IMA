@@ -5,9 +5,9 @@ function Card(props){
     function Avatar(props) {
         return <img className="circle-img" src={props.image} alt="avatar_img" />;
       }      
-    function Details(props) {
-        return <p className="info">{props.detailInfo}</p>;
-      }      
+    // function Details(props) {
+    //     return <p className="info">{props.detailInfo}</p>;
+    //   }      
     return (
         <div className="card">
             <Avatar image={props.image} />
