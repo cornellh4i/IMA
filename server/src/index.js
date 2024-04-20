@@ -23,15 +23,16 @@ app.listen(3000, () => {
 
 const userSchema = new mongoose.Schema({
   name: String,
-  year: String,
+  pronouns: String,
   role: String,
+  location: String,
+  grad_year: String,
+  major: String,
+  imgURL: String,
   email: String,
-  m_id: Number,
-  pronoun: String, 
-  location: String, 
   linkedin: String,
   slack: String,
-
+  m_id: Number,
 });
 
 //user model
@@ -40,15 +41,17 @@ const users = mongoose.model("users", userSchema);
 //add member function
 app.post("/addMember", async (req, res) => {
   const data = new users({
-    m_id: req.body.m_id,
     name: req.body.name,
-    year: req.body.year,
+    pronouns: req.body.pronouns,
     role: req.body.role,
+    location: req.body.location,
+    year: req.body.year,
+    major: req.body.major,
+    imgURL: req.body.imgURL,
     email: req.body.email,
-    pronoun: req.body.pronoun, 
-    location: req.body.location, 
     linkedin: req.body.linkedin,
-    slack: req.body.slack, 
+    slack: req.body.slack,
+    m_id: req.body.m_id,
   });
   try {
     const savedData = await data.save();

@@ -15,6 +15,9 @@ function createCard(contact) {
       year={contact.year}
       role={contact.role}
       image={contact.imgURL}
+      email = {contact.email}
+      linkedin = {contact.linkedin}
+      slack = {contact.slack}
       // school={contact.school}
       // career={contact.career}
     />

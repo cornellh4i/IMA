@@ -13,7 +13,7 @@
     margin: 0;
     font-size: 20px;
     font-family: "Poppins", sans-serif;
-    font-size: 18px;
+    font-size: 30px;
     align-items: left;
     color: #000;
     font-weight: 600;
@@ -28,6 +28,7 @@
     color: #000;
     font-weight: 600;
     line-height: 45px;
-    width: 45px;
-    height: 45px;
+    width: 80px;
+    height: 60px;
+    padding:10px;
   }
