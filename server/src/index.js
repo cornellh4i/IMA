@@ -45,7 +45,7 @@ app.post("/addMember", async (req, res) => {
     year: req.body.year,
     role: req.body.role,
     email: req.body.email,
-    pronoun: req.body.pronouns, 
+    pronoun: req.body.pronoun, 
     location: req.body.location, 
     linkedin: req.body.linkedin,
     slack: req.body.slack, 
