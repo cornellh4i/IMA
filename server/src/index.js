@@ -1,8 +1,12 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 app.use(express.json());
+app.use(cors());
+
+
 mongoose.connect(
   "mongodb+srv://h4i-ima:h4iIMA2024@ima.pejjbfw.mongodb.net/",
   {
@@ -17,8 +21,10 @@ mongoose.connect(
     }
   }
 );
-app.listen(3000, () => {
-  console.log("on port 3000");
+
+
+app.listen(8000, () => {
+  console.log("on port 8000");
 });
 
 const userSchema = new mongoose.Schema({
@@ -26,7 +32,7 @@ const userSchema = new mongoose.Schema({
   pronouns: String,
   role: String,
   location: String,
-  grad_year: String,
+  year: String,
   major: String,
   imgURL: String,
   email: String,
