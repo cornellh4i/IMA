@@ -7,6 +7,23 @@ import Header from "./components/header.js"
 import "./App.css"
 const API_URL = process.env.REACT_APP_API;
 
+function App() {
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`/endpoin_URL`);
+      const jsonData = await response.json();
+      setData(jsonData);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
+
 function createCard(contact) {
   return (
     <Card
@@ -21,23 +38,23 @@ function createCard(contact) {
   );
 }
 
-function App() {
-  return (
-    <>
-    <div class = "container">
-      <Header/>
-      <div class = "top">
-        <Sidebar />
-        <div class = "middle">
-        <SearchBar/>
-        <div class = "cards">
-      {contacts.map(createCard)}
-      </div>
+
+return (
+  <>
+  <div class = "container">
+    <Header/>
+    <div class = "top">
+      <Sidebar />
+      <div class = "middle">
+      <SearchBar/>
+      <div class = "cards">
+    {contacts.map(createCard)}
         </div>
       </div>
-      {/* {contacts.map(createCard)} */}
     </div>
-    </>
+  {/* {contacts.map(createCard)} */}
+  </div>
+  </>
   );
 }
 export default App;
