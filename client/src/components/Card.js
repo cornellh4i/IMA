@@ -65,9 +65,9 @@ function Card(props){
             <h3 className = "detail">{props.role}</h3>
             &nbsp;
             <div className = "bottom">
-              <Modal value="Startups"/> 
-            &nbsp;
-            <Modal value="Research" /> 
+              <Modal value="Learn More"/> 
+            {/* &nbsp;
+            <Modal value="Research" />  */}
         </div>
           </div>
         </div>
