@@ -1,8 +1,12 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 app.use(express.json());
+app.use(cors());
+
+
 mongoose.connect(
   "mongodb+srv://h4i-ima:h4iIMA2024@ima.pejjbfw.mongodb.net/",
   {
@@ -17,15 +21,23 @@ mongoose.connect(
     }
   }
 );
-app.listen(3000, () => {
-  console.log("on port 3000");
+
+
+app.listen(8000, () => {
+  console.log("on port 8000");
 });
 
 const userSchema = new mongoose.Schema({
   name: String,
-  year: String,
+  pronouns: String,
   role: String,
+  location: String,
+  year: String,
+  major: String,
+  imgURL: String,
   email: String,
+  linkedin: String,
+  slack: String,
   m_id: Number,
 });
 
@@ -35,11 +47,17 @@ const users = mongoose.model("users", userSchema);
 //add member function
 app.post("/addMember", async (req, res) => {
   const data = new users({
-    m_id: req.body.m_id,
     name: req.body.name,
-    year: req.body.year,
+    pronouns: req.body.pronouns,
     role: req.body.role,
+    location: req.body.location,
+    year: req.body.year,
+    major: req.body.major,
+    imgURL: req.body.imgURL,
     email: req.body.email,
+    linkedin: req.body.linkedin,
+    slack: req.body.slack,
+    m_id: req.body.m_id,
   });
   try {
     const savedData = await data.save();

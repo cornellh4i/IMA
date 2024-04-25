@@ -12,12 +12,14 @@ function Header() {
   
   }
     return (
+      <div className = "all">
       <div className="header">
-          <img src={h4i_icon} alt="Company Logo" className="logo" />
           <Title value="Alumni Archive" />
           <Title value="Directory" />
-          <img src={tool_icon} alt="Tools icon" className="logo" />
       </div>
+      <img src={h4i_icon} alt="Company Logo" className="logo" />
+      </div>
+
   );
 }
 
