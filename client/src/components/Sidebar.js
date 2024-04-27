@@ -35,8 +35,8 @@ function Sidebar() {
 
   //function to toggle the categories
   const toggleCategories = (category, event) => {
-    event.stopPropagation();
-
+    event.nativeEvent.stopImmediatePropagation();
+    console.log("expanded");
     setOpenCategories((prevOpenCategories) => ({
       ...prevOpenCategories,
       [category]: !prevOpenCategories[category],
@@ -45,7 +45,8 @@ function Sidebar() {
 
   //function to toggle checkbox states
   const toggleCheckBoxChange = (category, value, event) => {
-    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
+    console.log("checked");
     setCheckedState((prev) => ({
       ...prev,
       [category]: {
@@ -62,13 +63,13 @@ function Sidebar() {
           <div
             key={key}
             className="component"
-            onClick={(e) => toggleCategories(key, e)}
+            // onClick={(e) => toggleCategories(key, e)}
           >
             <h2>
               {key.charAt(0).toUpperCase() +
                 key.slice(1).replace("Year", " Year")}
             </h2>
-            <ChevronRightIcon className={openCategories[key] ? "open" : ""} />
+            <ChevronRightIcon className={openCategories[key] ? "open" : ""} onClick={(e) => toggleCategories(key, e)}/>
 
             {openCategories[key] && (
               <FormGroup className="dropdown">
