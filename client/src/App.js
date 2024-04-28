@@ -9,31 +9,6 @@ import "./App.css";
 const API_URL = process.env.REACT_APP_API;
 
 function App() {
-  const [members, setMembers] = useState([]);
-  useEffect(() => {
-    fetch(`http://localhost:8000/getMember`)
-      .then((response) => response.json())
-      .then((data) => setMembers(data))
-      .catch((error) => console.error("Error fetching members:", error));
-  }, []);
-
-  function createCard(member) {
-    return (
-      <Card
-        name={member.name}
-        year={member.year}
-        role={member.role}
-        major={member.major}
-        pronouns={member.pronouns}
-        location={member.location}
-        linkedin={member.linkedin}
-        slack={member.slack}
-        email={member.email}
-        image={member.imgURL}
-        key={member.m_id}
-      />
-    );
-  }
 
   return (
     <>
@@ -43,7 +18,6 @@ function App() {
           <Sidebar />
           <div className="middle">
             <SearchBar />
-            <div className="cards">{members.map(createCard)}</div>
           </div>
         </div>
       </div>
