@@ -1,67 +1,80 @@
-import React, { useState, useEffect } from "react";
-import Card from "./Card";
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import "./SearchBar.css";
+import Card from './Card';
 
-function SearchBar(){
-    const [searchQuery, setSearchQuery] = useState('');
+// Logic
+// when page opens up, load all the data
+// onSubmit, rerender the page
+
+function SearchBar(input){
     const [members, setMembers] = useState([]);
+
+    function createCard(member) {
+        return (
+            <Card
+                name={member.name}
+                year={member.year}
+                role={member.role}
+                major={member.major}
+                pronouns={member.pronouns}
+                location={member.location}
+                linkedin={member.linkedin}
+                slack={member.slack}
+                email={member.email}
+                image={member.imgURL}
+                key={member.m_id}
+            />
+        );
+    }
+    
     useEffect(() => {
-        if (searchQuery.trim() !== '') {
-            fetch(`http://localhost:8000/getMemberByName?name=${encodeURIComponent(searchQuery)}`)
-                .then(response => response.json())
-                .then(data => setMembers(data))
-                .catch(error => console.error("Error fetching members:", error));
-        } else {
-            fetch(`http://localhost:8000/getMember`)
-            .then((response) => response.json())
-            .then((data) => setMembers(data))
-            .catch((error) => console.error("Error fetching members:", error));
+        const fetchData = async () => {
+            const apiURL = "http://localhost:8000/getMember/";
+            fetch(apiURL)
+            .then(res => res.json())
+            .then(data => setMembers(data))
+            .catch(e => console.log("error fetching", e));
         }
-    }, [searchQuery]);
+        fetchData();
+    }, []);
+    
+    const SearchedMember = (searchQuery) => { 
+        const apiURL = "http://localhost:8000/getMemberByName/";
+        console.log(`${apiURL}${searchQuery}`)
+        const fullURL = `${apiURL}${searchQuery}`;
+        fetch(fullURL)
+        .then(res => res.json())
+        .then(data =>setMembers(data))
+        .catch(e => console.log("error fetching", e));
+    }
 
-    const handleInputChange = (event) => {
-        setSearchQuery(event.target.value);
-    };
-
-    const handleSubmit = (event) => {
+    const handleSubmit=(event) =>{
         event.preventDefault();
-    };
-
-
-  function createCard(member) {
+        const newQuery = event.target.name.value;
+        SearchedMember(newQuery);
+    }
+    
     return (
-      <Card
-        name={member.name}
-        year={member.year}
-        role={member.role}
-        major={member.major}
-        pronouns={member.pronouns}
-        location={member.location}
-        linkedin={member.linkedin}
-        slack={member.slack}
-        email={member.email}
-        image={member.imgURL}
-        key={member.m_id}
-      />
-    );
-  }
-
-    return (
-        <><div className="searchBar">
-            <form id="form" onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    id="searchInput"
-                    placeholder="Search"
-                    value={searchQuery}
-                    onChange={handleInputChange} />
-                <button type="submit" id="submit">Search</button>
-            </form>
+        <div>
+            <div className = "searchBar" onSubmit={handleSubmit}>
+                <form id = "form" >
+                    <input type = "text" 
+                    name='name'
+                    id = "searchInput"
+                    placeholder = "enter a name"
+                    >
+                    </input>
+                    <button id = "submit">Search</button>
+                </form>
+                <div className="cards">
+                    {members.map(createCard)}
+                </div>
+            </div>
+            
         </div>
-        <div className="cards">{members.map(createCard)}
-        </div>
-        </>
     )
+	
 }
 
 export default SearchBar;
