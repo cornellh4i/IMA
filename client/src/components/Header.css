@@ -1,33 +1,34 @@
 .header {
-    background-color: #B0D0FF;
-    padding: 10px 20px;
-    color: rgb(0, 0, 0);
-    display: flex;
-    font-family: "Poppins", sans-serif;
-    font-style: Poppins;
-    justify-content: space-between;
-  }
-  
-  .title{
-    background-color: #B0D0FF;
-    margin: 0;
-    font-size: 20px;
-    font-family: "Poppins", sans-serif;
-    font-size: 18px;
-    align-items: left;
-    color: #000;
-    font-weight: 600;
-    font-style: Poppins;
-    line-height: 52px;
-    border: none
-  }
+  background-color: #b0d0ff;
+  padding: 10px 20px;
+  color: rgb(0, 0, 0);
+  display: flex;
+  font-family: "Poppins", sans-serif;
+  font-style: Poppins;
+  justify-content: space-between;
+}
 
-  .logo{
-    background-color: #B0D0FF;
-    margin: 0;
-    color: #000;
-    font-weight: 600;
-    line-height: 45px;
-    width: 45px;
-    height: 45px;
-  }
+.title {
+  background-color: #b0d0ff;
+  margin: 0;
+  font-size: 20px;
+  font-family: "Poppins", sans-serif;
+  font-size: 18px;
+  align-items: left;
+  color: #000;
+  font-weight: 600;
+  font-style: Poppins;
+  line-height: 52px;
+  border: none;
+}
+
+.logo {
+  background-color: #b0d0ff;
+  margin: 0;
+  color: #000;
+  font-weight: 600;
+  line-height: 45px;
+  width: 45px;
+  height: 45px;
+  cursor: pointer;
+}

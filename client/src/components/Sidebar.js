@@ -8,10 +8,16 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
 //defining the categories and subcategories: hardcoded values
 const categories = {
-  roles: ["Developer", "PM", "Designer", "External", "Other"],
-  interests: ["Research", "Startups", "Design", "Fintech", "Other"],
-  gradYear: ["2023", "2022", "2021", "2020", "Other"],
-  location: ["Bay Area", "NYC", "Elsewhere in the US", "Outside the US"],
+  roles: ["Developer", "Project Manager", "Designer", "External", "Other"],
+  major: [
+    "Computer Science",
+    "Information Science",
+    "Economics",
+    "Electrical and Computer Engineering",
+    "Other",
+  ],
+  gradYear: ["2024", "2023", "2022", "2021", "2020", "Other"],
+  location: ["San Fransisco", "New York City", "Chicago", "Austin", "Other"],
 };
 
 //const checkedBoxes = []; for passing values in the future
@@ -20,7 +26,7 @@ function Sidebar() {
   //state to keep track of categories
   const [openCategories, setOpenCategories] = useState({
     roles: false,
-    interests: false,
+    major: false,
     gradYear: false,
     location: false,
   });
@@ -28,14 +34,14 @@ function Sidebar() {
   //states for the checkboxes
   const [checkedState, setCheckedState] = useState({
     roles: {},
-    interests: {},
+    major: {},
     gradYear: {},
     location: {},
   });
 
   //function to toggle the categories
   const toggleCategories = (category, event) => {
-    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
 
     setOpenCategories((prevOpenCategories) => ({
       ...prevOpenCategories,
@@ -45,7 +51,7 @@ function Sidebar() {
 
   //function to toggle checkbox states
   const toggleCheckBoxChange = (category, value, event) => {
-    event.stopPropagation();
+    event.nativeEvent.stopImmediatePropagation();
     setCheckedState((prev) => ({
       ...prev,
       [category]: {
@@ -62,13 +68,16 @@ function Sidebar() {
           <div
             key={key}
             className="component"
-            onClick={(e) => toggleCategories(key, e)}
+            // onClick={(e) => toggleCategories(key, e)}
           >
             <h2>
               {key.charAt(0).toUpperCase() +
                 key.slice(1).replace("Year", " Year")}
             </h2>
-            <ChevronRightIcon className={openCategories[key] ? "open" : ""} />
+            <ChevronRightIcon
+              className={openCategories[key] ? "open" : ""}
+              onClick={(e) => toggleCategories(key, e)}
+            />
 
             {openCategories[key] && (
               <FormGroup className="dropdown">

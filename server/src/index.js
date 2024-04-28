@@ -1,8 +1,11 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+const cors = require("cors");
 const { Schema } = mongoose;
+app.use(cors());
 app.use(express.json());
+
 mongoose.connect(
   "mongodb+srv://h4i-ima:h4iIMA2024@ima.pejjbfw.mongodb.net/",
   {
@@ -17,15 +20,22 @@ mongoose.connect(
     }
   }
 );
-app.listen(3000, () => {
-  console.log("on port 3000");
+app.listen(8000, () => {
+  console.log("on port 8000");
 });
 
 const userSchema = new mongoose.Schema({
   name: String,
-  year: String,
+  pronouns: String,
   role: String,
+  location: String,
+  grad_year: String,
+  major: String,
+  bio: String,
+  imgURL: String,
   email: String,
+  linkedin: String,
+  slack: String,
   m_id: Number,
 });
 
@@ -35,11 +45,18 @@ const users = mongoose.model("users", userSchema);
 //add member function
 app.post("/addMember", async (req, res) => {
   const data = new users({
-    m_id: req.body.m_id,
     name: req.body.name,
-    year: req.body.year,
+    pronouns: req.body.pronouns,
     role: req.body.role,
+    location: req.body.location,
+    year: req.body.year,
+    major: req.body.major,
+    bio: req.body.bio,
+    imgURL: req.body.imgURL,
     email: req.body.email,
+    linkedin: req.body.linkedin,
+    slack: req.body.slack,
+    m_id: req.body.m_id,
   });
   try {
     const savedData = await data.save();
@@ -92,7 +109,7 @@ app.get("/getMemberByYear", async (req, res) => {
   });
 });
 
-// get members by role
+//getMembers by role
 app.get("/getMemberByRole", async (req, res) => {
   users.find({ role: req.body.role }, function (err, docs) {
     if (err) {
@@ -100,6 +117,32 @@ app.get("/getMemberByRole", async (req, res) => {
       res.status(500).send("Error retreving members");
     } else {
       console.log(docs);
+      res.send(docs);
+    }
+  });
+});
+
+//get members by location
+app.get("/getMemberByLocation", async (req, res) => {
+  users.find({ location: req.body.location }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.statusMessage(500).send("Error retreving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
+});
+
+//get members by major
+app.get("/getMemberByMajor", async (req, res) => {
+  users.find({ major: req.body.major }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.statusMessage(500).send("Error retreving members");
+    } else {
+      console.docs(docs);
       res.send(docs);
     }
   });
