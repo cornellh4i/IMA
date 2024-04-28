@@ -5,7 +5,6 @@ import email_icon from "../assets/email_icon.png"
 import linkedin_icon from "../assets/linkedin_icon.png"
 import slack_icon from "../assets/slack_icon.png"
 
-
 function Card(props){
     function Avatar(props) {
         return <img class="fit-img" src={props.image} alt="avatar_img" />;
@@ -33,7 +32,7 @@ function Card(props){
               <div className="modal">
                 <div onClick={toggleModal} className="overlay"></div>
                 <div className="modal-content">
-                    <h2>Learn More About {props.name} </h2>
+                    <h2>Learn More About {props.name.charAt(0).toUpperCase() + props.name.slice(1)} </h2>
                     <div className = "Main">
                       <img class="fit-img" src={props.image} alt="avatar_img" />
                       <h3 className = "text"> {props.role}  </h3>
@@ -62,7 +61,7 @@ function Card(props){
         <div className="elements">
             <Avatar image={props.image} />
         <div className="text">
-          <h1 className="name">{props.name}</h1>
+          <h1 className="name">{props.name.charAt(0).toUpperCase() + props.name.slice(1)}</h1>
           <div>
             <h3 className="detail">{props.year}</h3>
             &#160;
