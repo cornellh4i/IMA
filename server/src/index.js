@@ -124,14 +124,14 @@ app.get("/getMemberByRole", async (req, res) => {
 });
 
 app.get('/getMemberByName', function (req, res) {
-
-  users.find({ name: req.body.name }, function (err, docs) {
-      if (err) {
-          console.log(err);
-          res.status(500).send('Error retrieving members');
-      } else {
-          console.log(docs);
-          res.send(docs);
+    const name = req.query.name;
+    users.find({ name: name }, function (err, docs) {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Error retrieving members');
+        } else {
+            console.log(docs);
+            res.send(docs);
       }
   });
 });
