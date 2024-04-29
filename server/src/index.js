@@ -123,15 +123,16 @@ app.get("/getMemberByRole", async (req, res) => {
   });
 });
 
-app.get('/getMemberByName', function (req, res) {
-
-  users.find({ name: req.body.name }, function (err, docs) {
-      if (err) {
-          console.log(err);
-          res.status(500).send('Error retrieving members');
-      } else {
-          console.log(docs);
-          res.send(docs);
-      }
+app.get('/getMemberByName/:name', function (req, res) {
+  users.find({ name: req.params.name }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Error retrieving members');
+    } else {
+      console.log(req.params.name)
+      console.log(docs);
+        // console.log(req)
+      res.send(docs);
+    }
   });
 });

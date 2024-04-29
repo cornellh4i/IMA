@@ -5,12 +5,11 @@ import email_icon from "../assets/email_icon.png"
 import linkedin_icon from "../assets/linkedin_icon.png"
 import slack_icon from "../assets/slack_icon.png"
 
-
 function Card(props){
     function Avatar(props) {
         return <img class="fit-img" src={props.image} alt="avatar_img" />;
       }      
-      function Modal({value}, props){
+      function Modal(props){
         const [modal, setModal] = useState(false);
 
         const toggleModal = () => {
@@ -26,21 +25,25 @@ function Card(props){
         return (
           <>
             <button onClick={toggleModal} className="bottombutton">
-              {value}
+              Learn More
             </button>
       
             {modal && (
               <div className="modal">
                 <div onClick={toggleModal} className="overlay"></div>
                 <div className="modal-content">
-                  <h2>{value}</h2>
-                  <p>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
-                    perferendis suscipit officia recusandae, eveniet quaerat assumenda
-                    id fugit, dignissimos maxime non natus placeat illo iusto!
-                    Sapiente dolorum id maiores dolores? Illum pariatur possimus
-                    quaerat ipsum quos molestiae rem aspernatur dicta tenetur. Sunt
-                    placeat tempora vitae enim incidunt porro fuga ea.
+                    <h2>Learn More About {props.name.charAt(0).toUpperCase() + props.name.slice(1)} </h2>
+                    <div className = "Main">
+                      <img class="fit-img" src={props.image} alt="avatar_img" />
+                      <h3 className = "text"> {props.role}  </h3>
+                  </div>                  
+                    <p>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
+                      perferendis suscipit officia recusandae, eveniet quaerat assumenda
+                      id fugit, dignissimos maxime non natus placeat illo iusto!
+                      Sapiente dolorum id maiores dolores? Illum pariatur possimus
+                      quaerat ipsum quos molestiae rem aspernatur dicta tenetur. Sunt
+                      placeat tempora vitae enim incidunt porro fuga ea.
                   </p>
                   <button className="close-modal" onClick={toggleModal}>
                     CLOSE
@@ -58,14 +61,14 @@ function Card(props){
         <div className="elements">
             <Avatar image={props.image} />
         <div className="text">
-          <h1 className="name">{props.name}</h1>
+          <h1 className="name">{props.name.charAt(0).toUpperCase() + props.name.slice(1)}</h1>
           <div>
             <h3 className="detail">{props.year}</h3>
             &#160;
             <h3 className = "detail">{props.role}</h3>
             &nbsp;
             <div className = "bottom">
-              <Modal value="Learn More"/> 
+              <Modal image={props.image} name = {props.name} year = {props.year}role = {props.role}/> 
             {/* &nbsp;
             <Modal value="Research" />  */}
         </div>
