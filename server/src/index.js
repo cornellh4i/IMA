@@ -3,8 +3,8 @@ const cors = require('cors');
 const app = express();
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
-app.use(cors());
 app.use(express.json());
+app.use(cors());
 
 
 mongoose.connect(
@@ -21,6 +21,8 @@ mongoose.connect(
     }
   }
 );
+
+
 app.listen(8000, () => {
   console.log("on port 8000");
 });
@@ -32,7 +34,6 @@ const userSchema = new mongoose.Schema({
   location: String,
   year: String,
   major: String,
-  bio: String,
   imgURL: String,
   email: String,
   linkedin: String,
@@ -52,7 +53,6 @@ app.post("/addMember", async (req, res) => {
     location: req.body.location,
     year: req.body.year,
     major: req.body.major,
-    bio: req.body.bio,
     imgURL: req.body.imgURL,
     email: req.body.email,
     linkedin: req.body.linkedin,
@@ -97,20 +97,30 @@ app.get("/getMember", function (req, res) {
   });
 });
 
+// get members by year
+app.get("/getMemberByYear", async (req, res) => {
+  users.find({ year: req.body.year }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retreving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
+});
 
-//get members for filtering and individual categories as well.
-app.get("/getAllMembers", async (req, res) => {
-  try {
-    const queryObj = { ...req.query };
-    let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    const query = users.find(JSON.parse(queryStr));
-    const member = await query;
-    res.send(member);
-  } catch (error) {
-    console.log(error);
-    res.status(500).send(error.message);
-  }
+// get members by role
+app.get("/getMemberByRole", async (req, res) => {
+  users.find({ role: req.body.role }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retreving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
 });
 
 app.get('/getMemberByName/:name', function (req, res) {
@@ -121,6 +131,7 @@ app.get('/getMemberByName/:name', function (req, res) {
     } else {
       console.log(req.params.name)
       console.log(docs);
+        // console.log(req)
       res.send(docs);
     }
   });
