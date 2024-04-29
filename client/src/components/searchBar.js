@@ -40,9 +40,14 @@ function SearchBar(input){
     }, []);
     
     const SearchedMember = (searchQuery) => { 
-        const apiURL = "http://localhost:8000/getMemberByName/";
-        console.log(`${apiURL}${searchQuery}`)
-        const fullURL = `${apiURL}${searchQuery.toLowerCase()}`;
+        var fullURL = "";
+        if (searchQuery === ""){
+            fullURL = "http://localhost:8000/getMember/";
+        }
+        else {
+            const apiURL = "http://localhost:8000/getMemberByName/";
+            fullURL = `${apiURL}${searchQuery.toLowerCase()}`;
+        }
         fetch(fullURL)
         .then(res => res.json())
         .then(data =>setMembers(data))
