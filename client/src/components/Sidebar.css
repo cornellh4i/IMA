@@ -1,8 +1,8 @@
-.container {
+/* .container {
   padding: 10px;
-}
+} */
 
-#sidebar {
+.sidebar {
   width: 298px;
   height: 90vh; /* 100% of the viewheight, change after merge of the header and search */
   flex-shrink: 0;

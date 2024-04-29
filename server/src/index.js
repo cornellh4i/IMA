@@ -1,10 +1,13 @@
 const express = require("express");
+const cors = require('cors');
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const { Schema } = mongoose;
 app.use(cors());
 app.use(express.json());
+app.use(cors());
+
 
 mongoose.connect(
   "mongodb+srv://h4i-ima:h4iIMA2024@ima.pejjbfw.mongodb.net/",
@@ -96,44 +99,6 @@ app.get("/getMember", function (req, res) {
   });
 });
 
-// // get members by year
-// app.get("/getMemberByYear", async (req, res) => {
-//   users.find({ year: req.body.year }, function (err, docs) {
-//     if (err) {
-//       console.log(err);
-//       res.status(500).send("Error retreving members");
-//     } else {
-//       console.log(docs);
-//       res.send(docs);
-//     }
-//   });
-// });
-
-// //getMembers by role
-// app.get("/getMemberByRole", async (req, res) => {
-//   users.find({ role: req.body.role }, function (err, docs) {
-//     if (err) {
-//       console.log(err);
-//       res.status(500).send("Error retreving members");
-//     } else {
-//       console.log(docs);
-//       res.send(docs);
-//     }
-//   });
-// });
-
-// //get members by location
-// app.get("/getMemberByLocation", async (req, res) => {
-//   users.find({ location: req.body.location }, function (err, docs) {
-//     if (err) {
-//       console.log(err);
-//       res.statusMessage(500).send("Error retreving members");
-//     } else {
-//       console.log(docs);
-//       res.send(docs);
-//     }
-//   });
-// });
 
 //get members for filtering and individual categories as well.
 app.get("/getAllMembers", async (req, res) => {
@@ -150,4 +115,18 @@ app.get("/getAllMembers", async (req, res) => {
     console.log(error);
     res.status(500).send(error.message);
   }
+});
+
+app.get('/getMemberByName/:name', function (req, res) {
+  users.find({ name: req.params.name }, function (err, docs) {
+    if (err) {
+      console.log(err);
+      res.status(500).send('Error retrieving members');
+    } else {
+      console.log(req.params.name)
+      console.log(docs);
+        // console.log(req)
+      res.send(docs);
+    }
+  });
 });

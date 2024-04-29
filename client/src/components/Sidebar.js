@@ -86,8 +86,8 @@ function Sidebar({ setMembers }) {
   };
   console.log(dummyURL);
   return (
-    <div className="container">
-      <div id="sidebar">
+    // <div className="container">
+      <div className="sidebar">
         {Object.entries(categories).map(([key, values]) => (
           <div key={key} className="component">
             <h2>
@@ -119,7 +119,7 @@ function Sidebar({ setMembers }) {
           </div>
         ))}
       </div>
-    </div>
+    // </div>
   );
 }
 export default Sidebar;

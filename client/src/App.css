@@ -5,14 +5,11 @@
 .middle {
     display: flex;
     flex-direction: column;
+    padding:10px;
 }
-
 .cards {
-    /* display: flex;
-    flex-direction: column; */
     width: 50 px;
     height: 50 px; 
     padding: 10px;
     display: grid; 
-    grid-template-columns: 50% 50%;
-}
+    grid-template-columns: 50% 50%;}
