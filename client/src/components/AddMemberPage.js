@@ -1,7 +1,6 @@
 import React from "react";
 import "./addMemberPage.css";
 import { useState, useRef } from "react";
-
 function AddMemberPage() {
   const [image, setImage] = useState(null);
   const inputsRef = useRef({});
@@ -133,7 +132,7 @@ function AddMemberPage() {
         </div>
         <div className="rightColumn">
           <div className="sectionLabel">Upload Profile Picture</div>
-          <div className="imageContainer">
+          <div className="imageContainer2">
             <input
               type="file"
               accept="image/*"

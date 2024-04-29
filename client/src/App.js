@@ -10,6 +10,7 @@ const API_URL = process.env.REACT_APP_API;
 
 function App() {
   const [members, setMembers] = useState([]);
+
   function createCard(member) {
     return (
       <Card
@@ -31,14 +32,14 @@ function App() {
   return (
     <>
       <div className="container">
-        {/* <Header />
+        <Header />
         <div className="top">
           <Sidebar setMembers={setMembers} />
           <div className="middle">
             <SearchBar />
             <div className="cards">{members.map(createCard)}</div>
-          </div> */}
-        {/* </div> */}
+          </div>
+        </div>
         <AddMemberPage />
       </div>
     </>
