@@ -106,9 +106,7 @@ app.get("/getAllMembers", async (req, res) => {
     const queryObj = { ...req.query };
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-
     const query = users.find(JSON.parse(queryStr));
-
     const member = await query;
     res.send(member);
   } catch (error) {
@@ -125,7 +123,6 @@ app.get('/getMemberByName/:name', function (req, res) {
     } else {
       console.log(req.params.name)
       console.log(docs);
-        // console.log(req)
       res.send(docs);
     }
   });
