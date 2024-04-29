@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
+    "@emotion/styled": "^11.11.5",
     "@mui/icons-material": "^5.15.14",
-    "@mui/material": "^5.15.14",
+    "@mui/material": "^5.15.15",
     "@mui/styled-engine-sc": "^5.6.1",
     "express": "^4.19.1",
     "mongodb": "^6.5.0",
