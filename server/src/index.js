@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
   pronouns: String,
   role: String,
   location: String,
-  grad_year: String,
+  year: String,
   major: String,
   bio: String,
   imgURL: String,
@@ -96,54 +96,58 @@ app.get("/getMember", function (req, res) {
   });
 });
 
-// get members by year
-app.get("/getMemberByYear", async (req, res) => {
-  users.find({ year: req.body.year }, function (err, docs) {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Error retreving members");
-    } else {
-      console.log(docs);
-      res.send(docs);
-    }
-  });
-});
+// // get members by year
+// app.get("/getMemberByYear", async (req, res) => {
+//   users.find({ year: req.body.year }, function (err, docs) {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send("Error retreving members");
+//     } else {
+//       console.log(docs);
+//       res.send(docs);
+//     }
+//   });
+// });
 
-//getMembers by role
-app.get("/getMemberByRole", async (req, res) => {
-  users.find({ role: req.body.role }, function (err, docs) {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Error retreving members");
-    } else {
-      console.log(docs);
-      res.send(docs);
-    }
-  });
-});
+// //getMembers by role
+// app.get("/getMemberByRole", async (req, res) => {
+//   users.find({ role: req.body.role }, function (err, docs) {
+//     if (err) {
+//       console.log(err);
+//       res.status(500).send("Error retreving members");
+//     } else {
+//       console.log(docs);
+//       res.send(docs);
+//     }
+//   });
+// });
 
-//get members by location
-app.get("/getMemberByLocation", async (req, res) => {
-  users.find({ location: req.body.location }, function (err, docs) {
-    if (err) {
-      console.log(err);
-      res.statusMessage(500).send("Error retreving members");
-    } else {
-      console.log(docs);
-      res.send(docs);
-    }
-  });
-});
+// //get members by location
+// app.get("/getMemberByLocation", async (req, res) => {
+//   users.find({ location: req.body.location }, function (err, docs) {
+//     if (err) {
+//       console.log(err);
+//       res.statusMessage(500).send("Error retreving members");
+//     } else {
+//       console.log(docs);
+//       res.send(docs);
+//     }
+//   });
+// });
 
-//get members by major
-app.get("/getMemberByMajor", async (req, res) => {
-  users.find({ major: req.body.major }, function (err, docs) {
-    if (err) {
-      console.log(err);
-      res.statusMessage(500).send("Error retreving members");
-    } else {
-      console.docs(docs);
-      res.send(docs);
-    }
-  });
+//get members for filtering and individual categories as well.
+app.get("/getAllMembers", async (req, res) => {
+  try {
+    const queryObj = { ...req.query };
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    const query = users.find(JSON.parse(queryStr));
+
+    const member = await query;
+    res.send(member);
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error.message);
+  }
 });

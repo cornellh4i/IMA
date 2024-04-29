@@ -15,21 +15,13 @@ function Header() {
       </button>
     );
   }
-  const openAddMemberPage = () => {
-    console.log("Clicked");
-  };
   return (
     <div className="header">
       <img src={h4i_icon} alt="Company Logo" className="logo" />
       <Title value="Alumni Archive" />
       <Title value="Directory" />
       <img src={tool_icon} alt="Tools icon" className="logo" />
-      <img
-        src={addMemberIcon}
-        alt="Member Icon"
-        className="logo"
-        onClick={openAddMemberPage}
-      />
+      <img src={addMemberIcon} alt="Member Icon" className="logo" />
     </div>
   );
 }

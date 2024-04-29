@@ -10,13 +10,6 @@ const API_URL = process.env.REACT_APP_API;
 
 function App() {
   const [members, setMembers] = useState([]);
-  useEffect(() => {
-    fetch(`http://localhost:8000/getMember`)
-      .then((response) => response.json())
-      .then((data) => setMembers(data))
-      .catch((error) => console.error("Error fetching members:", error));
-  }, []);
-
   function createCard(member) {
     return (
       <Card
@@ -38,14 +31,15 @@ function App() {
   return (
     <>
       <div className="container">
-        <Header />
+        {/* <Header />
         <div className="top">
-          <Sidebar />
+          <Sidebar setMembers={setMembers} />
           <div className="middle">
             <SearchBar />
             <div className="cards">{members.map(createCard)}</div>
-          </div>
-        </div>
+          </div> */}
+        {/* </div> */}
+        <AddMemberPage />
       </div>
     </>
   );
