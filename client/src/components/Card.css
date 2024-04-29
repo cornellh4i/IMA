@@ -84,7 +84,7 @@ background-color: inherit;
   background-color: inherit;
   width: 80px;
   height: 170px; 
-
+  align-items: center;
 }
 
 body.active-modal {
