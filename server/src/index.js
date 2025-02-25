@@ -1,14 +1,13 @@
 const express = require("express");
-const cors = require('cors');
+const cors = require("cors");
 const app = express();
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 app.use(cors());
 app.use(express.json());
 
-
 mongoose.connect(
-  "mongodb+srv://h4i-ima:h4iIMA2024@ima.pejjbfw.mongodb.net/",
+  "mongodb+srv://bsl77:h4i-cornell-ima@ima.d3rmp.mongodb.net/?retryWrites=true&w=majority&appName=IMA",
   {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -97,7 +96,6 @@ app.get("/getMember", function (req, res) {
   });
 });
 
-
 //get members for filtering and individual categories as well.
 app.get("/getAllMembers", async (req, res) => {
   try {
@@ -113,13 +111,13 @@ app.get("/getAllMembers", async (req, res) => {
   }
 });
 
-app.get('/getMemberByName/:name', function (req, res) {
+app.get("/getMemberByName/:name", function (req, res) {
   users.find({ name: req.params.name }, function (err, docs) {
     if (err) {
       console.log(err);
-      res.status(500).send('Error retrieving members');
+      res.status(500).send("Error retrieving members");
     } else {
-      console.log(req.params.name)
+      console.log(req.params.name);
       console.log(docs);
       res.send(docs);
     }

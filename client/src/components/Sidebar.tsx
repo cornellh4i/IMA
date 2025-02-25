@@ -1,13 +1,19 @@
 import * as React from "react";
-import "./Sidebar.css";
+import "../styles/Sidebar.css";
 import { useState, useEffect } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 
+interface SidebarProps {
+  setMembers: (members: any) => void;
+}
+
+type CategoryKeys = "role" | "major" | "year" | "location";
+
 //defining the categories and subcategories: hardcoded values
-const categories = {
+const categories: Record<CategoryKeys, string[]> = {
   role: ["Developer", "Project Manager", "Designer", "External", "Other"],
   major: [
     "Computer Science",
@@ -21,9 +27,11 @@ const categories = {
 };
 let dummyURL = "fd";
 
-function Sidebar({ setMembers }) {
+const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
   //state to keep track of categories
-  const [openCategories, setOpenCategories] = useState({
+  const [openCategories, setOpenCategories] = useState<
+    Record<CategoryKeys, boolean>
+  >({
     role: false,
     major: false,
     year: false,
@@ -31,7 +39,9 @@ function Sidebar({ setMembers }) {
   });
 
   //states for the checkboxes
-  const [checkedState, setCheckedState] = useState({
+  const [checkedState, setCheckedState] = useState<
+    Record<CategoryKeys, Record<string, boolean>>
+  >({
     role: {},
     major: {},
     year: {},
@@ -39,7 +49,7 @@ function Sidebar({ setMembers }) {
   });
 
   useEffect(() => {
-    const query = Object.entries(checkedState).reduce(
+    const query = Object.entries(checkedState).reduce<Record<string, string>>(
       (acc, [category, values]) => {
         const checkedItems = Object.entries(values)
           .filter(([_, isChecked]) => isChecked)
@@ -47,7 +57,7 @@ function Sidebar({ setMembers }) {
         if (checkedItems.length) acc[category] = checkedItems.join(",");
         return acc;
       },
-      [checkedState, setMembers]
+      {}
     );
 
     const url = new URL("http://localhost:8000/getAllMembers");
@@ -64,7 +74,11 @@ function Sidebar({ setMembers }) {
   }, [checkedState, setMembers]);
 
   //function to toggle the categories
-  const toggleCategories = (category, event) => {
+  const toggleCategories = (
+    category: CategoryKeys,
+    event: React.MouseEvent
+  ) => {
+    // event.stopPropogation();
     event.nativeEvent.stopImmediatePropagation();
 
     setOpenCategories((prevOpenCategories) => ({
@@ -73,9 +87,15 @@ function Sidebar({ setMembers }) {
     }));
   };
 
-  //function to toggle checkbox states
-  const toggleCheckBoxChange = (category, value, event) => {
+  // function to toggle checkbox states
+  const toggleCheckBoxChange = (
+    category: CategoryKeys,
+    value: string,
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    // event.stopPropogation();
     event.nativeEvent.stopImmediatePropagation();
+
     setCheckedState((prev) => ({
       ...prev,
       [category]: {
@@ -84,30 +104,36 @@ function Sidebar({ setMembers }) {
       },
     }));
   };
+
   console.log(dummyURL);
+
   return (
     // <div className="container">
-      <div className="sidebar">
-        {Object.entries(categories).map(([key, values]) => (
-          <div key={key} className="component">
+    <div className="sidebar">
+      {Object.entries(categories).map(([key, values]) => {
+        const categoryKey = key as CategoryKeys;
+        return (
+          <div key={categoryKey} className="component">
             <h2>
-              {key.charAt(0).toUpperCase() +
-                key.slice(1).replace("Year", " Year")}
+              {categoryKey.charAt(0).toUpperCase() +
+                categoryKey.slice(1).replace("Year", " Year")}
             </h2>
             <ChevronRightIcon
-              className={openCategories[key] ? "open" : ""}
-              onClick={(e) => toggleCategories(key, e)}
+              className={openCategories[categoryKey] ? "open" : ""}
+              onClick={(e) => toggleCategories(categoryKey, e)}
             />
 
-            {openCategories[key] && (
+            {openCategories[categoryKey] && (
               <FormGroup className="dropdown">
                 {values.map((value, index) => (
                   <FormControlLabel
                     key={index}
                     control={
                       <Checkbox
-                        checked={!!checkedState[key][value]}
-                        onChange={(e) => toggleCheckBoxChange(key, value, e)}
+                        checked={!!checkedState[categoryKey][value]}
+                        onChange={(e) =>
+                          toggleCheckBoxChange(categoryKey, value, e)
+                        }
                         name={value}
                       />
                     }
@@ -117,9 +143,10 @@ function Sidebar({ setMembers }) {
               </FormGroup>
             )}
           </div>
-        ))}
-      </div>
-    // </div>
+        );
+      })}
+    </div>
   );
-}
+};
+
 export default Sidebar;

@@ -17,6 +17,7 @@
   },
   "description": "",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "dotenv": "^16.0.2",
     "nodemon": "^2.0.20"
   }
