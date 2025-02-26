@@ -10,7 +10,12 @@ import "./App.css";
 interface Member {
   id: number;
   name: string;
-  // Add other fields that match the actual data structure
+  year: string;
+  role: string;
+  image: string;
+  email?: string;
+  linkedin?: string;
+  slack?: string;
 }
 
 const API_URL = process.env.REACT_APP_API;
@@ -23,11 +28,12 @@ const App: React.FC = () => {
   const handleCloseModal = () => setModalOpen(false);
 
   useEffect(() => {
-    // If you need to fetch the members from an API, you can use this.
-    // fetch(`${API_URL}/members`)
-    //   .then(res => res.json())
-    //   .then(data => setMembers(data))
-    //   .catch(error => console.error(error));
+    fetch(`${API_URL}/getMember`)
+      .then((res) => res.json())
+      .then((data) => {
+        setMembers(data);
+      })
+      .catch((error) => console.error("Error fetching members:", error));
   }, []); // Empty dependency array for once on component mount
 
   return (
@@ -39,7 +45,6 @@ const App: React.FC = () => {
           <div className="middle">
             <SearchBar />
             {/* Render cards if members exist */}
-            {/* <div className="cards">{members.map(createCard)}</div> */}
           </div>
         </div>
         <AddMemberPage isOpen={isModalOpen} onClose={handleCloseModal} />
