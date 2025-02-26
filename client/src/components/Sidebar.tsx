@@ -65,8 +65,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
       url.searchParams.append(key, query[key])
     );
 
-    console.log(url);
-
     fetch(url)
       .then((response) => response.json())
       .then((data) => setMembers(data))
@@ -104,8 +102,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
       },
     }));
   };
-
-  console.log(dummyURL);
 
   return (
     // <div className="container">

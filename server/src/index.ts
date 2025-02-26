@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import cors from "cors";
 import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 const app = express();
 const PORT = process.env.PORT || 8000;
@@ -10,17 +11,22 @@ app.use(express.json());
 
 mongoose.set("strictQuery", true);
 
+dotenv.config();
+const MONGO_URI = process.env.MONGO_URI;
+
+if (!MONGO_URI) {
+  throw new Error("Missing MONGO_URI! Set it in your environment variables.");
+}
+
 mongoose
-  .connect(
-    "mongodb+srv://bsl77:h4i-cornell-ima@ima.d3rmp.mongodb.net/?retryWrites=true&w=majority&appName=IMA",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as mongoose.ConnectOptions
-  )
+  .connect(MONGO_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  } as mongoose.ConnectOptions)
   .then(() => console.log("Connected to MongoDB"))
   .catch((err) => console.error("MongoDB connection error:", err));
-app.listen(8000, () => {
+
+app.listen(PORT, () => {
   console.log("on port 8000");
 });
 
@@ -39,23 +45,26 @@ interface IUser extends mongoose.Document {
   m_id: number;
 }
 
-const userSchema = new mongoose.Schema<IUser>({
-  name: String,
-  pronouns: String,
-  role: String,
-  location: String,
-  year: String,
-  major: String,
-  bio: String,
-  imgURL: String,
-  email: String,
-  linkedin: String,
-  slack: String,
-  m_id: { type: Number, required: true, unique: true },
-});
+const userSchema = new mongoose.Schema<IUser>(
+  {
+    name: String,
+    pronouns: String,
+    role: String,
+    location: String,
+    year: String,
+    major: String,
+    bio: String,
+    imgURL: String,
+    email: String,
+    linkedin: String,
+    slack: String,
+    m_id: { type: Number, required: true, unique: true },
+  },
+  { collection: "Users" }
+);
 
 //user model
-const UserModel = mongoose.model<IUser>("User", userSchema);
+const UserModel = mongoose.model<IUser>("Users", userSchema);
 
 //add member function
 app.post("/addMember", async (req: Request, res: Response) => {
@@ -136,9 +145,4 @@ app.get("/getMemberByName/:name", function (req: Request, res: Response) {
       res.send(docs);
     }
   });
-});
-
-// Start Server
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
 });
