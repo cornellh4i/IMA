@@ -76,9 +76,8 @@ const SearchBar: React.FC = () => {
             type="text"
             name="name"
             id="searchInput"
-            placeholder="enter a name"
+            placeholder="Enter a Name"
           ></input>
-          <button id="submit">Search</button>
         </form>
         <div className="cards">{members.map(createCard)}</div>
       </div>

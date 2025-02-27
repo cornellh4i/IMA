@@ -4,7 +4,8 @@ import { useState, useEffect } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { ChevronRight } from "lucide-react";
 
 interface SidebarProps {
   setMembers: (members: any) => void;
@@ -110,14 +111,16 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
         const categoryKey = key as CategoryKeys;
         return (
           <div key={categoryKey} className="component">
-            <h2>
-              {categoryKey.charAt(0).toUpperCase() +
-                categoryKey.slice(1).replace("Year", " Year")}
-            </h2>
-            <ChevronRightIcon
-              className={openCategories[categoryKey] ? "open" : ""}
-              onClick={(e) => toggleCategories(categoryKey, e)}
-            />
+            <div className="filterRow">
+              <h2>
+                {categoryKey.charAt(0).toUpperCase() +
+                  categoryKey.slice(1).replace("Year", " Year")}
+              </h2>
+              <ChevronRight
+                className={openCategories[categoryKey] ? "open" : ""}
+                onClick={(e) => toggleCategories(categoryKey, e)}
+              />
+            </div>
 
             {openCategories[categoryKey] && (
               <FormGroup className="dropdown">

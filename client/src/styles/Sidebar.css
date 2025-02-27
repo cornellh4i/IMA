@@ -3,16 +3,15 @@
 } */
 
 .sidebar {
-  width: 298px;
-  height: 90vh; /* 100% of the viewheight, change after merge of the header and search */
+  width: 298px; /* 100% of the viewheight, change after merge of the header and search */
+  min-height: 90vh;
   flex-shrink: 0;
-  border-radius: 30px;
-  border: 2px solid #72aaff;
+  border: 1px solid lightgray;
+  border-radius: 5px;
   background: var(--M3-sys-light-on-primary, #fff);
   display: flex;
   flex-direction: column;
-  margin-left: 20px;
-  margin-top: 20px;
+  margin-top: 30px;
 }
 
 /* format for the categories */
@@ -23,6 +22,15 @@
   padding: 12px 20px;
   box-sizing: border-box;
   cursor: pointer;
+  flex-direction: column;
+}
+
+.filterRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
 }
 
 .component h2 {
@@ -30,9 +38,8 @@
   font-size: 20px;
   font-family: "Roboto", sans-serif;
   font-size: 18px;
-  color: #000;
-  font-weight: 525;
   font-style: normal;
+  font-weight: normal;
   line-height: 48px;
 }
 
@@ -51,6 +58,6 @@
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  padding: 0px 20px 20px;
-  align-items: first baseline;
+  justify-items: left;
+  margin-left: 0;
 }

@@ -1,15 +1,22 @@
 .top {
-    display: flex;
-    flex-direction: row;
+  display: flex;
+  flex-direction: row;
 }
 .middle {
-    display: flex;
-    flex-direction: column;
-    padding:10px;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
 }
 .cards {
-    width: 50 px;
-    height: 50 px; 
-    padding: 10px;
-    display: grid; 
-    grid-template-columns: 50% 50%;}
+  width: 50 px;
+  height: 50 px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.container {
+  width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
