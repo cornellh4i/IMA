@@ -67,7 +67,7 @@ const SearchBar: React.FC = () => {
     const newQuery = formData.get("name") as string;
     SearchedMember(newQuery);
   };
-
+  // TODO: Implement the search button to the right fo the search bar.
   return (
     <div>
       <div className="searchBar">
