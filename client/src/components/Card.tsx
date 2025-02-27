@@ -1,9 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
 import "../styles/Card.css";
-import email_icon from "../assets/email_icon.png";
-import linkedin_icon from "../assets/linkedin_icon.png";
-import slack_icon from "../assets/slack_icon.png";
+import { Mail, Linkedin, Slack } from "lucide-react";
 
 interface CardProps {
   name: string;
@@ -103,7 +101,7 @@ const Card: React.FC<CardProps> = ({
         </div>
         <div className="imageContainer">
           <a href={`mailto:${email}`} className="button">
-            <img src={email_icon} alt="Email Icon" />
+            <Mail />
           </a>
           <a
             href={linkedin}
@@ -111,7 +109,7 @@ const Card: React.FC<CardProps> = ({
             className="button"
             rel="noopener noreferrer"
           >
-            <img src={linkedin_icon} alt="LinkedIn Icon" />
+            <Linkedin />
           </a>
           <a
             href={slack}
@@ -119,7 +117,7 @@ const Card: React.FC<CardProps> = ({
             className="button"
             rel="noopener noreferrer"
           >
-            <img src={slack_icon} alt="Slack Icon" />
+            <Slack />
           </a>
         </div>
       </div>
