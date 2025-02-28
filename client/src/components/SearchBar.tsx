@@ -67,7 +67,7 @@ const SearchBar: React.FC = () => {
     const newQuery = formData.get("name") as string;
     SearchedMember(newQuery);
   };
-  // TODO: Implement the search button to the right fo the search bar.
+  // TODO: Implement the search button to the right for the search bar.
   return (
     <div>
       <div className="searchBar">
@@ -78,11 +78,15 @@ const SearchBar: React.FC = () => {
             id="searchInput"
             placeholder="Enter a Name"
           ></input>
+          <button className="searchButton">
+            Search
+          </button>
         </form>
         <div className="cards">{members.map(createCard)}</div>
       </div>
     </div>
   );
+
 };
 
 export default SearchBar;

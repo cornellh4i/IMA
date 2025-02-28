@@ -26,3 +26,16 @@
   border-color: transparent;
   font-size: 17px;
 }
+
+.searchButton{
+  background-color: #e8e8e8;
+  color: black;
+  height: 67px;
+  width: 120px;
+  padding: 15px;
+  border-radius: 35px;
+  font-family: "Arial", sans-serif;
+  font-weight: lighter;
+  border-color: lightblue;
+  font-size: 17px;
+}
