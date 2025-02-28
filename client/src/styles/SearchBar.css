@@ -26,3 +26,14 @@
   border-color: transparent;
   font-size: 17px;
 }
+
+.searchButt {
+  background-color: #e8e8e8;
+  color: black;
+  height: 67px;
+  width: 120px;
+  padding: 20px;
+  border-radius: 20px; 
+  border-color:aqua;
+  font-size: 17px;
+}
