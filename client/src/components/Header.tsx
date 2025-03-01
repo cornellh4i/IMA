@@ -1,8 +1,7 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 import "../styles/Header.css";
-import tool_icon from "../assets/tools_icon.png";
 import h4i_icon from "../assets/hack4i.png";
-import addMemberIcon from "../assets/addMemberIcon.png";
 
 interface HeaderProps {
   onAddMemberClick: () => void;
@@ -27,7 +26,9 @@ const Header: React.FC<HeaderProps> = ({ onAddMemberClick }) => {
 
   return (
     <div className="header">
-      <img src={h4i_icon} alt="Company Logo" className="logo" />
+      <Link to="/">
+        <img src={h4i_icon} alt="Company Logo" className="logo" />
+      </Link>
       <Title value="Hack4Impact Alumni Archive" />
     </div>
   );
