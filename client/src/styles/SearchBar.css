@@ -18,11 +18,22 @@
   background-color: #e8e8e8;
   color: black;
   height: 67px;
-  width: 865px;
+  width: 776px;
   padding-left: 15px;
   border-radius: 35px;
   font-family: "Arial", sans-serif;
   font-weight: lighter;
   border-color: transparent;
+  font-size: 17px;
+}
+
+.searchButton {
+  background-color: #e8e8e8;
+  color: black;
+  height: 67px;
+  width: 128px;
+  padding: 20px;
+  border-radius: 20px;
+  border-color: lightblue;
   font-size: 17px;
 }
