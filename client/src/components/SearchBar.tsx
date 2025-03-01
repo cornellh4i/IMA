@@ -2,6 +2,7 @@ import * as React from "react";
 import { useState, useEffect } from "react";
 import "../styles/SearchBar.css";
 import Card from "./Card.tsx";
+import { RectangleEllipsis } from "lucide-react";
 
 // Define the member structure
 interface Member {
@@ -78,6 +79,9 @@ const SearchBar: React.FC = () => {
             id="searchInput"
             placeholder="Enter a Name"
           ></input>
+          <button className = "searchButton">
+            Search
+          </button>
         </form>
         <div className="cards">{members.map(createCard)}</div>
       </div>
