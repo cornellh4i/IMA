@@ -81,7 +81,6 @@ const TestPage: React.FC = () => {
         <Header onAddMemberClick={dummyFunc} />
         <div className="topTest">
           <div className="middleTest">
-            {/* Add Testing Functions Here */}
             <h1>Testing Page</h1>
 
             {/* Create User Button */}
