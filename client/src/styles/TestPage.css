@@ -1,0 +1,38 @@
+.topTest {
+  display: flex;
+  flex-direction: row;
+}
+
+.middleTest {
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+  width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container {
+  width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.middleTest button,
+.middleTest div input {
+  padding: 20px;
+  border-radius: 20px;
+  border: black 1px solid;
+  margin-bottom: 30px;
+  font-size: 20px;
+}
+
+.middleTest div {
+  display: flex;
+  flex-direction: column;
+}
+
+.response {
+  font-size: 22px;
+  margin-bottom: 0;
+}
