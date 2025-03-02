@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import "../styles/addMemberPage.css";
+import "../styles/AddMemberPage.css";
 
 // Define Props for AddMemberPage component
 interface AddMemberPageProps {
