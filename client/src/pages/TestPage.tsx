@@ -23,7 +23,6 @@ const TestPage: React.FC = () => {
       email: "johndoe@example.com",
       linkedin: "http://linkedin.com/in/johndoe",
       slack: "@johndoe",
-      m_id: Math.floor(Math.random() * 10000), // Random ID
     };
 
     try {
@@ -64,16 +63,16 @@ const TestPage: React.FC = () => {
     }
   };
 
-  const deleteUsers = async () => {
-    try {
-      const res = await fetch(`${API_URL}/deleteAll`, { method: "DELETE" });
-      const data = await res.json();
-      setUsers([]);
-      setResponse(data.message);
-    } catch (error) {
-      setResponse("Error deleting users");
-    }
-  };
+  // const deleteUsers = async () => {
+  //   try {
+  //     const res = await fetch(`${API_URL}/deleteAll`, { method: "DELETE" });
+  //     const data = await res.json();
+  //     setUsers([]);
+  //     setResponse(data.message);
+  //   } catch (error) {
+  //     setResponse("Error deleting users");
+  //   }
+  // };
 
   return (
     <>
@@ -111,7 +110,7 @@ const TestPage: React.FC = () => {
                 <div>
                   <ul className="userList">
                     {users.map((user) => (
-                      <li key={user.m_id}>
+                      <li key={user._id}>
                         {user.name} - {user.role} - {user.year}
                       </li>
                     ))}

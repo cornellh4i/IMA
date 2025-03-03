@@ -78,7 +78,6 @@ app.post("/addMember", async (req: Request, res: Response) => {
     email: req.body.email,
     linkedin: req.body.linkedin,
     slack: req.body.slack,
-    m_id: req.body.m_id,
   });
   try {
     const savedData = await data.save();
