@@ -65,7 +65,7 @@ const userSchema = new mongoose.Schema<IUser>(
 const UserModel = mongoose.model<IUser>("Users", userSchema);
 
 //add member function
-app.post("/addMember", async (req: Request, res: Response) => {
+app.post("/addMember", async (req: Request, res: Response): Promise<any> => {
   const data = new UserModel({
     name: req.body.name,
     pronouns: req.body.pronouns,
@@ -88,7 +88,7 @@ app.post("/addMember", async (req: Request, res: Response) => {
 });
 
 //deleteAll function
-app.delete("/deleteAll", async (req: Request, res: Response) => {
+app.delete("/deleteAll", async (req: Request, res: Response): Promise<any> => {
   console.log("trying to delete docs");
   UserModel.deleteMany({})
     .then((result) => {
@@ -105,7 +105,7 @@ app.delete("/deleteAll", async (req: Request, res: Response) => {
 });
 
 //  Get all Method
-app.get("/getMember", function (req: Request, res: Response) {
+app.get("/getMember", async (req: Request, res: Response): Promise<any> => {
   UserModel.find(function (err, docs) {
     if (err) {
       console.log(err);
@@ -117,7 +117,7 @@ app.get("/getMember", function (req: Request, res: Response) {
 });
 
 //get members for filtering and individual categories as well.
-app.get("/getAllMembers", async (req: Request, res: Response) => {
+app.get("/getAllMembers", async (req: Request, res: Response): Promise<any> => {
   try {
     const queryObj = { ...req.query };
     let queryStr = JSON.stringify(queryObj);
@@ -131,15 +131,18 @@ app.get("/getAllMembers", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/getMemberByName/:name", function (req: Request, res: Response) {
-  UserModel.find({ name: req.params.name }, function (err: any, docs: any) {
-    if (err) {
-      console.log(err);
-      res.status(500).send("Error retrieving members");
-    } else {
-      console.log(req.params.name);
-      console.log(docs);
-      res.send(docs);
-    }
-  });
-});
+app.get(
+  "/getMemberByName/:name",
+  async (req: Request, res: Response): Promise<any> => {
+    UserModel.find({ name: req.params.name }, function (err: any, docs: any) {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Error retrieving members");
+      } else {
+        console.log(req.params.name);
+        console.log(docs);
+        res.send(docs);
+      }
+    });
+  }
+);
