@@ -61,10 +61,10 @@ const userSchema = new mongoose.Schema<IUser>(
   { collection: "Users" }
 );
 
-//user model
+// User model
 const UserModel = mongoose.model<IUser>("Users", userSchema);
 
-//add member function
+// Add member function
 app.post("/addMember", async (req: Request, res: Response): Promise<any> => {
   const data = new UserModel({
     name: req.body.name,
@@ -87,7 +87,7 @@ app.post("/addMember", async (req: Request, res: Response): Promise<any> => {
   }
 });
 
-//deleteAll function
+// Delete all function
 app.delete("/deleteAll", async (req: Request, res: Response): Promise<any> => {
   console.log("trying to delete docs");
   UserModel.deleteMany({})
@@ -104,7 +104,7 @@ app.delete("/deleteAll", async (req: Request, res: Response): Promise<any> => {
   console.log("skip");
 });
 
-//  Get all Method
+//  Get member 
 app.get("/getMember", async (req: Request, res: Response): Promise<any> => {
   UserModel.find(function (err, docs) {
     if (err) {
@@ -116,7 +116,7 @@ app.get("/getMember", async (req: Request, res: Response): Promise<any> => {
   });
 });
 
-//get members for filtering and individual categories as well.
+// Get all members for filtering and individual categories
 app.get("/getAllMembers", async (req: Request, res: Response): Promise<any> => {
   try {
     const queryObj = { ...req.query };
@@ -131,6 +131,7 @@ app.get("/getAllMembers", async (req: Request, res: Response): Promise<any> => {
   }
 });
 
+// Get member by name
 app.get(
   "/getMemberByName/:name",
   async (req: Request, res: Response): Promise<any> => {
@@ -146,3 +147,7 @@ app.get(
     });
   }
 );
+
+// TODO Pair 1: (DELETE) Write and implement the Delete memember by name route
+
+// TODO Pair 2: (PUT) Write and implement the Update member route
