@@ -38,7 +38,7 @@ const SearchBar: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const apiURL = "http://localhost:8000/getMember/";
+      const apiURL = "http://localhost:8000/api/users/getAllMembers/";
       fetch(apiURL)
         .then((res) => res.json())
         .then((data) => setMembers(data))
@@ -50,9 +50,9 @@ const SearchBar: React.FC = () => {
   const SearchedMember = (searchQuery: string) => {
     var fullURL = "";
     if (searchQuery === "") {
-      fullURL = "http://localhost:8000/getMember/";
+      fullURL = "http://localhost:8000/api/users/getAllMembers/";
     } else {
-      const apiURL = "http://localhost:8000/getMemberByName/";
+      const apiURL = "http://localhost:8000/api/users/getMemberByName/";
       fullURL = `${apiURL}${searchQuery.toLowerCase()}`;
     }
     fetch(fullURL)

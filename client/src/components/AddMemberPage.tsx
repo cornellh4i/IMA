@@ -72,13 +72,16 @@ const AddMemberPage: React.FC<AddMemberPageProps> = ({ isOpen, onClose }) => {
     };
 
     try {
-      const response = await fetch("http://localhost:8000/addMember", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(memberData),
-      });
+      const response = await fetch(
+        "http://localhost:8000/api/users/addMember",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(memberData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Something went wrong with server!");

@@ -26,7 +26,7 @@ const TestPage: React.FC = () => {
     };
 
     try {
-      const res = await fetch(`${API_URL}/addMember`, {
+      const res = await fetch(`${API_URL}/api/users/addMember`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
@@ -40,7 +40,7 @@ const TestPage: React.FC = () => {
 
   const getUsers = async () => {
     try {
-      const res = await fetch(`${API_URL}/getMember`);
+      const res = await fetch(`${API_URL}/api/users/getAllMembers`);
       const data = await res.json();
       setUsers(data);
       setResponse(`Fetched ${data.length} users`);
@@ -52,7 +52,7 @@ const TestPage: React.FC = () => {
   const getUserByName = async () => {
     if (!name) return;
     try {
-      const res = await fetch(`${API_URL}/getMemberByName/${name}`);
+      const res = await fetch(`${API_URL}/api/users/getMemberByName/${name}`);
       const data = await res.json();
       setUsers(data);
       setResponse(

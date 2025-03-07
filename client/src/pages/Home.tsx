@@ -28,7 +28,7 @@ const App: React.FC = () => {
   const handleCloseModal = () => setModalOpen(false);
 
   useEffect(() => {
-    fetch(`${API_URL}/getMember`)
+    fetch(`${API_URL}/getAllMembers`)
       .then((res) => res.json())
       .then((data) => {
         setMembers(data);

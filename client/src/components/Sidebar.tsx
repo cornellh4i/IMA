@@ -61,7 +61,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
       {}
     );
 
-    const url = new URL("http://localhost:8000/getAllMembers");
+    const url = new URL("http://localhost:8000/api/users/getAllMembers");
     Object.keys(query).forEach((key) =>
       url.searchParams.append(key, query[key])
     );
