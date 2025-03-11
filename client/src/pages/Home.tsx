@@ -8,14 +8,16 @@ import "../App.css";
 
 // Type for the members object, you should define it according to the actual structure of members.
 interface Member {
-  id: number;
   name: string;
   year: string;
   role: string;
+  major: string;
+  pronouns: string;
+  location: string;
+  linkedin: string;
+  slack: string;
+  email: string;
   imgURL: string;
-  email?: string;
-  linkedin?: string;
-  slack?: string;
 }
 
 function createCard(member: Member) {
@@ -57,7 +59,7 @@ const App: React.FC = () => {
         <div className="top">
           <Sidebar setMembers={setMembers} />
           <div className="middle">
-            <SearchBar />
+            <SearchBar members={members} setMembers={setMembers} />
             {/* Render cards if members exist */}
             <div className="cards">{members.map(createCard)}</div>
           </div>
