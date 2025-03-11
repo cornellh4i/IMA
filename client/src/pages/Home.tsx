@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar.tsx";
 import AddMemberPage from "../components/AddMemberPage.tsx";
 import SearchBar from "../components/SearchBar.tsx";
-// import Card from "../components/Card.tsx";
 import Header from "../components/Header.tsx";
+import Card from "../components/Card.tsx";
 import "../App.css";
 
 // Type for the members object, you should define it according to the actual structure of members.
@@ -12,10 +12,24 @@ interface Member {
   name: string;
   year: string;
   role: string;
-  image: string;
+  imgURL: string;
   email?: string;
   linkedin?: string;
   slack?: string;
+}
+
+function createCard(member: Member) {
+  return (
+    <Card
+      name={member.name}
+      year={member.year}
+      role={member.role}
+      linkedin={member.linkedin}
+      slack={member.slack}
+      email={member.email}
+      image={member.imgURL}
+    />
+  );
 }
 
 const API_URL = process.env.REACT_APP_API;
@@ -45,6 +59,7 @@ const App: React.FC = () => {
           <div className="middle">
             <SearchBar />
             {/* Render cards if members exist */}
+            <div className="cards">{members.map(createCard)}</div>
           </div>
         </div>
         <AddMemberPage isOpen={isModalOpen} onClose={handleCloseModal} />
