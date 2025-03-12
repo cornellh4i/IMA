@@ -151,3 +151,18 @@ app.get(
 // TODO Pair 1: (DELETE) Write and implement the Delete memember by name route
 
 // TODO Pair 2: (PUT) Write and implement the Update member route
+
+app.put("/updateMember/:id", async (req: Request, res: Response): Promise<any> => {
+  // name, pronouns, role, location, year, major, bio, imgURL, email, linkedin, slack
+     const userId = req.params.id;
+     const updateData = req.body;
+  
+     try {
+      const updatedMember = await UserModel.findByIdAndUpdate(userId, updateData).exec(); 
+      res.status(200).json(updatedMember);
+      
+     } catch (error: any) {
+      res.status(400).json({message: error.message});
+     }
+  
+  })
