@@ -3,6 +3,7 @@ import { UserModel } from "../models/user";
 
 // Add User
 export const addUser = async (req: Request, res: Response): Promise<any> => {
+  console.log("Received request:", req.body);
   const data = new UserModel({
     name: req.body.name,
     pronouns: req.body.pronouns,
@@ -75,6 +76,35 @@ export const getUserByName = async (
   });
 };
 
-// TODO Pair 1: (DELETE) Write and implement the Delete memember by name route
+export const deleteUserById = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  UserModel.findByIdAndDelete(req.params.id, function (err: any, docs: any) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retrieving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
+};
 
-// TODO Pair 2: (PUT) Write and implement the Update member route
+export const updateUserById = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  const userId = req.params.id;
+  const updateData = req.body;
+
+  try {
+    const updatedMember = await UserModel.findByIdAndUpdate(
+      userId,
+      updateData
+    ).exec();
+    res.status(200).json(updatedMember);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+};
