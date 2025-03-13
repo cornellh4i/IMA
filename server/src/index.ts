@@ -149,6 +149,18 @@ app.get(
 );
 
 // TODO Pair 1: (DELETE) Write and implement the Delete memember by name route
+app.delete("/deleteMemberById/:id", async (req: Request, res: Response): Promise<any> => {
+  UserModel.findByIdAndDelete(req.params.id, function(err:any, docs:any) {
+    if (err) {
+      console.log(err);
+      res.status(500).send("Error retrieving members");
+    } else {
+      console.log(docs);
+      res.send(docs);
+    }
+  });
+}
+);
 
 // TODO Pair 2: (PUT) Write and implement the Update member route
 
