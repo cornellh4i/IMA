@@ -57,7 +57,7 @@ const App: React.FC = () => {
       <div className="container">
         <Header onAddMemberClick={handleOpenModal} />
         <div className="top">
-          <Sidebar setMembers={setMembers} />
+          <Sidebar members={members} setMembers={setMembers} />
           <div className="middle">
             <SearchBar members={members} setMembers={setMembers} />
             {/* Render cards if members exist */}

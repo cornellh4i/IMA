@@ -7,7 +7,21 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 // import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { ChevronRight } from "lucide-react";
 
+interface Member {
+  name: string;
+  year: string;
+  role: string;
+  major: string;
+  pronouns: string;
+  location: string;
+  linkedin: string;
+  slack: string;
+  email: string;
+  imgURL: string;
+}
+
 interface SidebarProps {
+  members: Member[];
   setMembers: (members: any) => void;
 }
 
