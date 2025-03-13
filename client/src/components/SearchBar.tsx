@@ -5,7 +5,6 @@ import Card from "./Card.tsx";
 
 // Define the member structure
 interface Member {
-  m_id: number;
   name: string;
   year: string;
   role: string;
@@ -18,41 +17,20 @@ interface Member {
   imgURL: string;
 }
 
-const SearchBar: React.FC = () => {
-  const [members, setMembers] = useState<Member[]>([]);
+interface SearchBarProps {
+  members: Member[];
+  setMembers: React.Dispatch<React.SetStateAction<Member[]>>;
+}
 
-  function createCard(member: Member) {
-    return (
-      <Card
-        name={member.name}
-        year={member.year}
-        role={member.role}
-        linkedin={member.linkedin}
-        slack={member.slack}
-        email={member.email}
-        image={member.imgURL}
-        key={member.m_id}
-      />
-    );
-  }
+const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const apiURL = "http://localhost:8000/getMember/";
-      fetch(apiURL)
-        .then((res) => res.json())
-        .then((data) => setMembers(data))
-        .catch((e) => console.log("error fetching", e));
-    };
-    fetchData();
-  }, []);
-
-  const SearchedMember = (searchQuery: string) => {
+  const searchMembers = async () => {
     var fullURL = "";
     if (searchQuery === "") {
-      fullURL = "http://localhost:8000/getMember/";
+      fullURL = "http://localhost:8000/api/users/getAllMembers/";
     } else {
-      const apiURL = "http://localhost:8000/getMemberByName/";
+      const apiURL = "http://localhost:8000/api/users/getMemberByName/";
       fullURL = `${apiURL}${searchQuery.toLowerCase()}`;
     }
     fetch(fullURL)
@@ -63,9 +41,7 @@ const SearchBar: React.FC = () => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    const newQuery = formData.get("name") as string;
-    SearchedMember(newQuery);
+    searchMembers();
   };
   // TODO: Implement the search button to the right fo the search bar.
   return (
@@ -77,9 +53,11 @@ const SearchBar: React.FC = () => {
             name="name"
             id="searchInput"
             placeholder="Enter a Name"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
           ></input>
         </form>
-        <div className="cards">{members.map(createCard)}</div>
+        {/* <div className="cards">{members.map(createCard)}</div> */}
       </div>
     </div>
   );
