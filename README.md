@@ -16,7 +16,7 @@
 
 ## About The Project
 
-This project aims to develop internal tooling and automation to streamline ICR's event & meeting setup process.
+This project aims to develop a centrailized location for members of Hack4Impact to connect with alumni and other members.
 
 ### Built With
 
@@ -40,8 +40,6 @@ This project aims to develop internal tooling and automation to streamline ICR's
 - Technical Leads
   - Brandon Lerit
   - Claire Wang
-- Design Lead
-  - Naomi Rufian
 - Developers
   - Jade Lee
   - Jonathan Liang
