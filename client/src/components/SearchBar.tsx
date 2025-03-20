@@ -1,7 +1,7 @@
 import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react"; //useEffect
 import "../styles/SearchBar.css";
-import Card from "./Card.tsx";
+//import Card from "./Card.tsx";
 
 // Define the member structure
 interface Member {
@@ -26,16 +26,17 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const searchMembers = async () => {
-    var fullURL = "";
-    if (searchQuery === "") {
-      fullURL = "http://localhost:8000/api/users/getAllMembers/";
-    } else {
-      const apiURL = "http://localhost:8000/api/users/getMemberByName/";
-      fullURL = `${apiURL}${searchQuery.toLowerCase()}`;
-    }
+    const apiURL = `http://localhost:8000/api/users/searchMembers`;
+    const fullURL = `${apiURL}?q=${encodeURIComponent(searchQuery.trim())}`;;
+    
+    console.log('API log', apiURL)
     fetch(fullURL)
       .then((res) => res.json())
-      .then((data) => setMembers(data))
+      .then((data) => {
+        // Log the data returned from the API to verify the results
+        console.log('API response data:', data);
+        setMembers(data);
+      })
       .catch((e) => console.log("error fetching", e));
   };
 
@@ -43,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
     event.preventDefault();
     searchMembers();
   };
-  // TODO: Implement the search button to the right fo the search bar.
+  // TODO: Implement the search button to the right of the search bar.
   return (
     <div>
       <div className="searchBar">

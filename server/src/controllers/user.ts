@@ -108,3 +108,30 @@ export const updateUserById = async (
     res.status(400).json({ message: error.message });
   }
 };
+
+// Search user by name, location, or email 
+export const searchUsers = async (
+  req: Request, 
+  res: Response
+): Promise<any> => {
+  try {
+
+    const { query } = req;
+    const searchStr = query.q
+
+    const filter = searchStr 
+    ? { 
+      $or: [ 
+        { name: { $regex: searchStr, $options: 'i'} }, 
+        { location: { $regex: searchStr, $options: 'i'} }, 
+        { email: { $regex: searchStr, $options: 'i'} } 
+      ]
+    } : {};
+
+    const matchedUsers = await UserModel.find(filter).exec();
+    res.status(200).json(matchedUsers);
+  } catch (error: any) {
+    res.status(400).json({ message: error.message });
+  }
+
+};

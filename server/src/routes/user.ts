@@ -6,6 +6,7 @@ import {
   deleteAllUsers,
   deleteUserById,
   updateUserById,
+  searchUsers,
 } from "../controllers/user";
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.get("/getMemberByName/:name", getUserByName);
 router.delete("/deleteAll", deleteAllUsers);
 router.delete("/deleteMember/:id", deleteUserById);
 router.put("/updateMember/:id", updateUserById);
+router.get("/searchMembers", searchUsers);
 
 export default router;

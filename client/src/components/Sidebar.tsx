@@ -40,7 +40,7 @@ const categories: Record<CategoryKeys, string[]> = {
   year: ["2024", "2023", "2022", "2021", "2020", "Other"],
   location: ["San Fransisco", "New York City", "Chicago", "Austin", "Other"],
 };
-let dummyURL = "fd";
+//let dummyURL = "fd";
 
 const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
   //state to keep track of categories
