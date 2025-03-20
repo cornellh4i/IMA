@@ -44,7 +44,7 @@ export const deleteAllUsers = async (
   console.log("skip");
 };
 
-//  Get All Users
+//  Get All Users (maybe change to getFilteredUsers?)
 export const getAllUsers = async (
   req: Request,
   res: Response
@@ -53,8 +53,17 @@ export const getAllUsers = async (
     if (err) {
       console.log(err);
     } else {
+      const query: any = {}
+
+      if (req.query.role) query.role = { $in: req.query.role.toString().split(",") };
+      if (req.query.location) query.location = { $in: req.query.location.toString().split(",") };
+      if (req.query.year) query.year = { $in: req.query.year.toString().split(",") };
+      if (req.query.major) query.major = { $in: req.query.major.toString().split(",") };
+
+      const users = UserModel.find(query);
+
       console.log(docs);
-      res.send(docs);
+      res.send(users);
     }
   });
 };
