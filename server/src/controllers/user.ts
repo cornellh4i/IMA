@@ -118,7 +118,7 @@ export const searchUsers = async (
 
     const { query } = req;
     const searchStr = query.q
-    if (searchStr == null) {
+    if (!searchStr) {
        res.status(200).json([])
     }
 
