@@ -118,15 +118,19 @@ export const searchUsers = async (
 
     const { query } = req;
     const searchStr = query.q
+    if (searchStr == null) {
+       res.status(200).json([])
+    }
 
-    const filter = searchStr 
-    ? { 
+
+    const filter =  
+    { 
       $or: [ 
         { name: { $regex: searchStr, $options: 'i'} }, 
         { location: { $regex: searchStr, $options: 'i'} }, 
         { email: { $regex: searchStr, $options: 'i'} } 
       ]
-    } : {};
+    };
 
     const matchedUsers = await UserModel.find(filter).exec();
     res.status(200).json(matchedUsers);
