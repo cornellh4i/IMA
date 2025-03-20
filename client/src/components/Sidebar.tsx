@@ -63,28 +63,28 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
     location: {},
   });
 
-  useEffect(() => {
-    const query = Object.entries(checkedState).reduce<Record<string, string>>(
-      (acc, [category, values]) => {
-        const checkedItems = Object.entries(values)
-          .filter(([_, isChecked]) => isChecked)
-          .map(([key]) => key);
-        if (checkedItems.length) acc[category] = checkedItems.join(",");
-        return acc;
-      },
-      {}
-    );
+  // useEffect(() => {
+  //   const query = Object.entries(checkedState).reduce<Record<string, string>>(
+  //     (acc, [category, values]) => {
+  //       const checkedItems = Object.entries(values)
+  //         .filter(([_, isChecked]) => isChecked)
+  //         .map(([key]) => key);
+  //       if (checkedItems.length) acc[category] = checkedItems.join(",");
+  //       return acc;
+  //     },
+  //     {}
+  //   );
 
-    const url = new URL("http://localhost:8000/api/users/getAllMembers");
-    Object.keys(query).forEach((key) =>
-      url.searchParams.append(key, query[key])
-    );
+  //   const url = new URL("http://localhost:8000/api/users/getAllMembers");
+  //   Object.keys(query).forEach((key) =>
+  //     url.searchParams.append(key, query[key])
+  //   );
 
-    fetch(url)
-      .then((response) => response.json())
-      .then((data) => setMembers(data))
-      .catch((error) => console.error("Error fetching members:", error));
-  }, [checkedState, setMembers]);
+  //   fetch(url)
+  //     .then((response) => response.json())
+  //     .then((data) => setMembers(data))
+  //     .catch((error) => console.error("Error fetching members:", error));
+  // }, [checkedState, setMembers]);
 
   //function to toggle the categories
   const toggleCategories = (
@@ -116,7 +116,29 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
         [value]: !prev[category][value],
       },
     }));
+    //TODO: Implement event handler
+    const query = Object.entries(checkedState).reduce<Record<string, string>>(
+      (acc, [category, values]) => {
+        const checkedItems = Object.entries(values)
+          .filter(([_, isChecked]) => isChecked)
+          .map(([key]) => key);
+        if (checkedItems.length) acc[category] = checkedItems.join(",");
+        return acc;
+      },
+      {}
+    );
+
+    const url = new URL("http://localhost:8000/api/users/getAllMembers");
+    Object.keys(query).forEach((key) =>
+      url.searchParams.append(key, query[key])
+    );
+
+    fetch(url)
+      .then((response) => response.json())
+      .then((data) => setMembers(data))
+      .catch((error) => console.error("Error fetching members:", error));
   };
+  
 
   return (
     // <div className="container">
