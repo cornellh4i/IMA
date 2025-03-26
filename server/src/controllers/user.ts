@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { UserModel } from "../models/user";
+import { UserModel } from "../models/user"; 
 
 // Add User
 export const addUser = async (req: Request, res: Response): Promise<any> => {
@@ -49,24 +49,45 @@ export const getAllUsers = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  UserModel.find(function (err, docs) {
-    if (err) {
-      console.log(err);
-    } else {
-      const query: any = {}
+  try {
+    type CategoryKeys = "role" | "major" | "year" | "location";
 
-      if (req.query.role) query.role = { $in: req.query.role.toString().split(",") };
-      if (req.query.location) query.location = { $in: req.query.location.toString().split(",") };
-      if (req.query.year) query.year = { $in: req.query.year.toString().split(",") };
-      if (req.query.major) query.major = { $in: req.query.major.toString().split(",") };
+    const categories: Record<CategoryKeys, string[]> = {
+      role: ["Developer", "Project Manager", "Designer", "External", "Other"],
+      major: [
+        "Computer Science",
+        "Information Science",
+        "Economics",
+        "Electrical and Computer Engineering",
+        "Other",
+      ],
+      year: ["2028", "2027", "2026", "2025", "2024", "Other"],
+      location: ["San Fransisco", "New York City", "Chicago", "Austin", "Other"],
+    };
 
-      const users = UserModel.find(query);
+    const filter: Record<string,any> = { $or : []};
 
-      console.log(docs);
-      res.send(users);
+    for (const [key,value] of Object.entries(req.query)) {
+        if (typeof value === "string") {
+          if (value.includes("Other")) {
+            filter.$or.push(
+              { [key]: { $nin: categories[key as CategoryKeys] } },
+              { [key]: { $in: value.split(",") } }
+            )
+          } else {
+            filter[key] = { $in: value.split(",")};
+          }
+        }
+      console.log(JSON.stringify(filter, null, 2));
     }
-  });
-};
+
+    const users = await UserModel.find(filter);
+    res.send(users);
+    
+  } catch (err) {
+      console.log(err);
+    }
+  };
 
 // Get member by name
 export const getUserByName = async (
