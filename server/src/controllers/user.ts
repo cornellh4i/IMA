@@ -75,7 +75,9 @@ export const getAllUsers = async (
               { [key]: { $in: value.split(",") } }
             )
           } else {
-            filter[key] = { $in: value.split(",")};
+            filter.$or.push(
+              { [key] : {$in: value.split(",")}}
+            )
           }
         }
       console.log(JSON.stringify(filter, null, 2));
