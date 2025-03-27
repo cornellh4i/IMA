@@ -80,7 +80,6 @@ export const getAllUsers = async (
             )
           }
         }
-      console.log(JSON.stringify(filter, null, 2));
     }
 
     const users = await UserModel.find(filter);
