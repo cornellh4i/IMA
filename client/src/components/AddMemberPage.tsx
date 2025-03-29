@@ -73,7 +73,7 @@ const AddMemberPage: React.FC<AddMemberPageProps> = ({ isOpen, onClose }) => {
 
     try {
       const response = await fetch(
-        "http://localhost:8000/api/users/addMember",
+        "http://localhost:8000/api/users/addUser",
         {
           method: "POST",
           headers: {

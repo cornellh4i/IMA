@@ -26,7 +26,7 @@ const TestPage: React.FC = () => {
     };
 
     try {
-      const res = await fetch(`${API_URL}/api/users/addMember`, {
+      const res = await fetch(`${API_URL}/api/users/addUser`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newUser),
