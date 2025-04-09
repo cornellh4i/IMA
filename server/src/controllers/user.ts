@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { UserModel } from "../models/user";
+import { UserModel } from "../models/user"; 
 
 /**
  * Adds a new user
@@ -36,20 +36,70 @@ export const addUser = async (
   }
 };
 
+// Delete All Users
+export const deleteAllUsers = async (
+  req: Request,
+  res: Response
+): Promise<any> => {
+  UserModel.deleteMany({})
+    .then((result) => {
+      console.log(`${result.deletedCount} documents were deleted.`);
+      res
+        .status(200)
+        .json({ message: `${result.deletedCount} documents were deleted.` });
+    })
+    .catch((error) => {
+      console.error(`An error occurred: ${error.message}`);
+      res.status(500).json({ message: `An error occurred: ${error.message}` });
+    });
+  console.log("skip");
+};
+
 //  Get All Users
 export const getAllUsers = async (
   req: Request,
   res: Response
 ): Promise<any> => {
-  UserModel.find(function (err, docs) {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log(docs);
-      res.send(docs);
+  try {
+    type CategoryKeys = "role" | "major" | "year" | "location";
+
+    const categories: Record<CategoryKeys, string[]> = {
+      role: ["Developer", "Project Manager", "Designer", "External", "Other"],
+      major: [
+        "Computer Science",
+        "Information Science",
+        "Economics",
+        "Electrical and Computer Engineering",
+        "Other",
+      ],
+      year: ["2028", "2027", "2026", "2025", "2024", "Other"],
+      location: ["San Fransisco", "New York City", "Chicago", "Austin", "Other"],
+    };
+
+    const filter: Record<string,any> = { $or : []};
+
+    for (const [key,value] of Object.entries(req.query)) {
+        if (typeof value === "string") {
+          if (value.includes("Other")) {
+            filter.$or.push(
+              { [key]: { $nin: categories[key as CategoryKeys] } },
+              { [key]: { $in: value.split(",") } }
+            )
+          } else {
+            filter.$or.push(
+              { [key] : {$in: value.split(",")}}
+            )
+          }
+        }
     }
-  });
-};
+
+    const users = await UserModel.find(filter);
+    res.send(users);
+    
+  } catch (err) {
+      console.log(err);
+    }
+  };
 
 /**
  * Retrieves a user by name
