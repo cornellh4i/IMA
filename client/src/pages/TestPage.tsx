@@ -4,7 +4,7 @@ import "../styles/TestPage.css";
 
 const TestPage: React.FC = () => {
   const dummyFunc = () => console.log("Open Modal Function");
-  const API_URL = process.env.REACT_APP_API;
+  const API_URL = process.env.REACT_APP_API || `http://localhost:8000`
 
   const [name, setName] = useState<string>("");
   const [users, setUsers] = useState<any[]>([]);
