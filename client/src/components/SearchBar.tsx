@@ -25,9 +25,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const searchMembers = async () => {
-    const apiURL = "http://localhost:8000/api/users/searchMembers/";
+    const apiURL = "http://localhost:8000/api/users/searchUsers/";
     const fullURL = `${apiURL}?q=${encodeURIComponent(searchQuery.trim())}`;
-    
+
     fetch(fullURL)
       .then((res) => res.json())
       .then((data) => setMembers(data))

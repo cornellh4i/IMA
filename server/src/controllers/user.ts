@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import { UserModel } from "../models/user"; 
+import { UserModel } from "../models/user";
 
 /**
  * Adds a new user
@@ -8,13 +8,10 @@ import { UserModel } from "../models/user";
  * @param res: response object used to return the new user data or an error message
  * @returns promise with the new user object or an error
  */
-export const addUser = async (
-  req: Request,
-  res: Response
-): Promise<any> => {
-  if (!req.body.name || !req.body.email) { 
-    res.status(400).json("name or email is undefined")
-  };
+export const addUser = async (req: Request, res: Response): Promise<any> => {
+  if (!req.body.name || !req.body.email) {
+    res.status(400).json("name or email is undefined");
+  }
   const data = new UserModel({
     name: req.body.name,
     pronouns: req.body.pronouns,
@@ -61,6 +58,13 @@ export const getAllUsers = async (
   res: Response
 ): Promise<any> => {
   try {
+    // If no query parameters, return all users
+    if (Object.keys(req.query).length === 0) {
+      const users = await UserModel.find({});
+      return res.status(200).json(users);
+    }
+
+    // Handle filtering if query parameters exist
     type CategoryKeys = "role" | "major" | "year" | "location";
 
     const categories: Record<CategoryKeys, string[]> = {
@@ -73,62 +77,65 @@ export const getAllUsers = async (
         "Other",
       ],
       year: ["2028", "2027", "2026", "2025", "2024", "Other"],
-      location: ["San Fransisco", "New York City", "Chicago", "Austin", "Other"],
+      location: [
+        "San Fransisco",
+        "New York City",
+        "Chicago",
+        "Austin",
+        "Other",
+      ],
     };
 
-    const filter: Record<string,any> = { $or : []};
+    const filter: Record<string, any> = { $or: [] };
 
-    for (const [key,value] of Object.entries(req.query)) {
-        if (typeof value === "string") {
-          if (value.includes("Other")) {
-            filter.$or.push(
-              { [key]: { $nin: categories[key as CategoryKeys] } },
-              { [key]: { $in: value.split(",") } }
-            )
-          } else {
-            filter.$or.push(
-              { [key] : {$in: value.split(",")}}
-            )
-          }
+    for (const [key, value] of Object.entries(req.query)) {
+      if (typeof value === "string") {
+        if (value.includes("Other")) {
+          filter.$or.push(
+            { [key]: { $nin: categories[key as CategoryKeys] } },
+            { [key]: { $in: value.split(",") } }
+          );
+        } else {
+          filter.$or.push({ [key]: { $in: value.split(",") } });
         }
+      }
     }
 
     const users = await UserModel.find(filter);
-    res.send(users);
-    
+    res.status(200).json(users);
   } catch (err) {
-      console.log(err);
-    }
-  };
+    console.error("Error in getAllUsers:", err);
+    res.status(500).json({ message: "Error fetching users" });
+  }
+};
 
 /**
  * Retrieves a user by name
  * Parameter:
  * @param req: name of the user
  * @param res: response object used to return the found user data or an error message
- * @returns promise with the retrieved user information or an error 
+ * @returns promise with the retrieved user information or an error
  */
 export const getUserByName = async (
   req: Request,
   res: Response
 ): Promise<any> => {
   const userName = req.params.name;
-  
-  if (!userName) { 
-    res.status(400).json({ message: "name is undefined"});
+
+  if (!userName) {
+    res.status(400).json({ message: "name is undefined" });
   }
 
   try {
-    const user = await UserModel.find({name: userName});
+    const user = await UserModel.find({ name: userName });
 
     if (user.length === 0 || !user) {
-      res.status(404).json({ message: "no user with provided name"}); 
+      res.status(404).json({ message: "no user with provided name" });
     }
-    res.status(200).json(user)
+    res.status(200).json(user);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
-
 };
 
 /**
@@ -143,18 +150,19 @@ export const deleteUserById = async (
   res: Response
 ): Promise<any> => {
   const userId = req.params.id;
-  if(!userId) {
-    res.status(400).json({ message: "userId is undefined"});
+  if (!userId) {
+    res.status(400).json({ message: "userId is undefined" });
   }
 
   try {
     const deletedMember = await UserModel.findByIdAndDelete(userId).exec;
-    if (!deletedMember) {res.status(404).json({ message: "no user with provided userId"})}
-    res.status(200).json(deletedMember)
+    if (!deletedMember) {
+      res.status(404).json({ message: "no user with provided userId" });
+    }
+    res.status(200).json(deletedMember);
   } catch (error: any) {
     res.status(500).json({ message: error.message });
   }
-
 };
 
 /**
@@ -170,7 +178,7 @@ export const updateUserById = async (
 ): Promise<any> => {
   const userId = req.params.id;
   if (!userId) {
-    res.status(400).json({ message: "userId is undefined"});
+    res.status(400).json({ message: "userId is undefined" });
   }
   const updateData = req.body;
 
@@ -180,7 +188,7 @@ export const updateUserById = async (
       updateData
     ).exec();
     if (!updatedMember) {
-      res.status(404).json({ message: "no user with provided userID"})
+      res.status(404).json({ message: "no user with provided userID" });
     }
     res.status(200).json(updatedMember);
   } catch (error: any) {
@@ -188,27 +196,24 @@ export const updateUserById = async (
   }
 };
 
-// Search user by name, location, or email 
+// Search user by name, location, or email
 export const searchUsers = async (
-  req: Request, 
+  req: Request,
   res: Response
 ): Promise<any> => {
   try {
-
     const { query } = req;
-    const searchStr = query.q
+    const searchStr = query.q;
     if (!searchStr) {
-       res.status(200).json([])
+      res.status(200).json([]);
     }
 
-
-    const filter =  
-    { 
-      $or: [ 
-        { name: { $regex: searchStr, $options: 'i'} }, 
-        { location: { $regex: searchStr, $options: 'i'} }, 
-        { email: { $regex: searchStr, $options: 'i'} } 
-      ]
+    const filter = {
+      $or: [
+        { name: { $regex: searchStr, $options: "i" } },
+        { location: { $regex: searchStr, $options: "i" } },
+        { email: { $regex: searchStr, $options: "i" } },
+      ],
     };
 
     const matchedUsers = await UserModel.find(filter).exec();
@@ -216,5 +221,4 @@ export const searchUsers = async (
   } catch (error: any) {
     res.status(400).json({ message: error.message });
   }
-
 };

@@ -4,7 +4,7 @@ import "../styles/TestPage.css";
 
 const TestPage: React.FC = () => {
   const dummyFunc = () => console.log("Open Modal Function");
-  const API_URL = process.env.REACT_APP_API || `http://localhost:8000`
+  const API_URL = process.env.REACT_APP_API || `http://localhost:8000`;
 
   const [name, setName] = useState<string>("");
   const [users, setUsers] = useState<any[]>([]);
@@ -40,7 +40,7 @@ const TestPage: React.FC = () => {
 
   const getUsers = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/users/getAllMembers`);
+      const res = await fetch(`${API_URL}/api/users/getAllUsers`);
       const data = await res.json();
       setUsers(data);
       setResponse(`Fetched ${data.length} users`);

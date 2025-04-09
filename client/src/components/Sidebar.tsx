@@ -84,7 +84,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     event.nativeEvent.stopImmediatePropagation();
-  
+
     setCheckedState((prev) => {
       const newCheckedState = {
         ...prev,
@@ -93,35 +93,33 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
           [value]: !prev[category][value],
         },
       };
-  
-      const query = Object.entries(newCheckedState).reduce<Record<string, string>>(
-        (acc, [category, values]) => {
-          const checkedItems = Object.entries(values)
-            .filter(([_, isChecked]) => isChecked)
-            .map(([key]) => key);
-            
-          if (checkedItems.length) {
-            acc[category] = checkedItems.join(",");
-          }
-          return acc;
-        },
-        {}
-      );
-  
-      const url = new URL("http://localhost:8000/api/users/getAllMembers");
+
+      const query = Object.entries(newCheckedState).reduce<
+        Record<string, string>
+      >((acc, [category, values]) => {
+        const checkedItems = Object.entries(values)
+          .filter(([_, isChecked]) => isChecked)
+          .map(([key]) => key);
+
+        if (checkedItems.length) {
+          acc[category] = checkedItems.join(",");
+        }
+        return acc;
+      }, {});
+
+      const url = new URL("http://localhost:8000/api/users/getAllUsers");
       Object.keys(query).forEach((key) =>
         url.searchParams.append(key, query[key])
       );
-  
+
       fetch(url)
         .then((response) => response.json())
         .then((data) => setMembers(data))
         .catch((error) => console.error("Error fetching members:", error));
-  
+
       return newCheckedState;
     });
   };
-  
 
   return (
     // <div className="container">
