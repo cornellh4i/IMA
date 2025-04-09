@@ -34,7 +34,7 @@ function createCard(member: Member) {
   );
 }
 
-const API_URL = process.env.REACT_APP_API;
+const API_URL = process.env.REACT_APP_API || `http://localhost:8000/api/users`;
 
 const App: React.FC = () => {
   const [members, setMembers] = useState<Member[]>([]); // Specify Member[] for members
