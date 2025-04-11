@@ -28,9 +28,9 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
   const searchMembers = async () => {
     var fullURL = "";
     if (searchQuery === "") {
-      fullURL = "http://localhost:8000/api/users/getAllMembers/";
+      fullURL = "http://localhost:8000/api/users/getAllUsers/";
     } else {
-      const apiURL = "http://localhost:8000/api/users/getMemberByName/";
+      const apiURL = "http://localhost:8000/api/users/getUserByName/";
       fullURL = `${apiURL}${searchQuery.toLowerCase()}`;
     }
     fetch(fullURL)

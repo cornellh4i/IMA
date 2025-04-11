@@ -71,9 +71,10 @@ export const getUserByName = async (
   try {
     const user = await UserModel.find({name: userName});
 
-    if (user.length === 0 || !user) {
+    if (!user) {
       res.status(404).json({ message: "no user with provided name"}); 
     }
+    
     res.status(200).json(user)
   } catch (error: any) {
     res.status(500).json({ message: error.message });

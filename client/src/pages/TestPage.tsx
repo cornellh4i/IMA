@@ -40,7 +40,7 @@ const TestPage: React.FC = () => {
 
   const getUsers = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/users/getAllMembers`);
+      const res = await fetch(`${API_URL}/api/users/getAllUsers`);
       const data = await res.json();
       setUsers(data);
       setResponse(`Fetched ${data.length} users`);
@@ -52,7 +52,7 @@ const TestPage: React.FC = () => {
   const getUserByName = async () => {
     if (!name) return;
     try {
-      const res = await fetch(`${API_URL}/api/users/getMemberByName/${name}`);
+      const res = await fetch(`${API_URL}/api/users/getUserByName/${name}`);
       const data = await res.json();
       setUsers(data);
       setResponse(

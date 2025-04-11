@@ -34,7 +34,7 @@ function createCard(member: Member) {
   );
 }
 
-const API_URL = process.env.REACT_APP_API || `http://localhost:8000/api/users`;
+const API_URL = process.env.REACT_APP_API || `http://localhost:8000`;
 
 const App: React.FC = () => {
   const [members, setMembers] = useState<Member[]>([]); // Specify Member[] for members
@@ -44,7 +44,7 @@ const App: React.FC = () => {
   const handleCloseModal = () => setModalOpen(false);
 
   useEffect(() => {
-    fetch(`${API_URL}/getAllMembers`)
+    fetch(`${API_URL}/api/users/getAllUsers`)
       .then((res) => res.json())
       .then((data) => {
         setMembers(data);
