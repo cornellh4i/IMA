@@ -10,13 +10,14 @@ interface IUser extends mongoose.Document {
   bio: string;
   imgURL: string;
   email: string;
+  password: string;
   linkedin: string;
   slack: string;
 }
 
 const userSchema = new mongoose.Schema<IUser>(
   {
-    name: String,
+    name: { type: String, required: true },
     pronouns: String,
     role: String,
     location: String,
@@ -24,7 +25,8 @@ const userSchema = new mongoose.Schema<IUser>(
     major: String,
     bio: String,
     imgURL: String,
-    email: String,
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
     linkedin: String,
     slack: String,
   },
