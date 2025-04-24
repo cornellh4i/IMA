@@ -18,6 +18,9 @@ interface Member {
   slack: string;
   email: string;
   imgURL: string;
+  university : string; 
+  industry : string;
+  openStatus : string; 
 }
 
 function createCard(member: Member) {
@@ -30,6 +33,9 @@ function createCard(member: Member) {
       slack={member.slack}
       email={member.email}
       image={member.imgURL}
+      university={member.university}
+      industry={member.industry}
+      openStatus={member.openStatus}
     />
   );
 }

@@ -16,6 +16,9 @@ export const addUser = async (req: Request, res: Response): Promise<any> => {
     email: req.body.email,
     linkedin: req.body.linkedin,
     slack: req.body.slack,
+    university : req.body.university,
+    industry : req.body.industry,
+    openStatus : req.body.openStatus,
   });
   try {
     const savedData = await data.save();

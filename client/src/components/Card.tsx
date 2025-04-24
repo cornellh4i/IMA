@@ -11,6 +11,9 @@ interface CardProps {
   email?: string;
   linkedin?: string;
   slack?: string;
+  university : string; 
+  industry : string;
+  openStatus : string; 
 }
 
 interface ModalProps {
@@ -78,6 +81,9 @@ const Card: React.FC<CardProps> = ({
   email,
   linkedin,
   slack,
+  university,
+  industry,
+  openStatus,
 }) => {
   return (
     <div className="card">
@@ -99,6 +105,9 @@ const Card: React.FC<CardProps> = ({
             </div>
           </div>
         </div>
+
+        <button id="star-button" className="star"></button>
+        
         <div className="imageContainer">
           <a href={`mailto:${email}`} className="button">
             <Mail />
@@ -119,6 +128,7 @@ const Card: React.FC<CardProps> = ({
           >
             <Slack />
           </a>
+      
         </div>
       </div>
     </div>

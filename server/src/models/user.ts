@@ -12,6 +12,9 @@ interface IUser extends mongoose.Document {
   email: string;
   linkedin: string;
   slack: string;
+  university: string; 
+  industry: string;
+  openStatus: string; 
 }
 
 const userSchema = new mongoose.Schema<IUser>(
@@ -27,6 +30,9 @@ const userSchema = new mongoose.Schema<IUser>(
     email: String,
     linkedin: String,
     slack: String,
+    university : String,
+    industry : String,
+    openStatus : String,  
   },
   { collection: "Users" }
 );
