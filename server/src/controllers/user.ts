@@ -13,7 +13,7 @@ export const addUser = async (
   res: Response
 ): Promise<any> => {
   if (!req.body.name || !req.body.email) { 
-    res.status(400).json("name or email is undefined")
+    return res.status(400).json("name or email is undefined")
   };
   const data = new UserModel({
     name: req.body.name,
@@ -65,19 +65,19 @@ export const getUserByName = async (
   const userName = req.params.name;
   
   if (!userName) { 
-    res.status(400).json({ message: "name is undefined"});
+    return res.status(400).json({ message: "name is undefined"});
   }
 
   try {
-    const user = await UserModel.find({name: userName});
+    const user = await UserModel.findOne({name: userName});
 
     if (!user) {
-      res.status(404).json({ message: "no user with provided name"}); 
+      return res.status(404).json({ message: "no user with provided name"}); 
     }
     
-    res.status(200).json(user)
+    return res.status(200).json(user)
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 
 };
@@ -95,15 +95,19 @@ export const deleteUserById = async (
 ): Promise<any> => {
   const userId = req.params.id;
   if(!userId) {
-    res.status(400).json({ message: "userId is undefined"});
+    return res.status(400).json({ message: "userId is undefined"});
   }
 
   try {
-    const deletedMember = await UserModel.findByIdAndDelete(userId).exec;
-    if (!deletedMember) {res.status(404).json({ message: "no user with provided userId"})}
-    res.status(200).json(deletedMember)
+    const deletedMember = await UserModel.findByIdAndDelete(userId).exec();
+    
+    if (!deletedMember) {
+      return res.status(404).json({ message: "no user with provided userId"})
+    }
+
+    return res.status(200).json(deletedMember)
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 
 };
@@ -121,7 +125,7 @@ export const updateUserById = async (
 ): Promise<any> => {
   const userId = req.params.id;
   if (!userId) {
-    res.status(400).json({ message: "userId is undefined"});
+    return res.status(400).json({ message: "userId is undefined"});
   }
   const updateData = req.body;
 
@@ -131,10 +135,10 @@ export const updateUserById = async (
       updateData
     ).exec();
     if (!updatedMember) {
-      res.status(404).json({ message: "no user with provided userID"})
+      return res.status(404).json({ message: "no user with provided userID"})
     }
-    res.status(200).json(updatedMember);
+    return res.status(200).json(updatedMember);
   } catch (error: any) {
-    res.status(500).json({ message: error.message });
+    return res.status(500).json({ message: error.message });
   }
 };
