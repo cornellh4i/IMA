@@ -45,10 +45,7 @@ export const signupUser = async (
         res.status(201).json(user);
     } catch (error: any) {
         return res.status(500).json({ message: error.message });
-    }
-
-    //hihihihih
-   
+    }   
 }
 
 export const loginUser = async (
