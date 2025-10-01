@@ -9,6 +9,7 @@
   },
   "license": "ISC",
   "dependencies": {
+    "@supabase/supabase-js": "^2.58.0",
     "cors": "^2.8.5",
     "express": "^4.19.1",
     "mongodb": "^6.5.0",
