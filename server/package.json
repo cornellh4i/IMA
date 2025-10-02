@@ -16,13 +16,15 @@
     "mongoose": "^6.12.7",
     "morgan": "^1.10.0",
     "swagger-jsdoc": "^6.0.0",
-    "swagger-ui-express": "^4.5.0"
+    "swagger-ui-express": "^4.6.3"
   },
   "description": "",
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
     "@types/node": "^22.13.10",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-express": "^4.1.8",
     "dotenv": "^16.0.2",
     "nodemon": "^2.0.20",
     "ts-node": "^10.9.2",

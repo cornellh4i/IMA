@@ -1,19 +1,15 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
+import { supabase } from "./supabase";
 
-dotenv.config();
-const MONGO_URI = process.env.MONGO_URI;
+export const initializeDatabase = async () => {
+  const { data, error } = await supabase.storage.listBuckets();
 
-if (!MONGO_URI) {
-  throw new Error("Missing MONGO_URI! Set it in your environment variables.");
-}
+  if (error) {
+    throw new Error(`Supabase connection error: ${error.message}`);
+  }
 
-export const connectDB = async () => {
-  mongoose
-    .connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    } as mongoose.ConnectOptions)
-    .then(() => console.log("Connected to MongoDB"))
-    .catch((err) => console.error("MongoDB connection error:", err));
+  console.log(
+    `Supabase connection verified${
+      Array.isArray(data) ? ` (${data.length} buckets accessible)` : ""
+    }`
+  );
 };

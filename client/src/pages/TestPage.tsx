@@ -40,7 +40,7 @@ const TestPage: React.FC = () => {
 
   const getUsers = async () => {
     try {
-      const res = await fetch(`${API_URL}/api/users/getAllUsers`);
+      const res = await fetch(`${API_URL}/api/members/`);
       const data = await res.json();
       setUsers(data);
       setResponse(`Fetched ${data.length} users`);
@@ -58,6 +58,7 @@ const TestPage: React.FC = () => {
       setResponse(
         data.length > 0 ? `Found user: ${data[0].name}` : "No user found"
       );
+      console.log(data);
     } catch (error) {
       setResponse("Error fetching user");
     }
@@ -110,8 +111,9 @@ const TestPage: React.FC = () => {
                 <div>
                   <ul className="userList">
                     {users.map((user) => (
-                      <li key={user._id}>
-                        {user.name} - {user.role} - {user.year}
+                      <li key={user.id}>
+                        {/* Put all of user's properties in one row */}
+                        {JSON.stringify(user)}
                       </li>
                     ))}
                   </ul>
