@@ -35,14 +35,11 @@ export interface SupabaseMemberRow {
   id: string;
   name: string;
   profile_picture?: string | null;
-  profilePicture?: string | null; // Alternative naming
   role: MemberRole;
   team: MemberTeam;
   date_joined?: string;
-  dateJoined?: string; // Alternative naming
   email: string;
-  linkedin?: string | null;
-  linked_in?: string | null; // Alternative naming
+  linkedIn?: string | null;
   bio?: string | null;
   created_at?: string;
 }
