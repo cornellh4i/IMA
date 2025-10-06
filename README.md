@@ -38,12 +38,12 @@ This project aims to develop a centrailized location for members of Hack4Impact 
 - Technical Leads
   - Rohan Sedhain
   - David Valerezo
--Developers
+- Developers
   - Nihaal Konda
   - Fadi Ismail
   - Carl Hu
   - Chimdi Ejiogu
--Designers
+- Designers
   - Ting Fei
   - Jasmine Shi
 
