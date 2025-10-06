@@ -34,9 +34,20 @@ This project aims to develop a centrailized location for members of Hack4Impact 
     └── README.md
 
 ## Contributors
+### Fall 2025
+- Technical Leads
+  - Rohan Sedhain
+  - David Valerezo
+-Developers
+  - Nihaal Konda
+  - Fadi Ismail
+  - Carl Hu
+  - Chimdi Ejiogu
+-Designers
+  - Ting Fei
+  - Jasmine Shi
 
 ### Spring 2025
-
 - Technical Leads
   - Brandon Lerit
   - Claire Wang
