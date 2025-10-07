@@ -27,12 +27,12 @@ const escapeLikePattern = (value: string): string =>
 const mapRowToMember = (row: SupabaseMemberRow): MemberRecord => ({
   id: row.id,
   name: row.name,
-  profilePicture: row.profile_picture ?? row.profilePicture ?? undefined,
+  profilePicture: row.profile_picture ?? undefined,
   role: row.role,
   team: row.team,
-  dateJoined: row.date_joined ?? row.dateJoined ?? "",
+  dateJoined: row.date_joined ?? "",
   email: row.email,
-  linkedIn: row.linkedin ?? row.linked_in ?? undefined,
+  linkedIn: row.linkedIn ?? undefined,
   bio: row.bio ?? undefined,
   created_at: row.created_at,
 });
