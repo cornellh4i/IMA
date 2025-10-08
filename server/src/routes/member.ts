@@ -7,6 +7,7 @@ const router = express.Router();
 // Documentation is handled in swagger/paths.ts
 router.get("/", getAllMembers);
 
+// POST /api/members - Add a new member
 router.post("/", addMember);
 
 export default router;
