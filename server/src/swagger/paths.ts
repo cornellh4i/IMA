@@ -26,6 +26,43 @@ export const memberPaths = {
           }
         }
       }
+    },
+    post: {
+      summary: 'Add a new member',
+      description: 'Add a new member to the organization',
+      tags: ['Members'],
+      requestBody: {
+        required: true,
+        content: {
+          'application/json': {
+            schema: {
+              $ref: '#/components/schemas/MemberFields'
+            }
+          }
+        }
+      },
+      responses: {
+        '201': {
+          description: 'Successfully added a new member',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Member'
+              }
+            }
+          }
+        },
+        '400': {
+          description: 'Bad request',
+          content: {
+            'application/json': {
+              schema: {
+                $ref: '#/components/schemas/Error'
+              }
+            }
+          }
+        }
+      }
     }
-  }
+  },
 };
