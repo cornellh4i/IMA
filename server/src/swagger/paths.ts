@@ -26,37 +26,24 @@ export const memberPaths = {
           }
         }
       }
-    }
-  },
-  '/api/members/{id}': {
+    },
     post: {
-      summary: 'Update a member',
-      description: 'Update a member by their unique ID',
+      summary: 'Add a new member',
+      description: 'Add a new member to the organization',
       tags: ['Members'],
-      parameters: [
-        {
-          name: 'id',
-          in: 'path',
-          required: true,
-          description: 'Unique identifier of the member to update',
-          schema: {
-            type: 'string'
-          }
-        }
-      ],
       requestBody: {
         required: true,
         content: {
           'application/json': {
             schema: {
-              $ref: '#/components/schemas/MemberUpdate'
+              $ref: '#/components/schemas/MemberFields'
             }
           }
         }
       },
       responses: {
-        '200': {
-          description: 'Member successfully updated',
+        '201': {
+          description: 'Successfully added a new member',
           content: {
             'application/json': {
               schema: {
@@ -66,27 +53,7 @@ export const memberPaths = {
           }
         },
         '400': {
-          description: 'Bad request - Member ID is required',
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/Error'
-              }
-            }
-          }
-        },
-        '404': {
-          description: 'Member not found',
-          content: {
-            'application/json': {
-              schema: {
-                $ref: '#/components/schemas/Error'
-              }
-            }
-          }
-        },
-        '500': {
-          description: 'Internal server error',
+          description: 'Bad request',
           content: {
             'application/json': {
               schema: {
@@ -97,5 +64,5 @@ export const memberPaths = {
         }
       }
     }
-  }
+  },
 };
