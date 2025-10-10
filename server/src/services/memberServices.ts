@@ -4,6 +4,7 @@ import {
   MemberRecord,
   MemberRole,
   SupabaseMemberRow,
+  MemberFields,
 } from "../models/member";
 
 export interface MemberListFilters {
@@ -27,12 +28,12 @@ const escapeLikePattern = (value: string): string =>
 const mapRowToMember = (row: SupabaseMemberRow): MemberRecord => ({
   id: row.id,
   name: row.name,
-  profilePicture: row.profile_picture ?? row.profilePicture ?? undefined,
+  profilePicture: row.profile_picture ?? undefined,
   role: row.role,
   team: row.team,
-  dateJoined: row.date_joined ?? row.dateJoined ?? "",
+  dateJoined: row.date_joined ?? "",
   email: row.email,
-  linkedIn: row.linkedin ?? row.linked_in ?? undefined,
+  linkedIn: row.linkedIn ?? undefined,
   bio: row.bio ?? undefined,
   created_at: row.created_at,
 });
@@ -100,4 +101,60 @@ export const getAllMembersService = async (): Promise<MemberRecord[]> => {
   }
 
   return (data ?? []).map(mapRowToMember);
+};
+
+/**
+ * Update a member by their unique ID
+ * @param id - The unique identifier of the member to update
+ * @param updates - The fields to update
+ * @returns Promise with the updated member record
+ */
+export const updateMemberService = async (
+  id: string,
+  updates: Partial<MemberFields>
+): Promise<MemberRecord> => {
+  // Convert camelCase to snake_case for Supabase
+  const supabaseUpdates: any = {};
+  
+  if (updates.profilePicture !== undefined) {
+    supabaseUpdates.profile_picture = updates.profilePicture;
+  }
+  if (updates.dateJoined !== undefined) {
+    supabaseUpdates.date_joined = updates.dateJoined;
+  }
+  if (updates.linkedIn !== undefined) {
+    supabaseUpdates.linkedIn = updates.linkedIn;
+  }
+  if (updates.name !== undefined) {
+    supabaseUpdates.name = updates.name;
+  }
+  if (updates.role !== undefined) {
+    supabaseUpdates.role = updates.role;
+  }
+  if (updates.team !== undefined) {
+    supabaseUpdates.team = updates.team;
+  }
+  if (updates.email !== undefined) {
+    supabaseUpdates.email = updates.email;
+  }
+  if (updates.bio !== undefined) {
+    supabaseUpdates.bio = updates.bio;
+  }
+
+  const { data, error } = await supabase
+    .from(MEMBERS_TABLE)
+    .update(supabaseUpdates)
+    .eq("id", id)
+    .select("*")
+    .single();
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("Member not found");
+  }
+
+  return mapRowToMember(data);
 };
