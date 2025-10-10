@@ -5,7 +5,6 @@ import {
   MemberRecord,
   MemberRole,
   SupabaseMemberRow,
-  MemberFields,
 } from "../models/member";
 
 export interface MemberListFilters {
