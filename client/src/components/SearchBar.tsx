@@ -25,13 +25,12 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   const searchMembers = async () => {
-    const apiURL = "http://localhost:8000/api/users/searchUsers/";
-    const fullURL = `${apiURL}?q=${encodeURIComponent(searchQuery.trim())}`;
-
-    fetch(fullURL)
-      .then((res) => res.json())
-      .then((data) => setMembers(data))
-      .catch((e) => console.log("error fetching", e));
+    // TODO(dev): call supabase.from("members").select(...).ilike(...) per ticket and update setMembers.
+    console.warn(
+      "TODO: integrate Supabase search for members",
+      searchQuery.trim()
+    );
+    setMembers((currentMembers) => currentMembers);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

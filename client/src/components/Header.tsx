@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import "../styles/Header.css";
-import h4i_icon from "../assets/hack4i.png";
+import h4i_icon from "../assets/h4hilogo.png";
 
 interface HeaderProps {
   onAddMemberClick: () => void;

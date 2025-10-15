@@ -4,76 +4,9 @@ import "../styles/TestPage.css";
 
 const TestPage: React.FC = () => {
   const dummyFunc = () => console.log("Open Modal Function");
-  const API_URL = process.env.REACT_APP_API || `http://localhost:8000`;
-
   const [name, setName] = useState<string>("");
   const [users, setUsers] = useState<any[]>([]);
   const [response, setResponse] = useState<string>("");
-
-  const addUser = async () => {
-    const newUser = {
-      name: "John Doe",
-      pronouns: "he/him",
-      role: "Developer",
-      location: "NY",
-      year: "2025",
-      major: "CS",
-      bio: "Test bio",
-      imgURL: "http://example.com/image.jpg",
-      email: "johndoe@example.com",
-      linkedin: "http://linkedin.com/in/johndoe",
-      slack: "@johndoe",
-    };
-
-    try {
-      const res = await fetch(`${API_URL}/api/users/addMember`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newUser),
-      });
-      const data = await res.json();
-      setResponse(`User created: ${data.name}`);
-    } catch (error) {
-      setResponse("Error creating user");
-    }
-  };
-
-  const getUsers = async () => {
-    try {
-      const res = await fetch(`${API_URL}/api/members/`);
-      const data = await res.json();
-      setUsers(data);
-      setResponse(`Fetched ${data.length} users`);
-    } catch (error) {
-      setResponse("Error fetching users");
-    }
-  };
-
-  const getUserByName = async () => {
-    if (!name) return;
-    try {
-      const res = await fetch(`${API_URL}/api/users/getMemberByName/${name}`);
-      const data = await res.json();
-      setUsers(data);
-      setResponse(
-        data.length > 0 ? `Found user: ${data[0].name}` : "No user found"
-      );
-      console.log(data);
-    } catch (error) {
-      setResponse("Error fetching user");
-    }
-  };
-
-  // const deleteUsers = async () => {
-  //   try {
-  //     const res = await fetch(`${API_URL}/deleteAll`, { method: "DELETE" });
-  //     const data = await res.json();
-  //     setUsers([]);
-  //     setResponse(data.message);
-  //   } catch (error) {
-  //     setResponse("Error deleting users");
-  //   }
-  // };
 
   return (
     <>
@@ -83,38 +16,34 @@ const TestPage: React.FC = () => {
           <div className="middleTest">
             <h1>Testing Page</h1>
 
-            {/* Create User Button */}
-            <button onClick={addUser}>Call Create User /api/addMember </button>
-
-            {/* Get All Users Button */}
-            <button onClick={getUsers}>
-              Call Get All Users /api/getAllMember
-            </button>
-
-            {/* Get User by Name Input & Button */}
+            <p>
+              {/* TODO(dev): wire Supabase testing harness here once core queries are ready. */}
+              Supabase integration testing hooks will live here. For now this
+              page only tracks local state so the UI can be wired up before
+              backend work begins.
+            </p>
             <div className="getUser">
-              <button onClick={getUserByName}>
-                Call Get User by Name /api/getUserByName:name
-              </button>
               <input
                 type="text"
-                placeholder="Enter Name (Call Get User by Name)"
+                placeholder="Enter Name (sample state only)"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-
-              {/* Response Messages */}
+              <button
+                onClick={() => {
+                  console.warn("TODO: connect Supabase lookup", name);
+                  setResponse("Supabase integration pending");
+                  setUsers((currentUsers) => currentUsers);
+                }}
+              >
+                Trigger Lookup Placeholder
+              </button>
               {response && <p className="response">{response}</p>}
-
-              {/* Display Users */}
               {users.length > 0 && (
                 <div>
                   <ul className="userList">
                     {users.map((user) => (
-                      <li key={user.id}>
-                        {/* Put all of user's properties in one row */}
-                        {JSON.stringify(user)}
-                      </li>
+                      <li key={user.id}>{JSON.stringify(user)}</li>
                     ))}
                   </ul>
                 </div>

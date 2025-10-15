@@ -1,6 +1,6 @@
 import * as React from "react";
 import "../styles/Sidebar.css";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
@@ -107,15 +107,9 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
         return acc;
       }, {});
 
-      const url = new URL("http://localhost:8000/api/users/getAllUsers");
-      Object.keys(query).forEach((key) =>
-        url.searchParams.append(key, query[key])
-      );
-
-      fetch(url)
-        .then((response) => response.json())
-        .then((data) => setMembers(data))
-        .catch((error) => console.error("Error fetching members:", error));
+      // TODO(dev): translate `query` into Supabase filters and update setMembers with returned rows.
+      console.warn("TODO: integrate Supabase filter with query", query);
+      setMembers((currentMembers: Member[]) => currentMembers);
 
       return newCheckedState;
     });
