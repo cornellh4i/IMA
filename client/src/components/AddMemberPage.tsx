@@ -71,28 +71,9 @@ const AddMemberPage: React.FC<AddMemberPageProps> = ({ isOpen, onClose }) => {
       slack: inputsRef.current.slack?.value || "https://slack.com/",
     };
 
-    try {
-      const response = await fetch(
-        "http://localhost:8000/api/users/addMember",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(memberData),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Something went wrong with server!");
-      }
-
-      const savedMember = await response.json();
-      console.log("Member added successfully: ", savedMember);
-    } catch (error) {
-      console.error("Failed to add member: ", error);
-      alert("Unable to add member, please contact admin for details!");
-    }
+    // TODO(dev): replace with supabase.from("members").insert(...) and handle storage for imgURL (ticket SUPA-02).
+    console.warn("TODO: integrate Supabase insert for new member", memberData);
+    onClose();
   };
 
   return (

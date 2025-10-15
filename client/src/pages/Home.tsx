@@ -34,8 +34,6 @@ function createCard(member: Member) {
   );
 }
 
-const API_URL = process.env.REACT_APP_API || `http://localhost:8000/api/users`;
-
 const App: React.FC = () => {
   const [members, setMembers] = useState<Member[]>([]); // Specify Member[] for members
   const [isModalOpen, setModalOpen] = useState<boolean>(false); // Specify boolean type for modal state
@@ -44,12 +42,7 @@ const App: React.FC = () => {
   const handleCloseModal = () => setModalOpen(false);
 
   useEffect(() => {
-    fetch(`${API_URL}/getAllUsers`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMembers(data);
-      })
-      .catch((error) => console.error("Error fetching members:", error));
+    // TODO(dev): fetch members from Supabase (see ticket SUPA-01) and call setMembers with the result.
   }, []); // Empty dependency array for once on component mount
 
   return (
