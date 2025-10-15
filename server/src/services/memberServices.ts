@@ -28,10 +28,10 @@ const escapeLikePattern = (value: string): string =>
 const mapRowToMember = (row: SupabaseMemberRow): MemberRecord => ({
   id: row.id,
   name: row.name,
-  profilePicture: row.profile_picture ?? row.profile_picture ?? undefined,
+  profile_picture: row.profile_picture ?? row.profile_picture ?? undefined,
   role: row.role,
   team: row.team,
-  dateJoined: row.date_joined ?? row.date_joined ?? "",
+  date_joined: row.date_joined ?? row.date_joined ?? "",
   email: row.email,
   linkedIn: row.linkedIn ?? row.linkedIn ?? undefined,
   bio: row.bio ?? undefined,
@@ -48,10 +48,10 @@ const mapRowToMember = (row: SupabaseMemberRow): MemberRecord => ({
  */
 export const mapMemberToRow = (member: MemberFields) => ({
   name: member.name,
-  profile_picture: member.profilePicture,
+  profile_picture: member.profile_picture,
   role: member.role,
   team: member.team,
-  date_joined: member.dateJoined,
+  date_joined: member.date_joined,
   email: member.email,
   linkedIn: member.linkedIn,
   bio: member.bio,
@@ -135,11 +135,11 @@ export const updateMemberService = async (
   // Convert camelCase to snake_case for Supabase
   const supabaseUpdates: any = {};
   
-  if (updates.profilePicture !== undefined) {
-    supabaseUpdates.profile_picture = updates.profilePicture;
+  if (updates.profile_picture !== undefined) {
+    supabaseUpdates.profile_picture = updates.profile_picture;
   }
-  if (updates.dateJoined !== undefined) {
-    supabaseUpdates.date_joined = updates.dateJoined;
+  if (updates.date_joined !== undefined) {
+    supabaseUpdates.date_joined = updates.date_joined;
   }
   if (updates.linkedIn !== undefined) {
     supabaseUpdates.linkedIn = updates.linkedIn;
