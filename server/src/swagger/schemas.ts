@@ -60,6 +60,51 @@ export const memberSchemas = {
     }
   },
   
+  MemberUpdate: {
+    type: 'object',
+    properties: {
+      name: { 
+        type: 'string',
+        description: 'Full name of the member'
+      },
+      profile_picture: { 
+        type: 'string',
+        nullable: true,
+        description: 'URL to profile picture'
+      },
+      role: { 
+        type: 'string',
+        enum: ['COD', 'TL/PM', 'Engineering Chair', 'Design Lead', 'NME Instructor', 'Member', 'Newbie'],
+        description: 'Role of the member in the organization'
+      },
+      team: { 
+        type: 'string',
+        description: 'Team the member belongs to'
+      },
+      date_joined: { 
+        type: 'string',
+        format: 'date',
+        description: 'Date when the member joined'
+      },
+      email: { 
+        type: 'string',
+        format: 'email',
+        description: 'Email address of the member'
+      },
+      linkedIn: { 
+        type: 'string',
+        nullable: true,
+        description: 'LinkedIn profile URL'
+      },
+      bio: { 
+        type: 'string',
+        nullable: true,
+        description: 'Short biography of the member'
+      }
+    },
+    description: 'Fields that can be updated for a member. All fields are optional.'
+  },
+  
   Error: {
     type: 'object',
     properties: {
@@ -77,7 +122,7 @@ export const memberSchemas = {
         type: 'string',
         description: 'Full name of the member'
       },
-      profilePicture: {
+      profile_picture: {
         type: 'string',
         nullable: true,
         description: 'URL to profile picture'
@@ -91,7 +136,7 @@ export const memberSchemas = {
         type: 'string',
         description: 'Team the member belongs to'
       },
-      dateJoined: {
+      date_joined: {
         type: 'string',
         format: 'date',
         description: 'Date when the member joined'
@@ -111,6 +156,6 @@ export const memberSchemas = {
         description: 'Short biography of the member'
       }
     },
-    required: ['name', 'role', 'team', 'dateJoined', 'email', 'linkedIn', 'bio']
+    required: ['name', 'role', 'team', 'date_joined', 'email', 'linkedIn', 'bio']
   }
 };

@@ -16,10 +16,10 @@ export type MemberTeam = string;
 
 export interface MemberFields {
   name: string;
-  profilePicture?: string | null;
+  profile_picture?: string | null;
   role: MemberRole;
   team: MemberTeam;
-  dateJoined: string;
+  date_joined: string;
   email: string;
   linkedIn?: string | null;
   bio?: string | null;

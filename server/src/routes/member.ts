@@ -1,5 +1,5 @@
 import express from "express";
-import { getAllMembers, addMember } from "../controllers/member";
+import { getAllMembers, addMember, updateMember, getMemberById } from "../controllers/member";
 
 const router = express.Router();
 
@@ -9,5 +9,13 @@ router.get("/", getAllMembers);
 
 // POST /api/members - Add a new member
 router.post("/", addMember);
+
+// POST /api/members/:id - Update a member by ID
+// Documentation is handled in swagger/paths.ts
+router.post("/:id", updateMember);
+
+// GET /api/members/:id - Get member by ID
+// Documentation is handled in swagger/paths.ts
+router.get("/:id", getMemberById);
 
 export default router;
