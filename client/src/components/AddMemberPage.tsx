@@ -1,5 +1,7 @@
 import React, { useState, useRef } from "react";
 import "../styles/addMemberPage.css";
+import { transformToSupabaseInsert } from "../types/member.ts";
+import { supabaseHelpers } from "../lib/supabaseClient.ts";
 
 // Define Props for AddMemberPage component
 interface AddMemberPageProps {
@@ -55,7 +57,7 @@ const AddMemberPage: React.FC<AddMemberPageProps> = ({ isOpen, onClose }) => {
       return;
     }
 
-    // Creating user object for API
+    // Creating user object for Supabase
     const memberData = {
       name: inputsRef.current.name.value,
       pronouns: inputsRef.current.pronouns.value,
@@ -69,11 +71,21 @@ const AddMemberPage: React.FC<AddMemberPageProps> = ({ isOpen, onClose }) => {
       linkedin:
         inputsRef.current.linkedin?.value || "https://www.linkedin.com/",
       slack: inputsRef.current.slack?.value || "https://slack.com/",
+      team: "General", // Default team
+      dateJoined: new Date().toISOString().split('T')[0], // Current date
     };
 
-    // TODO(dev): replace with supabase.from("members").insert(...) and handle storage for imgURL.
-    console.warn("TODO: integrate Supabase insert for new member", memberData);
-    onClose();
+    try {
+      const supabaseData = transformToSupabaseInsert(memberData);
+      await supabaseHelpers.addMember(supabaseData);
+      alert("Member added successfully!");
+      onClose();
+      // Optionally refresh the page or trigger a parent component refresh
+      window.location.reload();
+    } catch (err) {
+      console.error('Failed to add member:', err);
+      alert("Failed to add member. Please try again.");
+    }
   };
 
   return (
