@@ -1,53 +1,56 @@
-import React, { useState } from "react";
-import Header from "../components/Header.tsx";
+import { supabase } from "../supabaseClient.ts";
+import { useState, useEffect } from "react";
+import type { Session } from "@supabase/supabase-js";
 
-import { createClient } from "@supabase/supabase-js";
+const AuthPage = () => {
+  const [session, setSession] = useState<Session | null>(null);
 
-const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || '';
-const supabaseKey = process.env.REACT_APP_SUPABASE_SERVICE_ROLE_KEY || '';
-
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: true, autoRefreshToken: true } });
-
-declare const process: any;
-
-const Auth: React.FC = () => {
-  const logSession = async () => {
-    // Get session from server
-    const { data : {session} } = await supabase.auth.getSession(); 
-    const accessToken = session?.access_token;
-
-    const resp = await fetch(`http://localhost:8000/api/auth/session`, {
-      headers: {Authorization: `Bearer ${accessToken}`},
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setSession(session);
     });
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
-    const data = await resp.json();
-    console.log(`Data is `, data);
-
-    // const session = await fetch(`http://localhost:8000/api/auth/session`);
-    // const data = await session.json();
-    // console.log(data);
-  }
-
-  return (
-    <div>
-        <button>
+  if (!session) {
+    return (
+      <div style={{ padding: 16 }}>
+        <div style={{ marginTop: 12, paddingLeft: 8 }}>
+          <button
+            onClick={() =>
+              supabase.auth.signInWithOAuth({ provider: "google" })
+            }
+            style={{ marginRight: 8 }}
+          >
             Sign in with Google
-        </button>
-        <button
-          onClick={logSession}
-        >
-            Check session
-        </button>
-        <button>
+          </button>
+          <button
+            onClick={() => supabase.auth.signOut()}
+            style={{ marginRight: 8 }}
+          >
             Sign out
-        </button>
-    </div>
-  );
+          </button>
+          <button
+            onClick={async () => {
+              const { data } = await supabase.auth.getSession();
+              console.log("Session: ", data?.session);
+              const { data: userData } = await supabase.auth.getUser();
+              const user = userData.user;
+              console.log('User: ', user);
+            }}
+          >
+            Check session
+          </button>
+        </div>
+      </div>
+    );
+  }
+  return <div>Logged in!</div>;
+};
 
-}
-
-export default Auth;
+export default AuthPage;
