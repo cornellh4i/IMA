@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState } from "react";
+import { Search } from "lucide-react";
 import { Member, transformSupabaseMember } from "../types/member.ts";
 import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import "../styles/SearchBar.css";
@@ -47,20 +48,21 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
   };
 
   return (
-    <div>
-      <div className="searchBar">
-        <form id="form" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            name="name"
-            id="searchInput"
-            placeholder="Enter a Name"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          ></input>
-        </form>
-        {/* <div className="cards">{members.map(createCard)}</div> */}
-      </div>
+    <div className="searchBar">
+      <form id="form" onSubmit={handleSubmit}>
+        <span className="searchIcon" aria-hidden>
+          <Search size={18} />
+        </span>
+        <input
+          type="text"
+          name="name"
+          id="searchInput"
+          placeholder="Search"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          aria-label="Search members"
+        />
+      </form>
     </div>
   );
 };

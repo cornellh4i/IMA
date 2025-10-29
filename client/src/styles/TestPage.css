@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&display=swap');
+
+.testPage {
+  font-family: "Hanken Grotesk", sans-serif;
+  height: auto;
+  overflow: auto; /* allow scrolling */
+}
+
 .topTest {
   display: flex;
   flex-direction: row;
@@ -13,10 +21,44 @@
 }
 
 .container {
-  width: 1280px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
+
+.testPage .middle {
+  background: #F3F4F6; /* lighter gray */
+  border-radius: 0;
+  flex: 1;
+  padding-right: 24px;
+  padding-bottom: 16px; /* ensure visual space below bottom row */
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.testPage .top {
+  display: flex;
+}
+
+.testPage .cards {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 24px;
+  row-gap: 24px;
+  padding: 8px 10px 24px 10px;
+}
+
+.testPage .cards .elements {
+  width: 100%;
+  height: auto;
+  margin: 0; 
+  box-sizing: border-box;
+  padding: 16px 20px;
+}
+
+/* pagination styles removed */
 
 .middleTest button,
 .middleTest div input {
@@ -36,3 +78,4 @@
   font-size: 22px;
   margin-bottom: 0;
 }
+

@@ -7,6 +7,8 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import { ChevronRight } from "lucide-react";
 import { Member, transformSupabaseMember } from "../types/member.ts";
 import { supabaseHelpers } from "../lib/supabaseClient.ts";
+// @ts-ignore - image modules declared in custom.d.ts
+import imaLogo from "../assets/ima_h4i.png";
 
 interface SidebarProps {
   members: Member[];
@@ -40,6 +42,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
     year: false,
     location: false,
   });
+  const [openKeywords, setOpenKeywords] = useState<boolean>(true);
 
   //states for the checkboxes
   const [checkedState, setCheckedState] = useState<
@@ -65,6 +68,28 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
     }));
   };
 
+  const applyFiltersFromState = async (
+    state: Record<CategoryKeys, Record<string, boolean>>
+  ) => {
+    const query = Object.entries(state).reduce<Record<string, string[]>>(
+      (acc, [category, values]) => {
+        const checkedItems = Object.entries(values)
+          .filter(([_, isChecked]) => isChecked)
+          .map(([key]) => key);
+        if (checkedItems.length) acc[category] = checkedItems;
+        return acc;
+      },
+    {});
+
+    try {
+      const supabaseMembers = await supabaseHelpers.filterMembers(query);
+      const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
+      setMembers(transformedMembers);
+    } catch (err) {
+      console.error('Failed to filter members:', err);
+    }
+  };
+
   // function to toggle checkbox states
   const toggleCheckBoxChange = (
     category: CategoryKeys,
@@ -82,32 +107,32 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
         },
       };
 
-      const query = Object.entries(newCheckedState).reduce<
-        Record<string, string[]>
-      >((acc, [category, values]) => {
-        const checkedItems = Object.entries(values)
-          .filter(([_, isChecked]) => isChecked)
-          .map(([key]) => key);
+      applyFiltersFromState(newCheckedState);
+      return newCheckedState;
+    });
+  };
 
-        if (checkedItems.length) {
-          acc[category] = checkedItems;
-        }
-        return acc;
-      }, {});
+  // chips derived from checkedState
+  const keywordChips = React.useMemo(() => {
+    const chips: { category: CategoryKeys; value: string }[] = [];
+    (Object.keys(checkedState) as CategoryKeys[]).forEach((cat) => {
+      Object.entries(checkedState[cat]).forEach(([val, isChecked]) => {
+        if (isChecked) chips.push({ category: cat, value: val });
+      });
+    });
+    return chips;
+  }, [checkedState]);
 
-      // Apply Supabase filters based on query
-      const applyFilters = async () => {
-        try {
-          const supabaseMembers = await supabaseHelpers.filterMembers(query);
-          const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
-          setMembers(transformedMembers);
-        } catch (err) {
-          console.error('Failed to filter members:', err);
-        }
+  const removeChip = (category: CategoryKeys, value: string) => {
+    setCheckedState((prev) => {
+      const newCheckedState = {
+        ...prev,
+        [category]: {
+          ...prev[category],
+          [value]: false,
+        },
       };
-      
-      applyFilters();
-
+      applyFiltersFromState(newCheckedState);
       return newCheckedState;
     });
   };
@@ -115,6 +140,36 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
   return (
     // <div className="container">
     <div className="sidebar">
+      <img src={imaLogo} alt="IMA Logo" className="imaLogo" />
+      <h3 className="filterTitle">Filter</h3>
+      {/* Keywords as first section under Filter */}
+      <div className="component">
+        <div className="filterRow" onClick={() => setOpenKeywords(!openKeywords)}>
+          <h2>Keywords</h2>
+          <ChevronRight className={openKeywords ? "open" : ""} />
+        </div>
+        {openKeywords && (
+          <div className="chipsContainer">
+            {keywordChips.length === 0 && (
+              <div style={{ color: '#6b7280', fontSize: 14, paddingBottom: 8 }}>No keywords selected</div>
+            )}
+            {keywordChips.map(({ category, value }) => (
+              <button
+                key={`${category}:${value}`}
+                className="chip"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  removeChip(category, value);
+                }}
+                aria-label={`Remove ${value}`}
+              >
+                <span className="chipLabel">{value}</span>
+                <span className="chipClose">×</span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
       {Object.entries(categories).map(([key, values]) => {
         const categoryKey = key as CategoryKeys;
         return (
@@ -152,6 +207,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
           </div>
         );
       })}
+      {/* end keywords */}
     </div>
   );
 };
