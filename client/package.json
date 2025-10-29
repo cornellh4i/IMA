@@ -8,6 +8,7 @@
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.15",
     "@mui/styled-engine-sc": "^5.6.1",
+    "@supabase/supabase-js": "^2.76.1",
     "express": "^4.19.1",
     "lucide-react": "^0.476.0",
     "react": "^18.0.0-rc.3",

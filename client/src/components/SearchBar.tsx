@@ -1,20 +1,8 @@
 import * as React from "react";
 import { useState } from "react";
+import { Member, transformSupabaseMember } from "../types/member.ts";
+import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import "../styles/SearchBar.css";
-
-// Define the member structure
-interface Member {
-  name: string;
-  year: string;
-  role: string;
-  major: string;
-  pronouns: string;
-  location: string;
-  linkedin: string;
-  slack: string;
-  email: string;
-  imgURL: string;
-}
 
 interface SearchBarProps {
   members: Member[];
@@ -23,14 +11,34 @@ interface SearchBarProps {
 
 const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
+  const [isSearching, setIsSearching] = useState<boolean>(false);
 
   const searchMembers = async () => {
-    // TODO(dev): call supabase.from("members").select(...).ilike(...) per ticket and update setMembers.
-    console.warn(
-      "TODO: integrate Supabase search for members",
-      searchQuery.trim()
-    );
-    setMembers((currentMembers) => currentMembers);
+    if (!searchQuery.trim()) {
+      // If search query is empty, fetch all members
+      try {
+        setIsSearching(true);
+        const supabaseMembers = await supabaseHelpers.getMembers();
+        const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
+        setMembers(transformedMembers);
+      } catch (err) {
+        console.error('Failed to fetch all members:', err);
+      } finally {
+        setIsSearching(false);
+      }
+      return;
+    }
+
+    try {
+      setIsSearching(true);
+      const supabaseMembers = await supabaseHelpers.searchMembers(searchQuery.trim());
+      const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
+      setMembers(transformedMembers);
+    } catch (err) {
+      console.error('Failed to search members:', err);
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {

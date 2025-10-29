@@ -4,21 +4,9 @@ import { useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
-// import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { ChevronRight } from "lucide-react";
-
-interface Member {
-  name: string;
-  year: string;
-  role: string;
-  major: string;
-  pronouns: string;
-  location: string;
-  linkedin: string;
-  slack: string;
-  email: string;
-  imgURL: string;
-}
+import { Member, transformSupabaseMember } from "../types/member.ts";
+import { supabaseHelpers } from "../lib/supabaseClient.ts";
 
 interface SidebarProps {
   members: Member[];
@@ -95,21 +83,30 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
       };
 
       const query = Object.entries(newCheckedState).reduce<
-        Record<string, string>
+        Record<string, string[]>
       >((acc, [category, values]) => {
         const checkedItems = Object.entries(values)
           .filter(([_, isChecked]) => isChecked)
           .map(([key]) => key);
 
         if (checkedItems.length) {
-          acc[category] = checkedItems.join(",");
+          acc[category] = checkedItems;
         }
         return acc;
       }, {});
 
-      // TODO(dev): translate `query` into Supabase filters and update setMembers with returned rows.
-      console.warn("TODO: integrate Supabase filter with query", query);
-      setMembers((currentMembers: Member[]) => currentMembers);
+      // Apply Supabase filters based on query
+      const applyFilters = async () => {
+        try {
+          const supabaseMembers = await supabaseHelpers.filterMembers(query);
+          const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
+          setMembers(transformedMembers);
+        } catch (err) {
+          console.error('Failed to filter members:', err);
+        }
+      };
+      
+      applyFilters();
 
       return newCheckedState;
     });
