@@ -1,7 +1,11 @@
 import * as React from "react";
 import { useState } from "react";
 import "../styles/Card.css";
-import { Mail, Linkedin, Slack } from "lucide-react";
+import { ReactComponent as Envelope } from "../assets/card-assets/envelope.svg";
+import { ReactComponent as Comment } from "../assets/card-assets/comment.svg";
+import { ReactComponent as LinkedInSvg } from "../assets/card-assets/linkedin.svg";
+import { ReactComponent as FilledStar } from "../assets/card-assets/filled-star.svg";
+import { ReactComponent as BlankStar } from "../assets/card-assets/blank-star.svg";
 
 interface CardProps {
   name: string;
@@ -20,7 +24,9 @@ interface ModalProps {
 }
 
 const Avatar: React.FC<{ image: string }> = ({ image }) => (
-  <img className="fit-img" src={image} alt="avatar_img" />
+  <div className="avatar">
+    <img className="fit-img" src={image} alt="avatar_img" />
+  </div>
 );
 
 const Modal: React.FC<ModalProps> = ({ name, role, image }) => {
@@ -79,6 +85,26 @@ const Card: React.FC<CardProps> = ({
   linkedin,
   slack,
 }) => {
+  // local storage star toggle logic, replace with user persistence later
+  const [fav, setFav] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(`fav:${name}`) === "1";
+    } catch (err) {
+      return false;
+    }
+  });
+
+  const toggleFav = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const next = !fav;
+    setFav(next);
+    try {
+      localStorage.setItem(`fav:${name}`, next ? "1" : "0");
+    } catch (err) {
+      console.error("Failed to set favorite in localStorage", err);
+    }
+  };
+
   return (
     <div className="card">
       <div className="elements">
@@ -87,38 +113,60 @@ const Card: React.FC<CardProps> = ({
           <h1 className="name">
             {name.charAt(0).toUpperCase() + name.slice(1)}
           </h1>
-          <div>
-            <h3 className="detail">{year}</h3>
-            &#160;
-            <h3 className="detail">{role}</h3>
-            &nbsp;
-            <div className="bottom">
-              <Modal image={image} name={name} role={role} />
-              {/* &nbsp;
-            <Modal value="Research" />  */}
-            </div>
+          <button
+            type="button"
+            className={`fav-btn ${fav ? "fav" : ""}`}
+            aria-pressed={fav}
+            onClick={toggleFav}
+            title={fav ? "Unfavorite" : "Favorite"}
+          >
+            {fav ? (
+              <FilledStar className="fav-icon" />
+            ) : (
+              <BlankStar className="fav-icon" />
+            )}
+          </button>
+          <div className="card-assets" aria-hidden={false}>
+            <a
+              href={`mailto:${email}`}
+              className="asset-btn"
+              title="Email"
+              aria-label="Email"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Envelope className="asset-icon" />
+            </a>
+
+            <a
+              href={linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="asset-btn"
+              title="LinkedIn"
+              aria-label="LinkedIn"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <LinkedInSvg className="asset-icon" />
+            </a>
+
+            <button
+              type="button"
+              className="asset-btn message-btn"
+              title="Message"
+              aria-label="Message"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <Comment className="asset-icon message-icon" />
+            </button>
           </div>
-        </div>
-        <div className="imageContainer">
-          <a href={`mailto:${email}`} className="button">
-            <Mail />
-          </a>
-          <a
-            href={linkedin}
-            target="_blank"
-            className="button"
-            rel="noopener noreferrer"
-          >
-            <Linkedin />
-          </a>
-          <a
-            href={slack}
-            target="_blank"
-            className="button"
-            rel="noopener noreferrer"
-          >
-            <Slack />
-          </a>
+
+          {/*year graduated, major, team for pills*/}
+          <div className="chips">
+            <span className="pill">IMA</span>
+            <span className="pill">Developer</span>
+            <span className="pill">2028</span>
+            <span className="pill">Technical Lead</span>
+          </div>
         </div>
       </div>
     </div>
