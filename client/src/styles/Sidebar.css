@@ -6,12 +6,22 @@
   width: 298px; /* 100% of the viewheight, change after merge of the header and search */
   min-height: 90vh;
   flex-shrink: 0;
-  border: 1px solid lightgray;
-  border-radius: 5px;
+  border: none;
+  border-radius: 0;
   background: var(--M3-sys-light-on-primary, #fff);
   display: flex;
   flex-direction: column;
-  margin-top: 30px;
+  margin-top: 0;
+  padding: 16px 12px;
+}
+
+.imaLogo {
+  width: 141px;
+  height: 66px;
+  object-fit: contain;
+  padding: 8px;
+  margin: 0 0 12px 8px;
+  display: block;
 }
 
 /* format for the categories */
@@ -22,6 +32,43 @@
   box-sizing: border-box;
   cursor: pointer;
   flex-direction: column;
+}
+
+.filterTitle {
+  margin: 4px 8px 8px 8px;
+  font-family: "Hanken Grotesk", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #002C61;
+}
+
+
+.chipsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 0 4px 8px 4px;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  color: #111827;
+  border: none;
+  border-radius: 9999px;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.chipLabel {
+  font-size: 14px;
+}
+
+.chipClose {
+  font-size: 16px;
+  line-height: 1;
 }
 
 .filterRow {
@@ -35,11 +82,35 @@
 .component h2 {
   margin: 0;
   font-size: 20px;
-  font-family: "Roboto", sans-serif;
+  font-family: "Hanken Grotesk", sans-serif;
   font-size: 18px;
   font-style: normal;
   font-weight: normal;
   line-height: 48px;
+  color: #344668; /* subsection headings */
+}
+
+.testPage .filterTitle {
+  line-height: 28px; /* height for Filter title */
+}
+
+.testPage .component h2,
+.testPage .MuiFormControlLabel-label {
+  line-height: 25px; /* height for subsections and items */
+}
+
+/* Dropdown text styling on TestPage */
+.testPage .MuiFormControlLabel-label {
+  color: #344668;
+  font-family: "Hanken Grotesk";
+}
+
+/* TestPage-specific background for sidebar */
+.testPage .sidebar {
+  background: #FFFFFF;
+  border: none;
+  border-radius: 0;
+  margin-top: 0;
 }
 
 .component svg {
