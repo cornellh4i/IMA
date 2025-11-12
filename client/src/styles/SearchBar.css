@@ -17,15 +17,15 @@
 }
 
 #searchInput {
-  background-color: #e8e8e8;
-  color: black;
-  height: 44px;
+  background-color: #ffffff;
+  color: #626F86;
+  height: 40px;
   width: 499px;
   padding-left: 44px; /* room for icon */
   padding-right: 20px;
   border-radius: 50px;
   font-family: "Hanken Grotesk", sans-serif;
-  font-weight: lighter;
+  font-weight: 500;
   border: 2px solid #e5e7eb; /* light border per figma */
   font-size: 17px;
 }
