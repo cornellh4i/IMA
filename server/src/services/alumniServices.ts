@@ -14,13 +14,25 @@ export const escapeLikePattern = (value: string): string =>
 
 /**
  * Map a raw Supabase row to an AlumniRecord used by the app.
- *
- * TODO: If your DB uses snake_case, normalize to the app's field names here.
  */
 export const mapRowToAlumni = (row: SupabaseAlumniRow): AlumniRecord => {
-  // TODO: Map/normalize all fields as needed
-  // Example assumes parity between stored names and app names
-  throw new Error("Not implemented: mapRowToAlumni");
+  return {
+    id: row.id,
+    profile_url: row.profile_url ?? undefined,
+    full_name: row.full_name ?? undefined,
+    emails: row.emails ?? undefined,
+    phone: row.phone ?? undefined,
+    linkedin_url: row.linkedin_url ?? undefined,
+    instagram_url: row.instagram_url ?? undefined,
+    graduation_year: row.graduation_year ?? undefined,
+    major: row.major ?? undefined,
+    location: row.location ?? undefined,
+    skills: row.skills ?? undefined,
+    interests: row.interests ?? undefined,
+    bio: row.bio ?? undefined,
+    created_at: row.created_at,
+    updated_at: row.updated_at ?? undefined,
+  };
 };
 
 /**
@@ -33,8 +45,16 @@ export const mapRowToAlumni = (row: SupabaseAlumniRow): AlumniRecord => {
  * - Throw with Supabase error.message on error
  */
 export const getAllAlumniService = async (): Promise<AlumniRecord[]> => {
-  // TODO: Implement
-  throw new Error("Not implemented: getAllAlumniService");
+  const { data, error } = await supabase
+    .from(ALUMNI_TABLE)
+    .select("*")
+    .order("created_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []).map(mapRowToAlumni);
 };
 
 /**
@@ -49,8 +69,28 @@ export const getAllAlumniService = async (): Promise<AlumniRecord[]> => {
 export const getAlumniByIdService = async (
   id: string
 ): Promise<AlumniRecord> => {
-  // TODO: Implement
-  throw new Error("Not implemented: getAlumniByIdService");
+  if (!id || id.trim() === "") {
+    throw new Error("Alumni ID is required");
+  }
+
+  const { data, error } = await supabase
+    .from(ALUMNI_TABLE)
+    .select("*")
+    .eq("id", id)
+    .single();
+
+  if (error) {
+    if (error.code === "PGRST116") {
+      throw new Error("Alumni not found");
+    }
+    throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("Alumni not found");
+  }
+
+  return mapRowToAlumni(data);
 };
 
 /**
@@ -67,12 +107,76 @@ export const getAlumniByIdService = async (
 export const queryAlumniService = async (
   filters: Record<string, unknown>
 ): Promise<AlumniRecord[]> => {
-  // TODO: Implement
-  // Suggested outline:
-  // let query = supabase.from(ALUMNI_TABLE).select("*");
-  // Iterate keys in filters, skip alumniUrlFields, apply ilike/eq/in/gte/lte as appropriate
-  // const { data, error } = await query;
-  // if (error) throw new Error(error.message);
-  // return (data ?? []).map(mapRowToAlumni);
-  throw new Error("Not implemented: queryAlumniService");
+  let query = supabase.from(ALUMNI_TABLE).select("*");
+
+  // String fields that support ILIKE search
+  const stringFields = [
+    "full_name",
+    "phone",
+    "location",
+    "bio",
+    "graduation_year",
+    "major",
+  ];
+
+  // Array fields that support .contains() or .in()
+  const arrayFields = ["emails", "skills", "interests"];
+
+  for (const [key, value] of Object.entries(filters)) {
+    // Skip URL fields
+    if (alumniUrlFields.includes(key)) {
+      continue;
+    }
+
+    // Skip empty values
+    if (value === undefined || value === null || value === "") {
+      continue;
+    }
+
+    const valueStr = String(value);
+
+    // Handle range queries (e.g., graduation_year_gte, graduation_year_lte)
+    if (key.endsWith("_gte")) {
+      const field = key.slice(0, -4);
+      query = query.gte(field, valueStr);
+      continue;
+    }
+
+    if (key.endsWith("_lte")) {
+      const field = key.slice(0, -4);
+      query = query.lte(field, valueStr);
+      continue;
+    }
+
+    // Handle array fields - support comma-separated values for .in()
+    if (arrayFields.includes(key)) {
+      if (valueStr.includes(",")) {
+        const values = valueStr.split(",").map((v) => v.trim()).filter((v) => v);
+        if (values.length > 0) {
+          query = query.contains(key, values);
+        }
+      } else {
+        query = query.contains(key, [valueStr]);
+      }
+      continue;
+    }
+
+    // Handle string fields with ILIKE
+    if (stringFields.includes(key)) {
+      const pattern = `%${escapeLikePattern(valueStr)}%`;
+      query = query.ilike(key, pattern);
+      continue;
+    }
+
+    // Default: equality match
+    query = query.eq(key, valueStr);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []).map(mapRowToAlumni);
 };
