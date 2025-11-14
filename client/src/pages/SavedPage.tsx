@@ -9,6 +9,7 @@ import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import "../App.css";
 import Breadcrumbs from "../components/Breadcrumbs.tsx";
 import "../styles/SavedPage.css";
+import SavedSearchBar from "../components/SavedSearchBar.tsx";
 
 function createCard(member: Member) {
   return (
@@ -85,7 +86,7 @@ const SavedPage: React.FC = () => {
         <div className="top">
           <Sidebar members={members} setMembers={setMembers} />
           <div className="middle">
-            <SearchBar members={members} setMembers={setMembers} />
+            <SavedSearchBar members={members} setMembers={setMembers} id={id} />
             {/* Render cards if members exist */}
             <Breadcrumbs />
             <div className='display-text'>
