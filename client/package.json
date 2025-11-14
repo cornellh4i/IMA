@@ -5,10 +5,13 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
+    "@heroicons/react": "^2.2.0",
     "@mui/icons-material": "^5.15.14",
     "@mui/material": "^5.15.15",
     "@mui/styled-engine-sc": "^5.6.1",
     "@supabase/supabase-js": "^2.76.1",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
     "express": "^4.19.1",
     "lucide-react": "^0.476.0",
     "react": "^18.0.0-rc.3",
@@ -16,7 +19,9 @@
     "react-image-crop": "^11.0.5",
     "react-router-dom": "^7.2.0",
     "react-scripts": "^5.0.0",
-    "styled-components": "^5.3.5"
+    "styled-components": "^5.3.5",
+    "tailwind-merge": "^3.4.0",
+    "tw-animate-css": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -40,6 +45,9 @@
     ]
   },
   "devDependencies": {
-    "@types/node": "^22.18.8"
+    "@types/node": "^22.18.8",
+    "autoprefixer": "^10.4.22",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.17"
   }
 }

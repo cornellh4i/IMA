@@ -4,6 +4,7 @@ import Home from "./pages/Home.tsx";
 import TestPage from "./pages/TestPage.tsx";
 import SignInPage from "./pages/SignInPage.tsx";
 import "./App.css";
+import SavedPage from "./pages/SavedPage.tsx";
 
 const App: React.FC = () => {
   return (
@@ -11,7 +12,8 @@ const App: React.FC = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/test" element={<TestPage />} />
-  <Route path="/signin" element={<SignInPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/saved" element={<SavedPage />} />
       </Routes>
     </Router>
   );
