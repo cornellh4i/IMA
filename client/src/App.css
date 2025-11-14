@@ -7,6 +7,10 @@
   display: flex;
   flex-direction: column;
   padding: 10px;
+  background-color: #FBFBFB;
+  flex: 1;
+  min-height: 100vh;
+  border-left: 1px solid #e2e8f0;
 }
 .cards {
   width: 50 px;
@@ -20,4 +24,22 @@
   width: 1280px;
   margin-left: auto;
   margin-right: auto;
+}
+
+.members-title {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 48px;
+  font-weight: 700;
+  color: #002C61;
+  margin: 16px 0px 4px 16px;
+  padding: 0;
+}
+
+.members-count {
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #515151;
+  margin: 20px 0px 0px 16px;
+  padding: 0;
 }

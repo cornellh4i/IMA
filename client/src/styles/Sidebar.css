@@ -13,6 +13,8 @@
   flex-direction: column;
   margin-top: 0;
   padding: 16px 12px;
+  font-family: "Hanken Grotesk", sans-serif;
+  color: #344668;
 }
 
 .imaLogo {
@@ -35,11 +37,11 @@
 }
 
 .filterTitle {
-  margin: 4px 8px 8px 8px;
+  margin: 4px 8px 8px 20px;
   font-family: "Hanken Grotesk", sans-serif;
   font-weight: 600;
-  font-size: 16px;
-  color: #002C61;
+  font-size: 20px;
+  color: #344668;
 }
 
 
@@ -55,15 +57,18 @@
   align-items: center;
   gap: 8px;
   background: #f1f5f9;
-  color: #111827;
+  color: #344668;
   border: none;
   border-radius: 9999px;
   padding: 6px 10px;
   cursor: pointer;
+  font-family: "Hanken Grotesk", sans-serif;
 }
 
 .chipLabel {
   font-size: 14px;
+  font-family: "Hanken Grotesk", sans-serif;
+  color: #344668;
 }
 
 .chipClose {
@@ -130,4 +135,13 @@
   flex-wrap: wrap;
   justify-items: left;
   margin-left: 0;
+}
+
+/* Checkbox styling */
+.sidebar .MuiCheckbox-root.Mui-checked {
+  color: #344668 !important;
+}
+
+.sidebar .MuiCheckbox-root {
+  color: #9ca3af; /* Unchecked color */
 }
