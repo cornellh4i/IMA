@@ -267,7 +267,7 @@ export const alumniPaths = {
           required: false,
           description: 'Filter by graduation year (case-insensitive partial match)',
           schema: {
-            type: 'string'
+            type: 'number'
           }
         },
         {

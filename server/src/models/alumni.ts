@@ -19,7 +19,7 @@ export interface AlumniFields {
   phone?: string | null;
   linkedin_url?: string | null;
   instagram_url?: string | null;
-  graduation_year?: string | null; // Stored as enum in Supabase
+  graduation_year?: number | null; // Stored as enum in Supabase
   major?: string | null;
   location?: string | null;
   skills?: string[] | null;
@@ -48,7 +48,7 @@ export interface SupabaseAlumniRow {
   phone?: string | null;
   linkedin_url?: string | null;
   instagram_url?: string | null;
-  graduation_year?: string | null;
+  graduation_year?: number | null;
   major?: string | null;
   location?: string | null;
   skills?: string[] | null;

@@ -115,7 +115,7 @@ export const queryAlumniService = async (
     "phone",
     "location",
     "bio",
-    "graduation_year",
+    // "graduation_year",
     "major",
   ];
 
