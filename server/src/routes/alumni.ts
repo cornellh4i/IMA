@@ -7,18 +7,15 @@ import {
 
 const router = express.Router();
 
-// TODO: Register this router in app.ts
-// Example: in server/src/app.ts
-//   import alumniRoutes from "./routes/alumni";
-//   app.use("/api/alumni", alumniRoutes);
 
 // GET /api/alumni - Get all alumni
 router.get("/", getAllAlumni);
 
+// GET /api/alumni/query - Query alumni by non-URL fields
+// Must come before /:id route to avoid matching "query" as an ID
+router.get("/query", queryAlumni);
+
 // GET /api/alumni/:id - Get single alumni by ID
 router.get("/:id", getAlumniById);
-
-// GET /api/alumni/query - Query alumni by non-URL fields
-router.get("/query", queryAlumni);
 
 export default router;

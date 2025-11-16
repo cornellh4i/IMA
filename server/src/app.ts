@@ -1,9 +1,10 @@
 import express from "express";
 import cors from "cors";
 import swaggerUi from 'swagger-ui-express';
-import { memberSchemas } from './swagger/schemas';
-import { memberPaths } from './swagger/paths';
+import { memberSchemas, alumniSchemas } from './swagger/schemas';
+import { memberPaths, alumniPaths } from './swagger/paths';
 import memberRoutes from "./routes/member";
+import alumniRoutes from "./routes/alumni";
 
 const swaggerSpec = {
   openapi: '3.0.0',
@@ -20,10 +21,12 @@ const swaggerSpec = {
   ],
   paths: {
     ...memberPaths,
+    ...alumniPaths,
   },
   components: {
     schemas: {
       ...memberSchemas,
+      ...alumniSchemas,
     },
   },
 };
@@ -37,6 +40,7 @@ app.use(express.json());
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.use("/api/members", memberRoutes);
+app.use("/api/alumni", alumniRoutes);
 
 // Add new route models here
 

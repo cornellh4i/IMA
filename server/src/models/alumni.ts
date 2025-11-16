@@ -14,17 +14,18 @@ export const ALUMNI_TABLE = "Alumni" as const; // TODO: Confirm exact table name
 export interface AlumniFields {
   // Matches Supabase columns per provided example
   profile_url?: string | null;
-  full_name: string;
+  full_name?: string | null;
   emails?: string[] | null;
   phone?: string | null;
   linkedin_url?: string | null;
   instagram_url?: string | null;
-  graduation_year?: string | null; // Stored as string in example
+  graduation_year?: number | null; // Stored as enum in Supabase
   major?: string | null;
   location?: string | null;
   skills?: string[] | null;
   interests?: string[] | null;
   bio?: string | null;
+  updated_at?: string | null;
 }
 
 /**
@@ -32,7 +33,7 @@ export interface AlumniFields {
  */
 export interface AlumniRecord extends AlumniFields {
   id: string;
-  created_at?: string;
+  created_at: string;
 }
 
 /**
@@ -42,18 +43,19 @@ export interface AlumniRecord extends AlumniFields {
 export interface SupabaseAlumniRow {
   id: string;
   profile_url?: string | null;
-  full_name: string;
+  full_name?: string | null;
   emails?: string[] | null;
   phone?: string | null;
   linkedin_url?: string | null;
   instagram_url?: string | null;
-  graduation_year?: string | null;
+  graduation_year?: number | null;
   major?: string | null;
   location?: string | null;
   skills?: string[] | null;
   interests?: string[] | null;
   bio?: string | null;
-  created_at?: string;
+  created_at: string;
+  updated_at?: string | null;
 }
 
 /**
