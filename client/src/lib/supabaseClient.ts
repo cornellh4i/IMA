@@ -109,5 +109,40 @@ export const supabaseHelpers = {
     if (error) {
       throw new Error(`Failed to delete member: ${error.message}`);
     }
-  }
+  },
+
+  // Get saved members
+  /**
+   * Get the members that the member has saved
+   * 
+   * @param id - The member_id of the user to get the saved members for
+   * @returns An array of members that the user has saved
+   */
+  async getSavedMembers(id: string) {
+    // Fetch all saved_ids where the member_id is the specific member
+    const { data, error } = await supabase
+      .from('saved_profiles')
+      .select('saved_id')
+      .eq('member_id', id);
+  
+    if (error) {
+      throw new Error(`Failed to fetch saved member ids: ${error.message}`);
+    }
+  
+    // Extract the member_ids (saved_ids) from the rows
+    const ids = (data ?? []).map(r => r.saved_id);
+    if (ids.length === 0) return [];
+  
+    const { data: members, error: memErr } = await supabase
+      .from('Members')
+      .select('*')
+      .in('id', ids)
+      .order('created_at', { ascending: false });
+  
+    if (memErr) {
+      throw new Error(`Failed to fetch member profiles: ${memErr.message}`);
+    }
+  
+    return members ?? [];
+  },
 };
