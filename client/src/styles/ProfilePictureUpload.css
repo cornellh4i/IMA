@@ -1,0 +1,219 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600;700&display=swap');
+
+.profile-upload-page {
+  font-family: "Hanken Grotesk", sans-serif;
+  min-height: 100vh;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.profile-upload-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  background-color: #ffffff;
+}
+
+.header-text {
+  font-size: 16px;
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-text {
+  font-size: 24px;
+  font-weight: 700;
+  color: #002C61;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.profile-upload-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  padding: 40px;
+  max-width: 600px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.welcome-section {
+  width: 100%;
+  text-align: center;
+  margin-bottom: 40px;
+  border: 2px dashed #002C61;
+  border-radius: 8px;
+  padding: 30px 20px;
+}
+
+.welcome-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: #002C61;
+  margin: 0 0 20px 0;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.progress-bar-container {
+  margin: 20px 0;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background-color: #e5e7eb;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  width: 33%;
+  height: 100%;
+  background-color: #002C61;
+  border-radius: 4px;
+  transition: width 0.3s ease;
+}
+
+.upload-instruction {
+  font-size: 16px;
+  color: #6b7280;
+  margin: 20px 0 0 0;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+.profile-picture-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 40px;
+  border: 2px dashed #002C61;
+  border-radius: 8px;
+  padding: 40px 20px;
+}
+
+.profile-picture-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.profile-picture {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #002C61;
+}
+
+.profile-picture-placeholder {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #002C61;
+}
+
+.edit-picture-text {
+  font-size: 16px;
+  color: #4b5563;
+  font-weight: 500;
+}
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  align-items: center;
+}
+
+.save-button {
+  background-color: #002C61;
+  color: #ffffff;
+  border: none;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: "Hanken Grotesk", sans-serif;
+  transition: background-color 0.2s ease;
+  width: 100%;
+}
+
+.save-button:hover:not(:disabled) {
+  background-color: #003d7a;
+}
+
+.save-button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+.skip-button {
+  background-color: #ffffff;
+  color: #002C61;
+  border: 2px solid #002C61;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: "Hanken Grotesk", sans-serif;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  width: 100%;
+}
+
+.skip-button:hover:not(:disabled) {
+  background-color: #f3f4f6;
+}
+
+.skip-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.profile-upload-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  font-family: "Hanken Grotesk", sans-serif;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .profile-upload-content {
+    padding: 20px;
+  }
+
+  .welcome-title {
+    font-size: 24px;
+  }
+
+  .profile-picture,
+  .profile-picture-placeholder {
+    width: 150px;
+    height: 150px;
+  }
+
+  .action-buttons {
+    max-width: 100%;
+  }
+}
+

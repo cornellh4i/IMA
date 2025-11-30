@@ -6,6 +6,7 @@ import SignInPage from "./pages/SignInPage.tsx";
 import LandingPage from "./pages/LandingPage.tsx";
 import "./App.css";
 import SavedPage from "./pages/SavedPage.tsx";
+import ProfilePictureUpload from "./components/ProfilePictureUpload.tsx";
 
 const App: React.FC = () => {
   return (
@@ -16,6 +17,7 @@ const App: React.FC = () => {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/saved" element={<SavedPage />} />
+        <Route path="/profile-upload" element={<ProfilePictureUpload />} />
       </Routes>
     </Router>
   );
