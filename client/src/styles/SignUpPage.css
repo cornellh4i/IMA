@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #F6F6F6;
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.window-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.welcome-title {
+  font-size: 36px;
+  font-weight: 700;
+  color: #21417A;
+  text-align: center;
+  margin-top: 0.67em;
+}

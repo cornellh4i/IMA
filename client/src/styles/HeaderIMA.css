@@ -1,0 +1,18 @@
+.all {
+  display: flex;
+  flex-direction: row;
+  /* justify-content: space-between; */
+}
+
+.ima-header {
+  display: flex;
+  padding: 0px 20px;
+  background-color: white;
+}
+
+.ima-header img {
+  display: block;
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 50px;
+}
