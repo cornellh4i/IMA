@@ -3,6 +3,7 @@ import {
   getAllAlumniService,
   getAlumniByIdService,
   queryAlumniService,
+  updateAlumniProfileService,
 } from "../services/alumniServices";
 import { alumniUrlFields } from "../models/alumni";
 
@@ -72,6 +73,42 @@ export const queryAlumni = async (req: Request, res: Response): Promise<void> =>
   } catch (error) {
     console.error("Error querying alumni:", error);
     res.status(500).json({ error: "Failed to query alumni" });
+  }
+};
+
+/**
+ * POST /api/alumni/update-profile
+ * Update profile_url for an alumni by email.
+ */
+export const updateAlumniProfile = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, profile_url } = req.body;
+
+    if (!email) {
+      res.status(400).json({ error: "Email is required" });
+      return;
+    }
+
+    if (!profile_url) {
+      res.status(400).json({ error: "Profile URL is required" });
+      return;
+    }
+
+    const alumni = await updateAlumniProfileService(email, profile_url);
+    res.status(200).json(alumni);
+  } catch (error) {
+    console.error("Error updating alumni profile:", error);
+    if (error instanceof Error) {
+      if (error.message === "Alumni not found with this email") {
+        res.status(404).json({ error: error.message });
+      } else if (error.message === "Email is required" || error.message === "Profile URL is required") {
+        res.status(400).json({ error: error.message });
+      } else {
+        res.status(500).json({ error: "Failed to update alumni profile" });
+      }
+    } else {
+      res.status(500).json({ error: "Failed to update alumni profile" });
+    }
   }
 };
 

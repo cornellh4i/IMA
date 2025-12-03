@@ -180,3 +180,84 @@ export const queryAlumniService = async (
 
   return (data ?? []).map(mapRowToAlumni);
 };
+
+/**
+ * POST /alumni/update-profile — update profile_url for an alumni by email.
+ *
+ * Implementation notes:
+ * - Find alumni by email (checking emails array)
+ * - Update profile_url field
+ * - Return updated alumni record
+ */
+export const updateAlumniProfileService = async (
+  email: string,
+  profileUrl: string
+): Promise<AlumniRecord> => {
+  if (!email || email.trim() === "") {
+    throw new Error("Email is required");
+  }
+
+  if (!profileUrl || profileUrl.trim() === "") {
+    throw new Error("Profile URL is required");
+  }
+
+  // First, find the alumni record by email
+  const { data: alumniData, error: queryError } = await supabase
+    .from(ALUMNI_TABLE)
+    .select("*")
+    .contains("emails", [email])
+    .single();
+
+  if (queryError) {
+    if (queryError.code === "PGRST116") {
+      // Record doesn't exist - create it
+      console.log(`Alumni record not found for email ${email}, creating new record`);
+      const { data: newAlumni, error: insertError } = await supabase
+        .from(ALUMNI_TABLE)
+        .insert({
+          emails: [email],
+          profile_url: profileUrl,
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single();
+
+      if (insertError) {
+        console.error("Error creating alumni record:", insertError);
+        throw new Error(`Failed to create alumni record: ${insertError.message}`);
+      }
+
+      if (!newAlumni) {
+        throw new Error("Failed to create alumni record");
+      }
+
+      return mapRowToAlumni(newAlumni);
+    }
+    console.error("Error querying alumni:", queryError);
+    throw new Error(`Failed to query alumni: ${queryError.message}`);
+  }
+
+  if (!alumniData) {
+    throw new Error("Alumni not found with this email");
+  }
+
+  // Update the profile_url
+  console.log(`Updating alumni record ${alumniData.id} with profile URL`);
+  const { data: updatedData, error: updateError } = await supabase
+    .from(ALUMNI_TABLE)
+    .update({ profile_url: profileUrl, updated_at: new Date().toISOString() })
+    .eq("id", alumniData.id)
+    .select()
+    .single();
+
+  if (updateError) {
+    console.error("Error updating alumni record:", updateError);
+    throw new Error(`Failed to update alumni record: ${updateError.message} (code: ${updateError.code})`);
+  }
+
+  if (!updatedData) {
+    throw new Error("Failed to update alumni profile");
+  }
+
+  return mapRowToAlumni(updatedData);
+};
