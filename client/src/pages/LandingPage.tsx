@@ -87,8 +87,8 @@ const LandingPage: React.FC = () => {
             connections.
           </p>
           <div className="landing-buttons">
-            <button className="btn-primary">Sign Up</button>
-            <button className="btn-secondary">Login</button>
+            <Link to="/signup" className="btn-primary">Sign Up</Link>
+            <Link to="/signin" className="btn-secondary">Login</Link>
           </div>
         </div>
 
