@@ -1,10 +1,78 @@
 import React, { useEffect, useState } from "react";
-import { supabase } from "../lib/supabaseClient.ts";
+import { supabase, supabaseHelpers } from "../lib/supabaseClient.ts";
 import type { Session } from "@supabase/supabase-js";
 
 import Header from "../components/HeaderIMA.tsx";
 import "../App.css";
 import "../styles/SignUpPage.css";
+
+// Enums for major, hack role, project, semester, and employment type
+const majors = [
+  "Information Science",
+  "Computer Science",
+  "Electrical and Computer Engineering",
+  "Mechanical Engineering",
+  "Operations Research and Engineering",
+  "Business",
+  "Economics",
+  "Other",
+];
+const hackRoles = [
+  "Designer",
+  "PM",
+  "Developer",
+  "Tech Lead",
+  "Design Lead",
+  "Engineering Chair",
+  "DEI Lead",
+  "Maintenance Lead",
+  "NME Instructor",
+];
+const projects = [
+  "MedSimAI",
+  "OKB Hope",
+  "Rethink Food",
+  "Greenzone",
+  "IMA",
+  "ACT",
+  "CHEM",
+  "Recovery",
+  "Lagos",
+  "MedExplain",
+];
+const semesters = [
+  "Spring '22",
+  "Fall '22",
+  "Spring '23",
+  "Fall '23",
+  "Spring '24",
+  "Fall '24",
+  "Spring '25",
+  "Fall '25",
+];
+
+const employmentTypes = [
+  "Full-time",
+  "Part-time",
+  "Intern",
+  "Contract",
+  "Freelance",
+];
+
+const monthEnum = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
 const FormInput: React.FC<{
   label: string;
@@ -46,66 +114,31 @@ const SignUpPage: React.FC = () => {
 
   // Alumni object to be inserted once bio is done
   const [alumniData, setAlumniData] = useState<{
-    full_name: string;
-    emails: string[];
-    phone: string;
-    linkedin_url: string;
-    instagram_url: string;
+    full_name: string | null;
+    emails: string[] | null;
+    phone: string | null;
+    linkedin_url: string | null;
+    instagram_url: string | null;
     graduation_year: number | null;
-    major: string;
+    major: string | null;
+    location: string | null;
+    skills: string[] | null;
+    interests: string[] | null;
+    bio: string | null;
   }>({
-    full_name: "",
-    emails: [],
-    phone: "",
-    linkedin_url: "",
-    instagram_url: "",
+    full_name: null,
+    emails: null,
+    phone: null,
+    linkedin_url: null,
+    instagram_url: null,
     graduation_year: null,
-    major: "",
+    major: null,
+    location: null,
+    skills: null,
+    interests: null,
+    bio: null,
   });
-  const majors = [
-    "Information Science",
-    "Computer Science",
-    "Electrical and Computer Engineering",
-    "Mechanical Engineering",
-    "Operations Research and Engineering",
-    "Business",
-    "Economics",
-    "Other",
-  ];
-  const hackRoles = [
-    "Designer",
-    "PM",
-    "Developer",
-    "Tech Lead",
-    "Design Lead",
-    "Engineering Chair",
-    "DEI Lead",
-    "Maintenance Lead",
-    "NME Instructor",
-  ];
-  const projects = [
-    "MedSimAI",
-    "OKB Hope",
-    "Rethink Food",
-    "Greenzone",
-    "IMA",
-    "ACT",
-    "CHEM",
-    "Recovery",
-    "Lagos",
-    "MedExplain",
-  ];
-  const semesters = [
-    "Spring '22",
-    "Fall '22",
-    "Spring '23",
-    "Fall '23",
-    "Spring '24",
-    "Fall '24",
-    "Spring '25",
-    "Fall '25",
-  ];
-
+  
   const [step, setStep] = useState<
     "basic" | "picture" | "academic" | "involvement" | "job" | "more" | "end"
   >("basic");
@@ -128,6 +161,35 @@ const SignUpPage: React.FC = () => {
       description: "",
     },
   ]);
+  const [jobExperiences, setJobExperiences] = useState<{
+    title: string;
+    employmmentType: string | null;
+    company: string;
+    location: string | null;
+    startMonth: string | null;
+    startYear: number | null;
+    endMonth: string | null;
+    endYear: number | null;
+    description: string | null;
+  }[]>([
+    {
+      title: "",
+      employmmentType: null,
+      company: "",
+      location: null,
+      startMonth: null,
+      startYear: null,
+      endMonth: null,
+      endYear: null,
+      description: null,
+    }
+  ]);
+
+  function validateJobExperiences() {
+    return jobExperiences.every(job => {
+      return job.title && job.employmmentType && job.company && job.startMonth && job.startYear && job.endMonth && job.endYear;
+    });
+  }
 
   const addRole = () => {
     setRoles([
@@ -159,6 +221,32 @@ const SignUpPage: React.FC = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  async function insertAlumniData() {
+    // Insert data into Alumni table
+    const result = await supabaseHelpers.insertAlumni(alumniData);
+    if (result.error) {
+      throw new Error(`Failed to insert alumni: ${result.error.message}`);
+    }
+
+    const alumniId = result.data?.id;
+    
+    // Insert data into Job Experiences table
+    const jobExperiencesResult = await supabaseHelpers.insertJobExperience(alumniId, jobExperiences);
+
+    // Insert data into Hack Involvements table
+    const hackInvolvementsResult = await supabaseHelpers.insertHackInvolvement(alumniId, roles);
+
+    if (result.error || jobExperiencesResult.length === 0 || hackInvolvementsResult.length === 0) {
+      throw new Error(`Failed to insert data: ${result.error?.message || jobExperiencesResult.length === 0 ? 'Failed to insert job experiences' : 'Failed to insert hack involvements'}`);
+    }
+
+    return {
+      alumni: result.data,
+      jobExperiences: jobExperiencesResult,
+      hackInvolvements: hackInvolvementsResult,
+    };
+  }
 
   return (
     <>
@@ -408,6 +496,10 @@ const SignUpPage: React.FC = () => {
                           graduation_year:
                             parseInt(responses.graduationYear) || null,
                           major: selectedMajors.join(", "),
+                          location: "",
+                          skills: [],
+                          interests: [],
+                          bio: "",
                         });
 
                         setValidationError("");
@@ -797,6 +889,343 @@ const SignUpPage: React.FC = () => {
                       Continue
                     </button>
                   </div>
+                </div>
+              </div>
+            </>
+          )}
+
+          {step === 'job' && (
+            <>
+              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+                Job Information
+              </div>
+
+              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+                <div className="w-2/3 h-full bg-blue-700 rounded-xl"></div>
+              </div>
+
+              <div className="text-center mt-4 text-gray-500">
+                Add your job experience here to help people know more about you.
+              </div>
+
+              <div className="flex justify-center mt-8 w-2/5 bg-white mx-auto rounded-lg p-4 shadow-md">
+                
+              <div className="w-full">
+                <div className="flex flex-col items-start mb-4">
+                  <div className="text-md text-gray-700 mb-2">
+                    New member and no experience before
+                  </div>
+                  <button
+                    className="w-full border border-blue-900 rounded-3xl px-6 py-1 font-medium text-blue-900 hover:bg-blue-50 transition-colors"
+                    onClick={() => {
+                      setJobExperiences([
+                        {
+                          title: "",
+                          employmmentType: "",
+                          company: "",
+                          location: "",
+                          startMonth: "",
+                          startYear: NaN as number,
+                          endMonth: "",
+                          endYear: NaN as number,
+                          description: "",
+                        }
+                      ]);
+                      setStep("more");
+                    }}
+                  >
+                    Skip for now
+                  </button>
+                </div>
+
+                {jobExperiences.map((job, index) => (
+                  <div
+                    key={index}
+                    className={index > 0 ? "mt-6 pt-6 border-t border-gray-200" : ""}
+                  >
+                    <div className="mb-3">
+                      <label className="text-sm text-gray-600 font-semibold">
+                        Title*
+                      </label>
+                      <select
+                        className="w-full border border-gray-400 rounded-md mt-1 p-2"
+                        value={job.title}
+                        onChange={e => {
+                          const newJobs = [...jobExperiences];
+                          newJobs[index].title = e.target.value;
+                          setJobExperiences(newJobs);
+                        }}
+                        required
+                      >
+                        <option value="">Select Title</option>
+                        <option value="Product Designer">Product Designer</option>
+                        <option value="Software Engineer">Software Engineer</option>
+                        <option value="Product Manager">Product Manager</option>
+                        <option value="Data Scientist">Data Scientist</option>
+                        <option value="Researcher">Researcher</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
+                      <span className="text-sm text-gray-600 font-semibold">Experience {index + 1}</span>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="text-sm text-gray-600 font-semibold">
+                        Employment type*
+                      </label>
+                      <select
+                        className="w-full border border-gray-400 rounded-md mt-1 p-2"
+                        value={job.employmmentType ?? ""}
+                        onChange={e => {
+                          const newJobs = [...jobExperiences];
+                          newJobs[index].employmmentType = e.target.value ?? null;
+                          setJobExperiences(newJobs);
+                        }}
+                        required
+                      >
+                        <option value="">Select Employment Type</option>
+                        {employmentTypes.map(type => (
+                          <option key={type} value={type}>{type}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="text-sm text-gray-600 font-semibold">
+                        Company or organization*
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full border border-gray-400 rounded-md mt-1 p-2"
+                        value={job.company}
+                        onChange={e => {
+                          const newJobs = [...jobExperiences];
+                          newJobs[index].company = e.target.value;
+                          setJobExperiences(newJobs);
+                        }}
+                        required
+                        placeholder="e.g. Amazon"
+                      />
+                    </div>
+
+                    <div className="mb-3">
+                      <label className="text-sm text-gray-600 font-semibold">
+                        Location
+                      </label>
+                      <input
+                        type="text"
+                        className="w-full border border-gray-400 rounded-md mt-1 p-2"
+                        value={job.location ?? ""}
+                        onChange={e => {
+                          const newJobs = [...jobExperiences];
+                          newJobs[index].location = e.target.value ?? null;
+                          setJobExperiences(newJobs);
+                        }}
+                        placeholder="e.g. New York City"
+                      />
+                    </div>
+
+                    {/* Start Time Fields */}
+                    <div className="mb-3 flex gap-2 items-end">
+                      <div className="flex-1">
+                        <label className="text-sm text-gray-600 font-semibold">
+                          Start Time*
+                        </label>
+                        <select
+                          className="w-full border border-gray-400 rounded-md mt-1 p-2"
+                          value={job.startMonth ?? ""}
+                          onChange={e => {
+                            const newJobs = [...jobExperiences];
+                            newJobs[index].startMonth = e.target.value ?? null;
+                            setJobExperiences(newJobs);
+                          }}
+                          required
+                        >
+                          <option value="">Month</option>
+                          {monthEnum.map(month => (
+                            <option key={month} value={month}>{month}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex-1">
+                        <label className="text-white text-xs">{/* spacer */}</label>
+                        <select
+                          className="w-full border border-gray-400 rounded-md mt-1 p-2"
+                          value={job.startYear ?? ""}
+                          onChange={e => {
+                            const newJobs = [...jobExperiences];
+                            newJobs[index].startYear = e.target.value ? parseInt(e.target.value) : null;
+                            setJobExperiences(newJobs);
+                          }}
+                          required
+                        >
+                          <option value="">Year</option>
+                          {Array.from({length: 70}, (_, i) => {
+                            const year = new Date().getFullYear() - i;
+                            return <option key={year} value={year}>{year}</option>
+                          })}
+                        </select>
+                      </div>
+                    </div>
+
+                    {/* End Time Fields */}
+                    <div className="mb-3 flex gap-2 items-end">
+                      <div className="flex-1">
+                        <label className="text-sm text-gray-600 font-semibold">
+                          End Time
+                        </label>
+                        <select
+                          className="w-full border border-gray-400 rounded-md mt-1 p-2"
+                          value={job.endMonth ?? ""}
+                          onChange={e => {
+                            const newJobs = [...jobExperiences];
+                            newJobs[index].endMonth = e.target.value ?? null;
+                            setJobExperiences(newJobs);
+                          }}
+                        >
+                          <option value="">Month</option>
+                          {monthEnum.map(month => (
+                            <option key={month} value={month}>{month}</option>
+                          ))}
+                        </select>
+                      </div>
+                      <div className="flex-1">
+                        <label className="text-white text-xs">{/* spacer */}</label>
+                        <select
+                          className="w-full border border-gray-400 rounded-md mt-1 p-2"
+                          value={job.endYear ?? ""}
+                          onChange={e => {
+                            const newJobs = [...jobExperiences];
+                            newJobs[index].endYear = e.target.value ? parseInt(e.target.value) : null;
+                            setJobExperiences(newJobs);
+                          }}
+                          required
+                        >
+                          <option value="">Year</option>
+                          {Array.from({length: 70}, (_, i) => {
+                            const year = new Date().getFullYear() - i;
+                            return <option key={year} value={year}>{year}</option>
+                          })}
+                        </select>
+                      </div>
+                    </div>
+
+                    <button
+                      className="mb-2 text-gray-600 underline hover:text-gray-800 transition-colors"
+                      type="button"
+                      style={{ width: 'auto', background: 'none', border: 'none', padding: 0, marginBottom: '12px', textAlign: 'left', display: 'block' }}
+                      onClick={() => {
+                        setJobExperiences([
+                          ...jobExperiences,
+                          {
+                            title: "",
+                            employmmentType: "",
+                            company: "",
+                            location: "",
+                            startMonth: "",
+                            startYear: NaN as number,
+                            endMonth: "",
+                            endYear: NaN as number,
+                            description: "",
+                          }
+                        ]);
+                      }}
+                    >
+                      Add Another Experience
+                    </button>
+                    <button
+                      className="mb-2 text-gray-600 underline hover:text-gray-800 transition-colors"
+                      type="button"
+                      style={{ 
+                        width: 'auto', 
+                        background: 'none', 
+                        border: 'none', 
+                        padding: 0, 
+                        marginBottom: '12px',
+                        marginTop: '0px',
+                        textAlign: 'left', 
+                        display: 'block' 
+                      }}
+                      onClick={() => {
+                        if (jobExperiences.length > 1) {
+                          setJobExperiences(jobExperiences.filter((_, i) => i !== index));
+                        }
+                      }}
+                      disabled={jobExperiences.length === 1}
+                    >
+                      Remove
+                    </button>
+                    <button
+                      className="w-full bg-blue-900 text-white rounded-3xl px-6 py-2 font-medium hover:bg-blue-800 transition-colors"
+                      onClick={() => {
+                        // Add logic to insert job experiences into database
+                        if (validateJobExperiences()) {
+                          // Approve job experiences to be inserted into database
+                          setValidationError("");
+                          
+                          // Continue to next step
+                          setStep("more");
+                        } else {
+                          setValidationError("Must answer all required questions");
+                        }
+                      }}
+                    >
+                      Continue
+                    </button>
+                    <div className="text-red-500 text-sm mt-2">{validationError}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </>
+          )}
+
+          {step === 'more' && (
+            <>
+              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+                More information about you
+              </div>
+              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+                <div className="w-full h-full bg-blue-700 rounded-xl" style={{ width: '100%' }}></div>
+              </div>
+              <div className="text-center mt-4 text-gray-500">
+                This will be the name displayed on your profile to help people know more about you
+              </div>
+              <div className="flex justify-center mt-8">
+                <div className="bg-white rounded-xl shadow-md w-full max-w-xl p-6 flex flex-col gap-4 items-stretch">
+                  <div className="flex flex-col mb-4">
+                    <label className="text-sm font-semibold text-gray-700 mb-1" htmlFor="short-bio">
+                      Short Bio
+                    </label>
+                    <span className="text-xs text-gray-500 mb-1">
+                      Optionally include your skills and interests here
+                    </span>
+                    <textarea
+                      id="short-bio"
+                      className="border border-gray-400 rounded-md p-3 w-full min-h-[80px] resize-vertical"
+                      placeholder="Tell us about yourself, your skills, and your interests..."
+                      value={responses.bio ?? ""}
+                      onChange={e => setResponses({ ...responses, bio: e.target.value })}
+                      maxLength={500}
+                      required
+                    />
+                  </div>
+                  <button
+                    className="w-full bg-blue-900 text-white rounded-3xl px-6 py-2 font-medium hover:bg-blue-800 transition-colors"
+                    onClick={() => {
+                      setAlumniData({
+                        ...alumniData,
+                        bio: responses.bio,
+                      });
+                      insertAlumniData();
+                      setValidationError("");
+                      setStep("end");
+                    }}
+                  >
+                    Continue
+                  </button>
                 </div>
               </div>
             </>

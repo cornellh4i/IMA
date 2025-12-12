@@ -145,4 +145,160 @@ export const supabaseHelpers = {
   
     return members ?? [];
   },
+
+  /**
+   * Insert a new alumni record into the Alumni table
+   * 
+   * @param alumniData - The data to insert into the Alumni table
+   * @returns The inserted alumni record
+   */
+  async insertAlumni(alumniData: {
+    full_name: string | null;
+    emails: string[] | null;
+    phone: string | null;
+    linkedin_url: string | null;
+    instagram_url: string | null;
+    graduation_year: number | null;
+    major: string | null;
+  }) {
+    if (!alumniData.full_name || !alumniData.emails || !alumniData.graduation_year || !alumniData.major) {
+      throw new Error('Missing required fields');
+    }
+
+    if (!Array.isArray(alumniData.emails)) {
+      throw new Error('Emails must be an array');
+    }
+
+    if (alumniData.emails.length === 0) {
+      throw new Error('Emails must be an array');
+    }
+
+    if (!alumniData.graduation_year) {
+      throw new Error('Graduation year is required');
+    }
+
+    if (!alumniData.major) {
+      throw new Error('Major is required');
+    }
+
+    const { data, error } = await supabase
+      .from('Alumni')
+      .insert({
+        full_name: alumniData.full_name,
+        emails: alumniData.emails,
+        phone: alumniData.phone,
+        linkedin_url: alumniData.linkedin_url,
+        instagram_url: alumniData.instagram_url,
+        graduation_year: alumniData.graduation_year,
+        major: alumniData.major,
+      })
+      .select();
+    
+    if (error) {
+      throw new Error(`Failed to insert alumni: ${error.message}`);
+    } 
+
+    return data?.[0];
+  },
+
+  /**
+   * Insert new job experience records into the Job_Experiences table
+   * 
+   * @param alumniId - The id of the alumni record to insert the job experience for
+   * @param jobExperienceData - The data to insert into the Job_Experiences table
+   * @returns An array of inserted job experience records
+   */
+  async insertJobExperience(alumniId: string, jobExperienceData: {
+    title: string;
+    employmmentType: string | null;
+    company: string;
+    location: string | null;
+    startMonth: string | null;
+    startYear: number | null;
+    endMonth: string | null;
+    endYear: number | null;
+    description: string | null;
+  }[]) {
+    const data: any[] = [];
+
+    jobExperienceData.forEach(async (job: {
+      title: string;
+      employmmentType: string | null;
+      company: string;
+      location: string | null;
+      startMonth: string | null;
+      startYear: number | null;
+      endMonth: string | null;
+      endYear: number | null;
+      description: string | null;
+    }) => {
+      const { data, error } = await supabase
+      .from('Job_Experiences')
+      .insert({
+        alumni_id: alumniId,
+        title: job.title,
+        employmmentType: job.employmmentType,
+        company: job.company,
+        location: job.location,
+        startMonth: job.startMonth,
+        startYear: job.startYear,
+        endMonth: job.endMonth,
+        endYear: job.endYear,
+        description: job.description,
+      })
+      .select();
+
+      if (error) {
+        throw new Error(`Failed to insert job experience: ${error.message}`);
+      }
+
+      data.push(data?.[0]);
+    });
+
+    return data ?? [];
+  },
+
+  /**
+   * Insert a new hack involvement record into the Hack_Involvements table
+   * 
+   * @param hackInvolvementData - The data to insert into the Hack_Involvements table
+   * @returns The inserted hack involvement record
+   */
+  async insertHackInvolvement(alumniId: string, hackInvolvementData: {
+    selectedRoles: string[];
+    selectedProjects: string[];
+    startSemester: string;
+    endSemester: string;
+    description: string;
+  }[]) {
+    const data: any[] = [];
+
+    hackInvolvementData.forEach(async (hack: {
+      selectedRoles: string[];
+      selectedProjects: string[];
+      startSemester: string;
+      endSemester: string;
+      description: string;
+    }) => {
+      const { data, error } = await supabase
+      .from('Hack_Involvements')
+      .insert({
+        alumni_id: alumniId,
+        selectedRoles: hack.selectedRoles,
+        selectedProjects: hack.selectedProjects,
+        startSemester: hack.startSemester,
+        endSemester: hack.endSemester,
+        description: hack.description,
+      })
+      .select();
+
+      if (error) {
+        throw new Error(`Failed to insert hack involvement: ${error.message}`);
+      }
+
+      data.push(data?.[0]);
+    });
+
+    return data ?? [];
+  },
 };
