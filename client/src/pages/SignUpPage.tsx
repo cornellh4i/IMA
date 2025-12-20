@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { supabase, supabaseHelpers } from "../lib/supabaseClient.ts";
 import type { Session } from "@supabase/supabase-js";
 
@@ -125,6 +125,7 @@ const SignUpPage: React.FC = () => {
     skills: string[] | null;
     interests: string[] | null;
     bio: string | null;
+    profile_url?: string | null;
   }>({
     full_name: null,
     emails: null,
@@ -137,12 +138,17 @@ const SignUpPage: React.FC = () => {
     skills: null,
     interests: null,
     bio: null,
+    profile_url: null,
   });
   
   const [step, setStep] = useState<
     "basic" | "picture" | "academic" | "involvement" | "job" | "more" | "end"
   >("basic");
   const [validationError, setValidationError] = useState("");
+  const [profileImage, setProfileImage] = useState<string | null>(null);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [selectedMajors, setSelectedMajors] = useState<string[]>([]);
   const [roles, setRoles] = useState<
     {
@@ -190,6 +196,86 @@ const SignUpPage: React.FC = () => {
       return job.title && job.employmentType && job.company && job.startMonth && job.startYear && job.endMonth && job.endYear;
     });
   }
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedFile(file);
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        if (event.target) {
+          setProfileImage(event.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleEditPicture = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleSaveProfilePicture = async () => {
+    if (!session?.user?.email) {
+      setValidationError("Please sign in to upload your profile picture");
+      return;
+    }
+
+    if (!selectedFile) {
+      setValidationError("Please select an image to upload");
+      return;
+    }
+
+    const file = selectedFile;
+    setUploading(true);
+
+    try {
+      // Generate a unique filename
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${session.user.id}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      // Upload to Supabase storage
+      const { error: uploadError } = await supabase.storage
+        .from('profile_images')
+        .upload(filePath, file, {
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (uploadError) {
+        throw uploadError;
+      }
+
+      // Get public URL
+      const { data: urlData } = supabase.storage
+        .from('profile_images')
+        .getPublicUrl(filePath);
+
+      const publicUrl = urlData.publicUrl;
+
+      // Store the URL to be saved with alumni data
+      setAlumniData(prev => ({ ...prev, profile_url: publicUrl }));
+      
+      setProfileImage(publicUrl);
+      setSelectedFile(null);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+      setValidationError("");
+      setStep("academic");
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      setValidationError(`Failed to upload image: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleSkipProfilePicture = () => {
+    setValidationError("");
+    setStep("academic");
+  };
 
   const addRole = () => {
     setRoles([
@@ -297,7 +383,7 @@ const SignUpPage: React.FC = () => {
                 Welcome, tell us who you are
               </div>
               <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
-                <div className="w-1/6 h-full bg-blue-700 rounded-xl"></div>
+                <div style={{ width: '14%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
               <div className="text-center mt-4 text-gray-500">
                 This will be the name displayed on your profile across the
@@ -358,12 +444,74 @@ const SignUpPage: React.FC = () => {
                         return;
                       }
                       setValidationError("");
-                      setStep("academic");
+                      setStep("picture");
                     }}
                     className="w-full bg-blue-900 mt-4 text-white py-2 rounded-3xl hover:bg-blue-800 transition-colors"
                   >
                     Continue
                   </button>
+                </div>
+              </div>
+            </>
+          )}
+
+          {step === "picture" && (
+            <>
+              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+                Upload Your Profile Picture
+              </div>
+              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+                <div style={{ width: '28%' }} className="h-full bg-blue-700 rounded-xl"></div>
+              </div>
+              <div className="text-center mt-4 text-gray-500">
+                Upload a clear photo so people can recognize and connect with you.
+              </div>
+              <div className="flex justify-center mt-8 w-2/5 bg-white mx-auto rounded-lg p-8 shadow-md">
+                <div className="w-full flex flex-col items-center">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    style={{ display: 'none' }}
+                  />
+                  <div 
+                    className="w-48 h-48 rounded-full overflow-hidden border-4 border-gray-300 cursor-pointer hover:border-blue-500 transition-colors mb-6"
+                    onClick={handleEditPicture}
+                  >
+                    {profileImage ? (
+                      <img
+                        src={profileImage}
+                        alt="Profile"
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gray-200 flex items-center justify-center">
+                        <span className="text-gray-500 text-sm">Click to upload</span>
+                      </div>
+                    )}
+                  </div>
+                  {validationError && (
+                    <div className="text-red-600 text-sm mb-4">
+                      {validationError}
+                    </div>
+                  )}
+                  <div className="flex gap-4 w-full">
+                    <button
+                      onClick={handleSkipProfilePicture}
+                      disabled={uploading}
+                      className="flex-1 bg-white text-blue-900 py-2 border border-blue-900 rounded-3xl hover:bg-blue-50 transition-colors disabled:opacity-50"
+                    >
+                      Skip
+                    </button>
+                    <button
+                      onClick={handleSaveProfilePicture}
+                      disabled={uploading || !selectedFile}
+                      className="flex-1 bg-blue-900 text-white py-2 rounded-3xl hover:bg-blue-800 transition-colors disabled:opacity-50"
+                    >
+                      {uploading ? 'Uploading...' : 'Continue'}
+                    </button>
+                  </div>
                 </div>
               </div>
             </>
@@ -375,7 +523,7 @@ const SignUpPage: React.FC = () => {
                 Academic Information
               </div>
               <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
-                <div className="w-1/3 h-full bg-blue-700 rounded-xl"></div>
+                <div style={{ width: '42%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
               <div className="text-center mt-4 text-gray-500">
                 Show your academic journey.
@@ -505,7 +653,7 @@ const SignUpPage: React.FC = () => {
                     <button
                       onClick={() => {
                         setValidationError("");
-                        setStep("basic");
+                        setStep("picture");
                       }}
                       className="flex-1 mt-4 bg-white text-blue-900 py-2 border border-blue-900 rounded-3xl hover:bg-blue-50 transition-colors"
                     >
@@ -559,7 +707,7 @@ const SignUpPage: React.FC = () => {
                 Hack4Impact Involvement
               </div>
               <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
-                <div className="w-1/2 h-full bg-blue-700 rounded-xl"></div>
+                <div style={{ width: '57%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
               <div className="text-center mt-4 text-gray-500">
                 Highlight your contributions.
@@ -876,6 +1024,12 @@ const SignUpPage: React.FC = () => {
                         label="Description"
                         type="text"
                         placeholder="What did you do"
+                        value={roles[index].description}
+                        onChange={(e) => {
+                          const newRoles = [...roles];
+                          newRoles[index].description = e.target.value;
+                          setRoles(newRoles);
+                        }}
                       />
                     </div>
                   ))}
@@ -939,7 +1093,7 @@ const SignUpPage: React.FC = () => {
               </div>
 
               <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
-                <div className="w-2/3 h-full bg-blue-700 rounded-xl"></div>
+                <div style={{ width: '71%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
 
               <div className="text-center mt-4 text-gray-500">
@@ -1226,7 +1380,7 @@ const SignUpPage: React.FC = () => {
                 More information about you
               </div>
               <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
-                <div className="w-full h-full bg-blue-700 rounded-xl" style={{ width: '100%' }}></div>
+                <div style={{ width: '85%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
               <div className="text-center mt-4 text-gray-500">
                 This will be the name displayed on your profile to help people know more about you
