@@ -379,17 +379,17 @@ const SignUpPage: React.FC = () => {
         <div className="container mx-auto">
           {step === "basic" && (
             <>
-              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+              <div className="text-center mt-4 md:mt-8 px-4 text-2xl md:text-3xl font-bold text-blue-900">
                 Welcome, tell us who you are
               </div>
-              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+              <div className="mx-auto w-11/12 md:w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
                 <div style={{ width: '14%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
-              <div className="text-center mt-4 text-gray-500">
+              <div className="text-center mt-4 px-4 text-sm md:text-base text-gray-500">
                 This will be the name displayed on your profile across the
                 platform.
               </div>
-              <div className="flex justify-center mt-8 w-2/5 bg-white mx-auto rounded-lg p-4 shadow-md">
+              <div className="flex justify-center mt-8 w-11/12 md:w-2/5 bg-white mx-auto rounded-lg p-4 md:p-6 shadow-md">
                 <div className="w-full">
                   <FormInput
                     label="First Name"
@@ -457,16 +457,16 @@ const SignUpPage: React.FC = () => {
 
           {step === "picture" && (
             <>
-              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+              <div className="text-center mt-4 md:mt-8 px-4 text-2xl md:text-3xl font-bold text-blue-900">
                 Upload Your Profile Picture
               </div>
-              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+              <div className="mx-auto w-11/12 md:w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
                 <div style={{ width: '28%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
-              <div className="text-center mt-4 text-gray-500">
+              <div className="text-center mt-4 px-4 text-sm md:text-base text-gray-500">
                 Upload a clear photo so people can recognize and connect with you.
               </div>
-              <div className="flex justify-center mt-8 w-2/5 bg-white mx-auto rounded-lg p-8 shadow-md">
+              <div className="flex justify-center mt-8 w-11/12 md:w-2/5 bg-white mx-auto rounded-lg p-6 md:p-8 shadow-md">
                 <div className="w-full flex flex-col items-center">
                   <input
                     ref={fileInputRef}
@@ -498,6 +498,16 @@ const SignUpPage: React.FC = () => {
                   )}
                   <div className="flex gap-4 w-full">
                     <button
+                      onClick={() => {
+                        setValidationError("");
+                        setStep("basic");
+                      }}
+                      disabled={uploading}
+                      className="flex-1 bg-white text-blue-900 py-2 border border-blue-900 rounded-3xl hover:bg-blue-50 transition-colors disabled:opacity-50"
+                    >
+                      Back
+                    </button>
+                    <button
                       onClick={handleSkipProfilePicture}
                       disabled={uploading}
                       className="flex-1 bg-white text-blue-900 py-2 border border-blue-900 rounded-3xl hover:bg-blue-50 transition-colors disabled:opacity-50"
@@ -519,16 +529,16 @@ const SignUpPage: React.FC = () => {
 
           {step === "academic" && (
             <>
-              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+              <div className="text-center mt-4 md:mt-8 px-4 text-2xl md:text-3xl font-bold text-blue-900">
                 Academic Information
               </div>
-              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+              <div className="mx-auto w-11/12 md:w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
                 <div style={{ width: '42%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
-              <div className="text-center mt-4 text-gray-500">
+              <div className="text-center mt-4 px-4 text-sm md:text-base text-gray-500">
                 Show your academic journey.
               </div>
-              <div className="flex justify-center mt-8 w-2/5 bg-white mx-auto rounded-lg p-4 shadow-md">
+              <div className="flex justify-center mt-8 w-11/12 md:w-2/5 bg-white mx-auto rounded-lg p-4 md:p-6 shadow-md">
                 <div className="w-full">
                   <div className="mb-4">
                     <label className="text-sm text-gray-600 font-semibold">
@@ -622,7 +632,7 @@ const SignUpPage: React.FC = () => {
                     onChange={(e) =>
                       setResponses({
                         ...responses,
-                        graduationYear: e.target.value,
+                        graduationYear: e.target.value.replace(/[^0-9]/g, ""),
                       })
                     }
                   />
@@ -703,16 +713,16 @@ const SignUpPage: React.FC = () => {
 
           {step === "involvement" && (
             <>
-              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+              <div className="text-center mt-4 md:mt-8 px-4 text-2xl md:text-3xl font-bold text-blue-900">
                 Hack4Impact Involvement
               </div>
-              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+              <div className="mx-auto w-11/12 md:w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
                 <div style={{ width: '57%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
-              <div className="text-center mt-4 text-gray-500">
+              <div className="text-center mt-4 px-4 text-sm md:text-base text-gray-500">
                 Highlight your contributions.
               </div>
-              <div className="flex justify-center mt-8 w-2/5 bg-white mx-auto rounded-lg p-4 shadow-md">
+              <div className="flex justify-center mt-8 w-11/12 md:w-2/5 bg-white mx-auto rounded-lg p-4 md:p-6 shadow-md">
                 <div className="w-full">
                   {roles.map((role, index) => (
                     <div
@@ -1088,19 +1098,19 @@ const SignUpPage: React.FC = () => {
 
           {step === 'job' && (
             <>
-              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+              <div className="text-center mt-4 md:mt-8 px-4 text-2xl md:text-3xl font-bold text-blue-900">
                 Job Information
               </div>
 
-              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+              <div className="mx-auto w-11/12 md:w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
                 <div style={{ width: '71%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
 
-              <div className="text-center mt-4 text-gray-500">
+              <div className="text-center mt-4 px-4 text-sm md:text-base text-gray-500">
                 Add your job experience here to help people know more about you.
               </div>
 
-              <div className="flex justify-center mt-8 w-2/5 bg-white mx-auto rounded-lg p-4 shadow-md">
+              <div className="flex justify-center mt-8 w-11/12 md:w-2/5 bg-white mx-auto rounded-lg p-4 md:p-6 shadow-md">
                 
               <div className="w-full">
                 <div className="flex flex-col items-start mb-4">
@@ -1110,19 +1120,8 @@ const SignUpPage: React.FC = () => {
                   <button
                     className="w-full border border-blue-900 rounded-3xl px-6 py-1 font-medium text-blue-900 hover:bg-blue-50 transition-colors"
                     onClick={() => {
-                      setJobExperiences([
-                        {
-                          title: "",
-                          employmentType: "",
-                          company: "",
-                          location: "",
-                          startMonth: "",
-                          startYear: NaN as number,
-                          endMonth: "",
-                          endYear: NaN as number,
-                          description: "",
-                        }
-                      ]);
+                      // Set empty job experiences array when skipping
+                      setJobExperiences([]);
                       setStep("more");
                     }}
                   >
@@ -1313,62 +1312,74 @@ const SignUpPage: React.FC = () => {
                           ...jobExperiences,
                           {
                             title: "",
-                            employmentType: "",
+                            employmentType: null,
                             company: "",
-                            location: "",
-                            startMonth: "",
-                            startYear: NaN as number,
-                            endMonth: "",
-                            endYear: NaN as number,
-                            description: "",
+                            location: null,
+                            startMonth: null,
+                            startYear: null,
+                            endMonth: null,
+                            endYear: null,
+                            description: null,
                           }
                         ]);
                       }}
                     >
                       Add Another Experience
                     </button>
-                    <button
-                      className="mb-2 text-gray-600 underline hover:text-gray-800 transition-colors"
-                      type="button"
-                      style={{ 
-                        width: 'auto', 
-                        background: 'none', 
-                        border: 'none', 
-                        padding: 0, 
-                        marginBottom: '12px',
-                        marginTop: '0px',
-                        textAlign: 'left', 
-                        display: 'block' 
-                      }}
-                      onClick={() => {
-                        if (jobExperiences.length > 1) {
+                    {jobExperiences.length > 1 && (
+                      <button
+                        className="mb-2 text-gray-600 underline hover:text-gray-800 transition-colors"
+                        type="button"
+                        style={{ 
+                          width: 'auto', 
+                          background: 'none', 
+                          border: 'none', 
+                          padding: 0, 
+                          marginBottom: '12px',
+                          marginTop: '0px',
+                          textAlign: 'left', 
+                          display: 'block' 
+                        }}
+                        onClick={() => {
                           setJobExperiences(jobExperiences.filter((_, i) => i !== index));
-                        }
-                      }}
-                      disabled={jobExperiences.length === 1}
-                    >
-                      Remove
-                    </button>
-                    <button
-                      className="w-full bg-blue-900 text-white rounded-3xl px-6 py-2 font-medium hover:bg-blue-800 transition-colors"
-                      onClick={() => {
-                        // Add logic to insert job experiences into database
-                        if (validateJobExperiences()) {
-                          // Approve job experiences to be inserted into database
-                          setValidationError("");
-                          
-                          // Continue to next step
-                          setStep("more");
-                        } else {
-                          setValidationError("Must answer all required questions");
-                        }
-                      }}
-                    >
-                      Continue
-                    </button>
-                    <div className="text-red-500 text-sm mt-2">{validationError}</div>
+                        }}
+                      >
+                        Remove
+                      </button>
+                    )}
                   </div>
                 ))}
+                
+                {/* Navigation buttons - outside the map so they always show */}
+                <div className="flex gap-4 mt-4">
+                  <button
+                    className="flex-1 bg-white text-blue-900 py-2 border border-blue-900 rounded-3xl hover:bg-blue-50 transition-colors"
+                    onClick={() => {
+                      setValidationError("");
+                      setStep("involvement");
+                    }}
+                  >
+                    Back
+                  </button>
+                  <button
+                    className="flex-1 bg-blue-900 text-white rounded-3xl px-6 py-2 font-medium hover:bg-blue-800 transition-colors"
+                    onClick={() => {
+                      // If there are job experiences, validate them
+                      if (jobExperiences.length > 0 && !validateJobExperiences()) {
+                        setValidationError("Must answer all required questions");
+                        return;
+                      }
+                      
+                      setValidationError("");
+                      setStep("more");
+                    }}
+                  >
+                    Continue
+                  </button>
+                </div>
+                {validationError && (
+                  <div className="text-red-500 text-sm mt-2">{validationError}</div>
+                )}
               </div>
             </div>
           </>
@@ -1376,17 +1387,17 @@ const SignUpPage: React.FC = () => {
 
           {step === 'more' && (
             <>
-              <div className="text-center mt-8 text-3xl font-bold text-blue-900">
+              <div className="text-center mt-4 md:mt-8 px-4 text-2xl md:text-3xl font-bold text-blue-900">
                 More information about you
               </div>
-              <div className="mx-auto w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
+              <div className="mx-auto w-11/12 md:w-2/5 mt-4 rounded-xl bg-gray-300 h-2">
                 <div style={{ width: '85%' }} className="h-full bg-blue-700 rounded-xl"></div>
               </div>
-              <div className="text-center mt-4 text-gray-500">
+              <div className="text-center mt-4 px-4 text-sm md:text-base text-gray-500">
                 This will be the name displayed on your profile to help people know more about you
               </div>
               <div className="flex justify-center mt-8">
-                <div className="bg-white rounded-xl shadow-md w-full max-w-xl p-6 flex flex-col gap-4 items-stretch">
+                <div className="bg-white rounded-xl shadow-md w-11/12 md:max-w-xl p-4 md:p-6 flex flex-col gap-4 items-stretch mx-auto">
                   <div className="flex flex-col mb-4">
                     <label className="text-sm font-semibold text-gray-700 mb-1" htmlFor="short-bio">
                       Short Bio
@@ -1404,27 +1415,65 @@ const SignUpPage: React.FC = () => {
                       required
                     />
                   </div>
-                  <button
-                    className="w-full bg-blue-900 text-white rounded-3xl px-6 py-2 font-medium hover:bg-blue-800 transition-colors"
-                    onClick={async () => {
-                      const updatedAlumniData = {
-                        ...alumniData,
-                        bio: responses.bio,
-                      };
-                      setAlumniData(updatedAlumniData);
-                      
-                      try {
-                        await insertAlumniData(updatedAlumniData);
+                  <div className="flex gap-4 w-full">
+                    <button
+                      className="flex-1 bg-white text-blue-900 rounded-3xl px-6 py-2 font-medium border border-blue-900 hover:bg-blue-50 transition-colors"
+                      onClick={() => {
                         setValidationError("");
-                        setStep("end");
-                      } catch (error) {
-                        console.error('Failed to submit form:', error);
-                        setValidationError(error instanceof Error ? error.message : 'Failed to submit form. Please try again.');
-                      }
-                    }}
-                  >
-                    Continue
-                  </button>
+                        // If the user skipped jobs earlier, ensure there's an empty row to fill
+                        if (jobExperiences.length === 0) {
+                          setJobExperiences([
+                            {
+                              title: "",
+                              employmentType: null,
+                              company: "",
+                              location: null,
+                              startMonth: null,
+                              startYear: null,
+                              endMonth: null,
+                              endYear: null,
+                              description: null,
+                            },
+                          ]);
+                        }
+                        setStep("job");
+                      }}
+                    >
+                      Back
+                    </button>
+                    <button
+                      className="flex-1 bg-blue-900 text-white rounded-3xl px-6 py-2 font-medium hover:bg-blue-800 transition-colors"
+                      onClick={async () => {
+                        // Ensure all data from all steps is included
+                        const updatedAlumniData = {
+                          full_name: `${responses.firstName} ${responses.lastName}`,
+                          emails: [responses.email],
+                          phone: responses.phone || null,
+                          linkedin_url: responses.linkedin || null,
+                          instagram_url: responses.instagram || null,
+                          graduation_year: parseInt(responses.graduationYear) || null,
+                          major: selectedMajors.join(", ") || null,
+                          location: alumniData.location || null,
+                          skills: alumniData.skills || null,
+                          interests: alumniData.interests || null,
+                          bio: responses.bio || null,
+                          profile_url: alumniData.profile_url || null,
+                        };
+                        setAlumniData(updatedAlumniData);
+                        
+                        try {
+                          await insertAlumniData(updatedAlumniData);
+                          setValidationError("");
+                          setStep("end");
+                        } catch (error) {
+                          console.error('Failed to submit form:', error);
+                          setValidationError(error instanceof Error ? error.message : 'Failed to submit form. Please try again.');
+                        }
+                      }}
+                    >
+                      Continue
+                    </button>
+                  </div>
                 </div>
               </div>
             </>
