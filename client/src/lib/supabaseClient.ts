@@ -160,6 +160,10 @@ export const supabaseHelpers = {
     instagram_url: string | null;
     graduation_year: number | null;
     major: string | null;
+    location: string | null;
+    skills: string[] | null;
+    interests: string[] | null;
+    bio: string | null;
   }) {
     if (!alumniData.full_name || !alumniData.emails || !alumniData.graduation_year || !alumniData.major) {
       throw new Error('Missing required fields');
@@ -170,15 +174,7 @@ export const supabaseHelpers = {
     }
 
     if (alumniData.emails.length === 0) {
-      throw new Error('Emails must be an array');
-    }
-
-    if (!alumniData.graduation_year) {
-      throw new Error('Graduation year is required');
-    }
-
-    if (!alumniData.major) {
-      throw new Error('Major is required');
+      throw new Error('Emails array cannot be empty');
     }
 
     const { data, error } = await supabase
@@ -191,14 +187,20 @@ export const supabaseHelpers = {
         instagram_url: alumniData.instagram_url,
         graduation_year: alumniData.graduation_year,
         major: alumniData.major,
+        location: alumniData.location,
+        skills: alumniData.skills,
+        interests: alumniData.interests,
+        bio: alumniData.bio,
       })
-      .select();
+      .select()
+      .single();
     
     if (error) {
+      console.error('Supabase insert error:', error);
       throw new Error(`Failed to insert alumni: ${error.message}`);
     } 
 
-    return data?.[0];
+    return { data, error };
   },
 
   /**
@@ -210,7 +212,7 @@ export const supabaseHelpers = {
    */
   async insertJobExperience(alumniId: string, jobExperienceData: {
     title: string;
-    employmmentType: string | null;
+    employmentType: string | null;
     company: string;
     location: string | null;
     startMonth: string | null;
@@ -219,43 +221,34 @@ export const supabaseHelpers = {
     endYear: number | null;
     description: string | null;
   }[]) {
-    const data: any[] = [];
-
-    jobExperienceData.forEach(async (job: {
-      title: string;
-      employmmentType: string | null;
-      company: string;
-      location: string | null;
-      startMonth: string | null;
-      startYear: number | null;
-      endMonth: string | null;
-      endYear: number | null;
-      description: string | null;
-    }) => {
+    const insertPromises = jobExperienceData.map(async (job) => {
       const { data, error } = await supabase
-      .from('Job_Experiences')
-      .insert({
-        alumni_id: alumniId,
-        title: job.title,
-        employmmentType: job.employmmentType,
-        company: job.company,
-        location: job.location,
-        startMonth: job.startMonth,
-        startYear: job.startYear,
-        endMonth: job.endMonth,
-        endYear: job.endYear,
-        description: job.description,
-      })
-      .select();
+        .from('Alumni Job Experience')
+        .insert({
+          alumni_id: alumniId,
+          title: job.title,
+          employment_type: job.employmentType,
+          company: job.company,
+          location: job.location,
+          start_month: job.startMonth,
+          start_year: job.startYear,
+          end_month: job.endMonth,
+          end_year: job.endYear,
+          description: job.description,
+        })
+        .select()
+        .single();
 
       if (error) {
+        console.error('Job experience insert error:', error);
         throw new Error(`Failed to insert job experience: ${error.message}`);
       }
 
-      data.push(data?.[0]);
+      return data;
     });
 
-    return data ?? [];
+    const results = await Promise.all(insertPromises);
+    return results;
   },
 
   /**
@@ -271,34 +264,57 @@ export const supabaseHelpers = {
     endSemester: string;
     description: string;
   }[]) {
-    const data: any[] = [];
+    const allInserts: Promise<any>[] = [];
 
-    hackInvolvementData.forEach(async (hack: {
-      selectedRoles: string[];
-      selectedProjects: string[];
-      startSemester: string;
-      endSemester: string;
-      description: string;
-    }) => {
-      const { data, error } = await supabase
-      .from('Hack_Involvements')
-      .insert({
-        alumni_id: alumniId,
-        selectedRoles: hack.selectedRoles,
-        selectedProjects: hack.selectedProjects,
-        startSemester: hack.startSemester,
-        endSemester: hack.endSemester,
-        description: hack.description,
-      })
-      .select();
+    hackInvolvementData.forEach((hack) => {
+      // Parse semester format "Fall '24" -> year: 2024, term: "Fall"
+      const parseYear = (semester: string) => {
+        const match = semester.match(/'(\d{2})$/);
+        if (match) {
+          const shortYear = parseInt(match[1]);
+          return shortYear >= 0 && shortYear <= 30 ? 2000 + shortYear : 1900 + shortYear;
+        }
+        return null;
+      };
+      
+      const parseTerm = (semester: string) => {
+        return semester.toLowerCase().includes('fall') ? 'Fall' : 'Spring';
+      };
 
-      if (error) {
-        throw new Error(`Failed to insert hack involvement: ${error.message}`);
-      }
+      const startYear = parseYear(hack.startSemester);
+      const startTerm = parseTerm(hack.startSemester);
+      const endYear = parseYear(hack.endSemester);
+      const endTerm = parseTerm(hack.endSemester);
 
-      data.push(data?.[0]);
+      // Insert one row per role (since role is a single enum value, not array)
+      hack.selectedRoles.forEach((role) => {
+        const insertPromise = supabase
+          .from('Alumni Hack Involvements')
+          .insert({
+            alumni_id: alumniId,
+            role: role,
+            projects: hack.selectedProjects,
+            start_year: startYear,
+            start_term: startTerm,
+            end_year: endYear,
+            end_term: endTerm,
+            description: hack.description,
+          })
+          .select()
+          .single()
+          .then(({ data, error }) => {
+            if (error) {
+              console.error('Hack involvement insert error:', error);
+              throw new Error(`Failed to insert hack involvement: ${error.message}`);
+            }
+            return data;
+          });
+
+        allInserts.push(insertPromise);
+      });
     });
 
-    return data ?? [];
+    const results = await Promise.all(allInserts);
+    return results;
   },
 };

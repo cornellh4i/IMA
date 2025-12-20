@@ -163,7 +163,7 @@ const SignUpPage: React.FC = () => {
   ]);
   const [jobExperiences, setJobExperiences] = useState<{
     title: string;
-    employmmentType: string | null;
+    employmentType: string | null;
     company: string;
     location: string | null;
     startMonth: string | null;
@@ -174,7 +174,7 @@ const SignUpPage: React.FC = () => {
   }[]>([
     {
       title: "",
-      employmmentType: null,
+      employmentType: null,
       company: "",
       location: null,
       startMonth: null,
@@ -187,7 +187,7 @@ const SignUpPage: React.FC = () => {
 
   function validateJobExperiences() {
     return jobExperiences.every(job => {
-      return job.title && job.employmmentType && job.company && job.startMonth && job.startYear && job.endMonth && job.endYear;
+      return job.title && job.employmentType && job.company && job.startMonth && job.startYear && job.endMonth && job.endYear;
     });
   }
 
@@ -222,30 +222,68 @@ const SignUpPage: React.FC = () => {
     return () => subscription.unsubscribe();
   }, []);
 
-  async function insertAlumniData() {
-    // Insert data into Alumni table
-    const result = await supabaseHelpers.insertAlumni(alumniData);
-    if (result.error) {
-      throw new Error(`Failed to insert alumni: ${result.error.message}`);
+  async function insertAlumniData(dataToInsert: typeof alumniData) {
+    try {
+      console.log('Starting insert with jobExperiences:', jobExperiences);
+      console.log('Starting insert with roles:', roles);
+      
+      // Insert data into Alumni table
+      const result = await supabaseHelpers.insertAlumni(dataToInsert);
+      if (result.error) {
+        throw new Error(`Failed to insert alumni: ${result.error.message}`);
+      }
+
+      const alumniId = result.data?.id;
+      
+      if (!alumniId) {
+        throw new Error('No alumni ID returned from insert');
+      }
+      
+      console.log('Alumni inserted with ID:', alumniId);
+      
+      // Insert data into Job Experiences table
+      console.log('Inserting job experiences...');
+      const jobExperiencesResult = await supabaseHelpers.insertJobExperience(alumniId, jobExperiences);
+      console.log('Job experiences result:', jobExperiencesResult);
+
+      // Insert data into Hack Involvements table
+      console.log('Inserting hack involvements...');
+      const hackInvolvementsResult = await supabaseHelpers.insertHackInvolvement(alumniId, roles);
+      console.log('Hack involvements result:', hackInvolvementsResult);
+
+      console.log('Alumni data inserted successfully:', {
+        alumni: result.data,
+        jobExperiences: jobExperiencesResult,
+        hackInvolvements: hackInvolvementsResult,
+      });
+
+      return {
+        alumni: result.data,
+        jobExperiences: jobExperiencesResult,
+        hackInvolvements: hackInvolvementsResult,
+      };
+    } catch (error) {
+      console.error('Error inserting alumni data:', error);
+      throw error;
     }
+  }
 
-    const alumniId = result.data?.id;
-    
-    // Insert data into Job Experiences table
-    const jobExperiencesResult = await supabaseHelpers.insertJobExperience(alumniId, jobExperiences);
-
-    // Insert data into Hack Involvements table
-    const hackInvolvementsResult = await supabaseHelpers.insertHackInvolvement(alumniId, roles);
-
-    if (result.error || jobExperiencesResult.length === 0 || hackInvolvementsResult.length === 0) {
-      throw new Error(`Failed to insert data: ${result.error?.message || jobExperiencesResult.length === 0 ? 'Failed to insert job experiences' : 'Failed to insert hack involvements'}`);
-    }
-
-    return {
-      alumni: result.data,
-      jobExperiences: jobExperiencesResult,
-      hackInvolvements: hackInvolvementsResult,
-    };
+  // Require authentication to access signup form
+  if (!session) {
+    return (
+      <div className="w-screen h-screen bg-gray-100 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-800 mb-4">Please sign in first</h2>
+          <p className="text-gray-600 mb-6">You need to be authenticated to complete the signup form.</p>
+          <a 
+            href="/signin" 
+            className="bg-blue-900 text-white rounded-lg px-6 py-3 font-medium hover:bg-blue-800 transition-colors inline-block"
+          >
+            Go to Sign In
+          </a>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -921,7 +959,7 @@ const SignUpPage: React.FC = () => {
                       setJobExperiences([
                         {
                           title: "",
-                          employmmentType: "",
+                          employmentType: "",
                           company: "",
                           location: "",
                           startMonth: "",
@@ -977,10 +1015,10 @@ const SignUpPage: React.FC = () => {
                       </label>
                       <select
                         className="w-full border border-gray-400 rounded-md mt-1 p-2"
-                        value={job.employmmentType ?? ""}
+                        value={job.employmentType ?? ""}
                         onChange={e => {
                           const newJobs = [...jobExperiences];
-                          newJobs[index].employmmentType = e.target.value ?? null;
+                          newJobs[index].employmentType = e.target.value ?? null;
                           setJobExperiences(newJobs);
                         }}
                         required
@@ -1121,7 +1159,7 @@ const SignUpPage: React.FC = () => {
                           ...jobExperiences,
                           {
                             title: "",
-                            employmmentType: "",
+                            employmentType: "",
                             company: "",
                             location: "",
                             startMonth: "",
@@ -1214,14 +1252,21 @@ const SignUpPage: React.FC = () => {
                   </div>
                   <button
                     className="w-full bg-blue-900 text-white rounded-3xl px-6 py-2 font-medium hover:bg-blue-800 transition-colors"
-                    onClick={() => {
-                      setAlumniData({
+                    onClick={async () => {
+                      const updatedAlumniData = {
                         ...alumniData,
                         bio: responses.bio,
-                      });
-                      insertAlumniData();
-                      setValidationError("");
-                      setStep("end");
+                      };
+                      setAlumniData(updatedAlumniData);
+                      
+                      try {
+                        await insertAlumniData(updatedAlumniData);
+                        setValidationError("");
+                        setStep("end");
+                      } catch (error) {
+                        console.error('Failed to submit form:', error);
+                        setValidationError(error instanceof Error ? error.message : 'Failed to submit form. Please try again.');
+                      }
                     }}
                   >
                     Continue
