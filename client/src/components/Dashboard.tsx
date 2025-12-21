@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
-import Sidebar from "../components/Sidebar.tsx";
-import SearchBar from "../components/SearchBar.tsx";
-import Card from "../components/Card.tsx";
+import Sidebar from "./Sidebar.tsx";
+import SearchBar from "./SearchBar.tsx";
+import Card from "./Card.tsx";
 import { Member, transformSupabaseMember } from "../types/member.ts";
 import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import "../styles/TestPage.css";
 
-const TestPage: React.FC = () => {
-  const dummyFunc = () => console.log("Open Modal Function");
+const Dashboard: React.FC = () => {
   const [members, setMembers] = useState<Member[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -89,4 +88,4 @@ const TestPage: React.FC = () => {
   );
 };
 
-export default TestPage;
+export default Dashboard;
