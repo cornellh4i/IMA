@@ -3,7 +3,7 @@
 } */
 
 .sidebar {
-  width: 298px; /* 100% of the viewheight, change after merge of the header and search */
+  width: 260px;
   min-height: 90vh;
   flex-shrink: 0;
   border: none;
@@ -15,6 +15,23 @@
   padding: 16px 12px;
   font-family: "Hanken Grotesk", sans-serif;
   color: #344668;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+    padding: 12px 16px;
+    flex-direction: column;
+  }
+  
+  .imaLogo {
+    display: none;
+  }
+  
+  .filterTitle {
+    margin: 0 0 8px 0;
+  }
 }
 
 .imaLogo {
