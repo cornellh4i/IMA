@@ -3,7 +3,13 @@
 .testPage {
   font-family: "Hanken Grotesk", sans-serif;
   height: auto;
-  overflow: auto; /* allow scrolling */
+  overflow-x: hidden;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
 .topTest {
@@ -20,42 +26,74 @@
   margin-right: auto;
 }
 
-.container {
+.container.testPage {
   width: 100%;
-  margin-left: 0;
-  margin-right: 0;
+  max-width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
 }
 
 .testPage .middle {
-  background: #F3F4F6; /* lighter gray */
+  background: #F3F4F6;
   border-radius: 0;
   flex: 1;
-  padding-right: 24px;
-  padding-bottom: 16px; /* ensure visual space below bottom row */
+  min-width: 0;
+  padding: 0 24px 16px 24px;
   display: flex;
   flex-direction: column;
   height: auto;
+  overflow-x: hidden;
 }
 
 .testPage .top {
   display: flex;
+  margin: 0;
+  padding: 0;
 }
 
 .testPage .cards {
   flex: 1;
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  column-gap: 24px;
-  row-gap: 24px;
-  padding: 8px 10px 24px 10px;
+  column-gap: 40px;
+  row-gap: 40px;
+  padding: 16px 0 24px 0;
+  box-sizing: border-box;
+}
+
+@media (max-width: 1024px) {
+  .testPage .cards {
+    grid-template-columns: 1fr;
+    row-gap: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .testPage .top {
+    flex-direction: column;
+  }
+  
+  .testPage .middle {
+    padding: 0 16px 16px 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .testPage .cards {
+    grid-template-columns: 1fr;
+    padding: 16px 0 24px 0;
+    row-gap: 24px;
+  }
+}
+
+.testPage .cards .card {
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .testPage .cards .elements {
-  width: 100%;
-  height: auto;
-  margin: 0; 
   box-sizing: border-box;
-  padding: 16px 20px;
 }
 
 /* pagination styles removed */

@@ -2,11 +2,15 @@
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-left: 10px; /* align with Members and cards */
+  margin-left: 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 #form {
-  width: auto; /* keep input at fixed 499px */
+  width: 100%;
+  max-width: 499px;
   height: 44px;
   margin-top: 24px;
   margin-left: 0;
@@ -20,14 +24,32 @@
   background-color: #ffffff;
   color: #626F86;
   height: 40px;
-  width: 499px;
-  padding-left: 44px; /* room for icon */
+  width: 100%;
+  max-width: 499px;
+  padding-left: 44px;
   padding-right: 20px;
   border-radius: 50px;
   font-family: "Hanken Grotesk", sans-serif;
   font-weight: 500;
-  border: 2px solid #e5e7eb; /* light border per figma */
+  border: 2px solid #e5e7eb;
   font-size: 17px;
+  box-sizing: border-box;
+}
+
+@media (max-width: 768px) {
+  .searchBar {
+    margin-left: 0;
+    padding: 0 4px;
+  }
+  
+  #form {
+    max-width: 100%;
+  }
+  
+  #searchInput {
+    max-width: 100%;
+    font-size: 16px;
+  }
 }
 
 .searchIcon {

@@ -62,8 +62,8 @@ const TestPage: React.FC = () => {
                 color: "#002C61",
                 fontFamily: "Hanken Grotesk",
                 fontWeight: 700,
-                fontSize: 48,
-                lineHeight: "67px",
+                fontSize: "clamp(28px, 5vw, 48px)",
+                lineHeight: "1.4",
                 letterSpacing: 0,
               }}
             >

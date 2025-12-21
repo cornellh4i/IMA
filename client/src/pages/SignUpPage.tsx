@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase, supabaseHelpers } from "../lib/supabaseClient.ts";
 import type { Session } from "@supabase/supabase-js";
 
@@ -101,6 +102,7 @@ const FormInput: React.FC<{
 };
 
 const SignUpPage: React.FC = () => {
+  const navigate = useNavigate();
   const [session, setSession] = useState<Session | null>(null);
   const [responses, setResponses] = useState<{ [key: string]: string }>({
     firstName: "",
@@ -1465,6 +1467,7 @@ const SignUpPage: React.FC = () => {
                           await insertAlumniData(updatedAlumniData);
                           setValidationError("");
                           setStep("end");
+                          navigate("/");
                         } catch (error) {
                           console.error('Failed to submit form:', error);
                           setValidationError(error instanceof Error ? error.message : 'Failed to submit form. Please try again.');
