@@ -2,49 +2,48 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar.tsx";
 import SearchBar from "./SearchBar.tsx";
 import Card from "./Card.tsx";
-import { Member, transformSupabaseMember } from "../types/member.ts";
+import { Alumni, transformSupabaseAlumni } from "../types/member.ts";
 import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import "../styles/TestPage.css";
 
 const Dashboard: React.FC = () => {
-  const [members, setMembers] = useState<Member[]>([]);
+  const [alumni, setAlumni] = useState<Alumni[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState<number>(0);
 
   useEffect(() => {
-    const fetchMembers = async () => {
+    const fetchAlumni = async () => {
       try {
         setLoading(true);
         setError(null);
-        const supabaseMembers = await supabaseHelpers.getMembers();
-        const transformedMembers = supabaseMembers.map((row: any) =>
-          transformSupabaseMember(row)
+        const supabaseAlumni = await supabaseHelpers.getAlumni();
+        const transformedAlumni = supabaseAlumni.map((row: any) =>
+          transformSupabaseAlumni(row)
         );
-        setMembers(transformedMembers);
-        setTotalCount(transformedMembers.length);
+        setAlumni(transformedAlumni);
+        setTotalCount(transformedAlumni.length);
       } catch (err) {
-        console.error("Failed to fetch members:", err);
-        setError(err instanceof Error ? err.message : "Failed to fetch members");
+        console.error("Failed to fetch alumni:", err);
+        setError(err instanceof Error ? err.message : "Failed to fetch alumni");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMembers();
+    fetchAlumni();
   }, []);
 
-  function createCard(member: Member) {
+  function createCard(alumnus: Alumni) {
     return (
       <Card
-        key={member.id}
-        name={member.name}
-        year={member.year || member.dateJoined}
-        role={member.role}
-        linkedin={member.linkedin ?? undefined}
-        slack={member.slack ?? undefined}
-        email={member.email}
-        image={(member.imgURL || member.profilePicture) ?? ""}
+        key={alumnus.id}
+        name={alumnus.name}
+        year={alumnus.graduationYear?.toString() || ""}
+        role={alumnus.major || ""}
+        linkedin={alumnus.linkedinUrl ?? undefined}
+        email={alumnus.emails?.[0] || ""}
+        image={alumnus.profileUrl ?? ""}
       />
     );
   }
@@ -53,7 +52,7 @@ const Dashboard: React.FC = () => {
     <>
       <div className="container testPage">
         <div className="top">
-          <Sidebar members={members} setMembers={setMembers} />
+          <Sidebar alumni={alumni} setAlumni={setAlumni} />
           <div className="middle">
             <h1
               style={{
@@ -64,13 +63,14 @@ const Dashboard: React.FC = () => {
                 fontSize: "clamp(28px, 5vw, 48px)",
                 lineHeight: "1.4",
                 letterSpacing: 0,
+                marginTop: "16px",
               }}
             >
               Members
             </h1>
-            <SearchBar members={members} setMembers={setMembers} />
+            <SearchBar alumni={alumni} setAlumni={setAlumni} />
             <div style={{ marginTop: "8px", marginLeft: "10px", color: "#6b7280" }}>
-              {`Showing ${members.length} of ${totalCount} members`}
+              {`Showing ${alumni.length} of ${totalCount} members`}
             </div>
             {loading && (
               <div style={{ textAlign: "center", padding: "1rem" }}>
@@ -80,7 +80,7 @@ const Dashboard: React.FC = () => {
             {error && (
               <div style={{ color: "red", padding: "1rem" }}>{error}</div>
             )}
-            {!loading && !error && <div className="cards">{members.map(createCard)}</div>}
+            {!loading && !error && <div className="cards">{alumni.map(createCard)}</div>}
           </div>
         </div>
       </div>
