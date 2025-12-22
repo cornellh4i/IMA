@@ -65,3 +65,62 @@ export function transformToSupabaseInsert(member: Omit<Member, 'id' | 'createdAt
     bio: member.bio,
   };
 }
+
+// Alumni type for the Alumni table
+export interface Alumni {
+  id: string;
+  name: string;
+  emails: string[];
+  phone?: string | null;
+  linkedinUrl?: string | null;
+  instagramUrl?: string | null;
+  graduationYear: number | null;
+  major: string | null;
+  location?: string | null;
+  skills?: string[] | null;
+  interests?: string[] | null;
+  bio?: string | null;
+  profileUrl?: string | null;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+// Raw Supabase Alumni row type (snake_case)
+export interface SupabaseAlumniRow {
+  id: string;
+  full_name: string | null;
+  emails: string[] | null;
+  phone: string | null;
+  linkedin_url: string | null;
+  instagram_url: string | null;
+  graduation_year: number | null;
+  major: string | null;
+  location: string | null;
+  skills: string[] | null;
+  interests: string[] | null;
+  bio: string | null;
+  profile_url: string | null;
+  created_at: string;
+  updated_at: string | null;
+}
+
+// Helper function to transform Supabase Alumni row to frontend Alumni
+export function transformSupabaseAlumni(row: SupabaseAlumniRow): Alumni {
+  return {
+    id: row.id,
+    name: row.full_name || '',
+    emails: row.emails || [],
+    phone: row.phone,
+    linkedinUrl: row.linkedin_url,
+    instagramUrl: row.instagram_url,
+    graduationYear: row.graduation_year,
+    major: row.major,
+    location: row.location,
+    skills: row.skills,
+    interests: row.interests,
+    bio: row.bio,
+    profileUrl: row.profile_url,
+    createdAt: row.created_at,
+    updatedAt: row.updated_at || undefined,
+  };
+}

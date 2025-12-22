@@ -317,4 +317,75 @@ export const supabaseHelpers = {
     const results = await Promise.all(allInserts);
     return results;
   },
+
+  // Get all alumni
+  async getAlumni() {
+    console.log('Fetching alumni from Supabase...');
+    const { data, error } = await supabase
+      .from('Alumni')
+      .select('*')
+      .order('created_at', { ascending: false });
+    
+    console.log('Alumni fetch result:', { data, error, count: data?.length });
+    
+    if (error) {
+      console.error('Supabase error:', error);
+      throw new Error(`Failed to fetch alumni: ${error.message}`);
+    }
+    
+    return data || [];
+  },
+
+  // Search alumni by name
+  async searchAlumni(query: string) {
+    const { data, error } = await supabase
+      .from('Alumni')
+      .select('*')
+      .ilike('full_name', `%${query}%`)
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      throw new Error(`Failed to search alumni: ${error.message}`);
+    }
+    
+    return data || [];
+  },
+
+  // Filter alumni by category
+  async filterAlumni(filters: Record<string, string[]>) {
+    let query = supabase.from('Alumni').select('*');
+    
+    // Map frontend filter keys to database column names
+    const columnMap: Record<string, string> = {
+      major: 'major',
+      year: 'graduation_year',
+      location: 'location',
+    };
+    
+    // Apply filters
+    Object.entries(filters).forEach(([category, values]) => {
+      if (values.length > 0) {
+        const dbColumn = columnMap[category];
+        if (dbColumn) {
+          if (dbColumn === 'graduation_year') {
+            // Convert year strings to numbers for graduation_year
+            const yearNumbers = values.map(v => parseInt(v, 10)).filter(n => !isNaN(n));
+            if (yearNumbers.length > 0) {
+              query = query.in(dbColumn, yearNumbers);
+            }
+          } else {
+            query = query.in(dbColumn, values);
+          }
+        }
+      }
+    });
+    
+    const { data, error } = await query.order('created_at', { ascending: false });
+    
+    if (error) {
+      throw new Error(`Failed to filter alumni: ${error.message}`);
+    }
+    
+    return data || [];
+  },
 };

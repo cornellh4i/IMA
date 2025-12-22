@@ -1,29 +1,29 @@
 import * as React from "react";
 import { useState } from "react";
 import { Search } from "lucide-react";
-import { Member, transformSupabaseMember } from "../types/member.ts";
+import { Alumni, transformSupabaseAlumni } from "../types/member.ts";
 import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import "../styles/SearchBar.css";
 
 interface SearchBarProps {
-  members: Member[];
-  setMembers: React.Dispatch<React.SetStateAction<Member[]>>;
+  alumni: Alumni[];
+  setAlumni: React.Dispatch<React.SetStateAction<Alumni[]>>;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ alumni, setAlumni }) => {
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [isSearching, setIsSearching] = useState<boolean>(false);
 
-  const searchMembers = async () => {
+  const searchAlumni = async () => {
     if (!searchQuery.trim()) {
-      // If search query is empty, fetch all members
+      // If search query is empty, fetch all alumni
       try {
         setIsSearching(true);
-        const supabaseMembers = await supabaseHelpers.getMembers();
-        const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
-        setMembers(transformedMembers);
+        const supabaseAlumni = await supabaseHelpers.getAlumni();
+        const transformedAlumni = supabaseAlumni.map((row: any) => transformSupabaseAlumni(row));
+        setAlumni(transformedAlumni);
       } catch (err) {
-        console.error('Failed to fetch all members:', err);
+        console.error('Failed to fetch all alumni:', err);
       } finally {
         setIsSearching(false);
       }
@@ -32,11 +32,11 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
 
     try {
       setIsSearching(true);
-      const supabaseMembers = await supabaseHelpers.searchMembers(searchQuery.trim());
-      const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
-      setMembers(transformedMembers);
+      const supabaseAlumni = await supabaseHelpers.searchAlumni(searchQuery.trim());
+      const transformedAlumni = supabaseAlumni.map((row: any) => transformSupabaseAlumni(row));
+      setAlumni(transformedAlumni);
     } catch (err) {
-      console.error('Failed to search members:', err);
+      console.error('Failed to search alumni:', err);
     } finally {
       setIsSearching(false);
     }
@@ -44,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    searchMembers();
+    searchAlumni();
   };
 
   return (
@@ -60,7 +60,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ members, setMembers }) => {
           placeholder="Search"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          aria-label="Search members"
+          aria-label="Search alumni"
         />
       </form>
     </div>

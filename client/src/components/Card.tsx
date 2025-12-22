@@ -162,10 +162,8 @@ const Card: React.FC<CardProps> = ({
 
           {/*year graduated, major, team for pills*/}
           <div className="chips">
-            <span className="pill">IMA</span>
-            <span className="pill">Developer</span>
-            <span className="pill">2028</span>
-            <span className="pill">Technical Lead</span>
+            {year && <span className="pill">{year}</span>}
+            {role && <span className="pill">{role}</span>}
           </div>
         </div>
       </div>

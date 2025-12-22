@@ -5,21 +5,20 @@ import Checkbox from "@mui/material/Checkbox";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { ChevronRight } from "lucide-react";
-import { Member, transformSupabaseMember } from "../types/member.ts";
+import { Alumni, transformSupabaseAlumni } from "../types/member.ts";
 import { supabaseHelpers } from "../lib/supabaseClient.ts";
 // @ts-ignore - image modules declared in custom.d.ts
 import imaLogo from "../assets/ima_h4i.png";
 
 interface SidebarProps {
-  members: Member[];
-  setMembers: (members: any) => void;
+  alumni: Alumni[];
+  setAlumni: (alumni: any) => void;
 }
 
-type CategoryKeys = "role" | "major" | "year" | "location";
+type CategoryKeys = "major" | "year" | "location";
 
 //defining the categories and subcategories: hardcoded values
 const categories: Record<CategoryKeys, string[]> = {
-  role: ["Developer", "Project Manager", "Designer", "External", "Other"],
   major: [
     "Computer Science",
     "Information Science",
@@ -30,14 +29,12 @@ const categories: Record<CategoryKeys, string[]> = {
   year: ["2028", "2027", "2026", "2025", "2024", "Other"],
   location: ["San Francisco", "New York City", "Chicago", "Austin", "Other"],
 };
-//let dummyURL = "fd";
 
-const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
+const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
   //state to keep track of categories
   const [openCategories, setOpenCategories] = useState<
     Record<CategoryKeys, boolean>
   >({
-    role: false,
     major: false,
     year: false,
     location: false,
@@ -48,7 +45,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
   const [checkedState, setCheckedState] = useState<
     Record<CategoryKeys, Record<string, boolean>>
   >({
-    role: {},
     major: {},
     year: {},
     location: {},
@@ -59,7 +55,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
     category: CategoryKeys,
     event: React.MouseEvent
   ) => {
-    // event.stopPropogation();
     event.nativeEvent.stopImmediatePropagation();
 
     setOpenCategories((prevOpenCategories) => ({
@@ -82,11 +77,18 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
     {});
 
     try {
-      const supabaseMembers = await supabaseHelpers.filterMembers(query);
-      const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
-      setMembers(transformedMembers);
+      // If no filters selected, get all alumni
+      if (Object.keys(query).length === 0) {
+        const supabaseAlumni = await supabaseHelpers.getAlumni();
+        const transformedAlumni = supabaseAlumni.map((row: any) => transformSupabaseAlumni(row));
+        setAlumni(transformedAlumni);
+      } else {
+        const supabaseAlumni = await supabaseHelpers.filterAlumni(query);
+        const transformedAlumni = supabaseAlumni.map((row: any) => transformSupabaseAlumni(row));
+        setAlumni(transformedAlumni);
+      }
     } catch (err) {
-      console.error('Failed to filter members:', err);
+      console.error('Failed to filter alumni:', err);
     }
   };
 
@@ -138,7 +140,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
   };
 
   return (
-    // <div className="container">
     <div className="sidebar">
       <img src={imaLogo} alt="IMA Logo" className="imaLogo" />
       <h3 className="filterTitle">Filter</h3>
@@ -207,7 +208,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setMembers }) => {
           </div>
         );
       })}
-      {/* end keywords */}
     </div>
   );
 };
