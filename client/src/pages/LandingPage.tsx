@@ -72,7 +72,7 @@ const LandingPage: React.FC = () => {
         <nav className="header-nav">
           <Link to="/" className="nav-link">Home</Link>
           <Link to="/about" className="nav-link">About IMA</Link>
-          <Link to="/test" className="nav-link">Member Directory</Link>
+          <Link to="/dashboard" className="nav-link">Member Directory</Link>
         </nav>
       </header>
 
