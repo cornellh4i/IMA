@@ -34,6 +34,11 @@ This project aims to develop a centrailized location for members of Hack4Impact 
     └── README.md
 
 ## Contributors
+## Spring 2026
+- Technical Leads
+  - Katherine Hu
+  - Zoey Jin
+  
 ### Fall 2025
 - Technical Leads
   - Rohan Sedhain
