@@ -15,7 +15,7 @@ interface SidebarProps {
   setAlumni: (alumni: any) => void;
 }
 
-type CategoryKeys = "major" | "year" | "location";
+type CategoryKeys = "major" | "year" | "location" | "role";
 
 //defining the categories and subcategories: hardcoded values
 const categories: Record<CategoryKeys, string[]> = {
@@ -28,6 +28,7 @@ const categories: Record<CategoryKeys, string[]> = {
   ],
   year: ["2028", "2027", "2026", "2025", "2024", "Other"],
   location: ["San Francisco", "New York City", "Chicago", "Austin", "Other"],
+  role: ["Developer", "Designer", "PM", "Tech Lead", "Engineering Chair", "Co-Director", "Maintenance Lead", "DEI Lead", "Community Lead", "NME Instructor", "Design Lead"]
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
@@ -38,6 +39,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
     major: false,
     year: false,
     location: false,
+    role: false,
   });
   const [openKeywords, setOpenKeywords] = useState<boolean>(true);
 
@@ -48,6 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
     major: {},
     year: {},
     location: {},
+    role: {},
   });
 
   //function to toggle the categories
