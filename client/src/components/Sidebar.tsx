@@ -15,10 +15,19 @@ interface SidebarProps {
   setAlumni: (alumni: any) => void;
 }
 
-type CategoryKeys = "major" | "year" | "location";
+type CategoryKeys = "interests" | "major" | "year" | "location";
 
 //defining the categories and subcategories: hardcoded values
 const categories: Record<CategoryKeys, string[]> = {
+  interests: [
+    "Product Design",
+    "Software Engineering",
+    "Product Management",
+    "Data Science",
+    "Research",
+    "AI",
+    "ML",
+  ],
   major: [
     "Computer Science",
     "Information Science",
@@ -35,6 +44,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
   const [openCategories, setOpenCategories] = useState<
     Record<CategoryKeys, boolean>
   >({
+    interests: false,
     major: false,
     year: false,
     location: false,
@@ -45,6 +55,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
   const [checkedState, setCheckedState] = useState<
     Record<CategoryKeys, Record<string, boolean>>
   >({
+    interests: {},
     major: {},
     year: {},
     location: {},
@@ -53,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
   //function to toggle the categories
   const toggleCategories = (
     category: CategoryKeys,
-    event: React.MouseEvent
+    event: React.MouseEvent,
   ) => {
     event.nativeEvent.stopImmediatePropagation();
 
@@ -64,7 +75,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
   };
 
   const applyFiltersFromState = async (
-    state: Record<CategoryKeys, Record<string, boolean>>
+    state: Record<CategoryKeys, Record<string, boolean>>,
   ) => {
     const query = Object.entries(state).reduce<Record<string, string[]>>(
       (acc, [category, values]) => {
@@ -74,21 +85,26 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
         if (checkedItems.length) acc[category] = checkedItems;
         return acc;
       },
-    {});
+      {},
+    );
 
     try {
       // If no filters selected, get all alumni
       if (Object.keys(query).length === 0) {
         const supabaseAlumni = await supabaseHelpers.getAlumni();
-        const transformedAlumni = supabaseAlumni.map((row: any) => transformSupabaseAlumni(row));
+        const transformedAlumni = supabaseAlumni.map((row: any) =>
+          transformSupabaseAlumni(row),
+        );
         setAlumni(transformedAlumni);
       } else {
         const supabaseAlumni = await supabaseHelpers.filterAlumni(query);
-        const transformedAlumni = supabaseAlumni.map((row: any) => transformSupabaseAlumni(row));
+        const transformedAlumni = supabaseAlumni.map((row: any) =>
+          transformSupabaseAlumni(row),
+        );
         setAlumni(transformedAlumni);
       }
     } catch (err) {
-      console.error('Failed to filter alumni:', err);
+      console.error("Failed to filter alumni:", err);
     }
   };
 
@@ -96,7 +112,7 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
   const toggleCheckBoxChange = (
     category: CategoryKeys,
     value: string,
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     event.nativeEvent.stopImmediatePropagation();
 
@@ -145,14 +161,19 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
       <h3 className="filterTitle">Filter</h3>
       {/* Keywords as first section under Filter */}
       <div className="component">
-        <div className="filterRow" onClick={() => setOpenKeywords(!openKeywords)}>
+        <div
+          className="filterRow"
+          onClick={() => setOpenKeywords(!openKeywords)}
+        >
           <h2>Keywords</h2>
           <ChevronRight className={openKeywords ? "open" : ""} />
         </div>
         {openKeywords && (
           <div className="chipsContainer">
             {keywordChips.length === 0 && (
-              <div style={{ color: '#6b7280', fontSize: 14, paddingBottom: 8 }}>No keywords selected</div>
+              <div style={{ color: "#6b7280", fontSize: 14, paddingBottom: 8 }}>
+                No keywords selected
+              </div>
             )}
             {keywordChips.map(({ category, value }) => (
               <button
@@ -177,8 +198,10 @@ const Sidebar: React.FC<SidebarProps> = ({ setAlumni }) => {
           <div key={categoryKey} className="component">
             <div className="filterRow">
               <h2>
-                {categoryKey.charAt(0).toUpperCase() +
-                  categoryKey.slice(1).replace("Year", " Year")}
+                {categoryKey === "interests"
+                  ? "Professional Interests"
+                  : categoryKey.charAt(0).toUpperCase() +
+                    categoryKey.slice(1).replace("Year", " Year")}
               </h2>
               <ChevronRight
                 className={openCategories[categoryKey] ? "open" : ""}
