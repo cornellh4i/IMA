@@ -37,7 +37,7 @@ const categories: Record<CategoryKeys, string[]> = {
   ],
   year: ["2028", "2027", "2026", "2025", "2024", "Other"],
   location: ["San Francisco", "New York City", "Chicago", "Austin", "Other"],
-  role: ["Developer", "Designer", "PM", "Tech Lead", "Engineering Chair", "Co-Director", "Maintenance Lead", "DEI Lead", "Community Lead", "NME Instructor", "Design Lead"]
+  role: ["Developer", "Designer", "PM", "Tech Lead", "Engineering Chair", "Co-Director", "Maintenance Lead", "DEI Lead", "Community Lead", "NME Instructor", "Design Lead"],
   chapter: ["Boston University", "Cal Poly, San Luis Obispo", "Carleton College", "Cornell University", "Drexel University", "Emory University", "Georgia Tech", "McGill University", "Rutgers University, New Brunswick", "University of Illinois, Urbana-Champaign", "University of Maryland, College Park", "University of Pennsylvania", "University of Tennessee, Knoxville"],
 };
 
