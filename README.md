@@ -38,6 +38,14 @@ This project aims to develop a centrailized location for members of Hack4Impact 
 - Technical Leads
   - Katherine Hu
   - Zoey Jin
+- Developers
+  - Krish Desai
+  - Andrew Zhang
+  - Will Nzeuton
+  - Olric Zeng
+- Designers
+  - Lauren Chin
+  - Ethan Lee    
   
 ### Fall 2025
 - Technical Leads
