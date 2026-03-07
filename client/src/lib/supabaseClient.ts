@@ -354,6 +354,28 @@ export const supabaseHelpers = {
   // Filter alumni by category
   async filterAlumni(filters: Record<string, string[]>) {
     let query = supabase.from('Alumni').select('*');
+
+    const selectedRoles = filters.role ?? [];
+    if (selectedRoles.length > 0) {
+      const { data: roleMatches, error: roleError } = await supabase
+        .from('Alumni Hack Involvements')
+        .select('alumni_id')
+        .in('role', selectedRoles);
+
+      if (roleError) {
+        throw new Error(`Failed to filter alumni by role: ${roleError.message}`);
+      }
+
+      const alumniIds = Array.from(
+        new Set((roleMatches ?? []).map((row) => row.alumni_id).filter(Boolean))
+      );
+
+      if (alumniIds.length === 0) {
+        return [];
+      }
+
+      query = query.in('id', alumniIds);
+    }
     
     // Map frontend filter keys to database column names
     const columnMap: Record<string, string> = {
@@ -380,6 +402,7 @@ export const supabaseHelpers = {
       }
     });
     
+
     const { data, error } = await query.order('created_at', { ascending: false });
     
     if (error) {
