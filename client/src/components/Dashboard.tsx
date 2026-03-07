@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./Sidebar.tsx";
 import SearchBar from "./SearchBar.tsx";
 import Card from "./Card.tsx";
+import ProfileDetailsModal from "./ProfileDetailsModal.tsx";
 import { Alumni, transformSupabaseAlumni } from "../types/member.ts";
 import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import "../styles/TestPage.css";
@@ -11,6 +12,8 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [totalCount, setTotalCount] = useState<number>(0);
+  const [selectedAlumni, setSelectedAlumni] = useState<Alumni | null>(null);
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchAlumni = async () => {
@@ -34,6 +37,15 @@ const Dashboard: React.FC = () => {
     fetchAlumni();
   }, []);
 
+  const openProfileModal = (alumnus: Alumni) => {
+    setSelectedAlumni(alumnus);
+    setIsProfileModalOpen(true);
+  };
+
+  const closeProfileModal = () => {
+    setIsProfileModalOpen(false);
+  };
+
   function createCard(alumnus: Alumni) {
     return (
       <Card
@@ -44,6 +56,7 @@ const Dashboard: React.FC = () => {
         linkedin={alumnus.linkedinUrl ?? undefined}
         email={alumnus.emails?.[0] || ""}
         image={alumnus.profileUrl ?? ""}
+        onClick={() => openProfileModal(alumnus)}
       />
     );
   }
@@ -84,6 +97,11 @@ const Dashboard: React.FC = () => {
           </div>
         </div>
       </div>
+      <ProfileDetailsModal
+        alumni={selectedAlumni}
+        isOpen={isProfileModalOpen}
+        onClose={closeProfileModal}
+      />
     </>
   );
 };

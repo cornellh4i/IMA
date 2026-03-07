@@ -6,6 +6,7 @@ import { ReactComponent as Comment } from "../assets/card-assets/comment.svg";
 import { ReactComponent as LinkedInSvg } from "../assets/card-assets/linkedin.svg";
 import { ReactComponent as FilledStar } from "../assets/card-assets/filled-star.svg";
 import { ReactComponent as BlankStar } from "../assets/card-assets/blank-star.svg";
+import defaultProfilePic from "../assets/defaultprofilepic_icon.png";
 
 interface CardProps {
   name: string;
@@ -15,66 +16,21 @@ interface CardProps {
   email?: string;
   linkedin?: string;
   slack?: string;
+  onClick?: () => void;
 }
 
-interface ModalProps {
-  name: string;
-  role: string;
-  image: string;
-}
-
-const Avatar: React.FC<{ image: string }> = ({ image }) => (
+const Avatar: React.FC<{ image: string; name: string }> = ({ image, name }) => (
   <div className="avatar">
-    <img className="fit-img" src={image} alt="avatar_img" />
+    <img
+      className="fit-img"
+      src={image || defaultProfilePic}
+      onError={(event) => {
+        event.currentTarget.src = defaultProfilePic;
+      }}
+      alt={`${name} avatar`}
+    />
   </div>
 );
-
-const Modal: React.FC<ModalProps> = ({ name, role, image }) => {
-  const [modal, setModal] = useState(false);
-
-  const toggleModal = () => {
-    setModal(!modal);
-    if (!modal) {
-      document.body.classList.add("active-modal");
-    } else {
-      document.body.classList.remove("active-modal");
-    }
-  };
-
-  return (
-    <>
-      <button onClick={toggleModal} className="bottombutton">
-        Learn More
-      </button>
-
-      {modal && (
-        <div className="modal">
-          <div onClick={toggleModal} className="overlay"></div>
-          <div className="modal-content">
-            <h2>
-              Learn More About {name.charAt(0).toUpperCase() + name.slice(1)}{" "}
-            </h2>
-            <div className="Main">
-              <img className="fit-img" src={image} alt="avatar_img" />
-              <h3 className="text"> {role} </h3>
-            </div>
-            <p>
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Provident
-              perferendis suscipit officia recusandae, eveniet quaerat assumenda
-              id fugit, dignissimos maxime non natus placeat illo iusto!
-              Sapiente dolorum id maiores dolores? Illum pariatur possimus
-              quaerat ipsum quos molestiae rem aspernatur dicta tenetur. Sunt
-              placeat tempora vitae enim incidunt porro fuga ea.
-            </p>
-            <button className="close-modal" onClick={toggleModal}>
-              CLOSE
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );
-};
 
 const Card: React.FC<CardProps> = ({
   name,
@@ -83,8 +39,11 @@ const Card: React.FC<CardProps> = ({
   image,
   email,
   linkedin,
-  slack,
+  onClick,
 }) => {
+  const displayName =
+    name.length > 0 ? name.charAt(0).toUpperCase() + name.slice(1) : "Unknown";
+
   // local storage star toggle logic, replace with user persistence later
   const [fav, setFav] = useState<boolean>(() => {
     try {
@@ -105,14 +64,31 @@ const Card: React.FC<CardProps> = ({
     }
   };
 
+  const openProfile = () => {
+    onClick?.();
+  };
+
+  const handleCardKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (!onClick) return;
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      openProfile();
+    }
+  };
+
   return (
     <div className="card">
-      <div className="elements">
-        <Avatar image={image} />
+      <div
+        className={`elements ${onClick ? "elements-clickable" : ""}`}
+        onClick={openProfile}
+        onKeyDown={handleCardKeyDown}
+        role={onClick ? "button" : undefined}
+        tabIndex={onClick ? 0 : undefined}
+        aria-label={onClick ? `Open profile details for ${displayName}` : undefined}
+      >
+        <Avatar image={image} name={displayName} />
         <div className="text">
-          <h1 className="name">
-            {name.charAt(0).toUpperCase() + name.slice(1)}
-          </h1>
+          <h1 className="name">{displayName}</h1>
           <button
             type="button"
             className={`fav-btn ${fav ? "fav" : ""}`}
@@ -127,27 +103,31 @@ const Card: React.FC<CardProps> = ({
             )}
           </button>
           <div className="card-assets" aria-hidden={false}>
-            <a
-              href={`mailto:${email}`}
-              className="asset-btn"
-              title="Email"
-              aria-label="Email"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <Envelope className="asset-icon" />
-            </a>
+            {email && (
+              <a
+                href={`mailto:${email}`}
+                className="asset-btn"
+                title="Email"
+                aria-label="Email"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <Envelope className="asset-icon" />
+              </a>
+            )}
 
-            <a
-              href={linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="asset-btn"
-              title="LinkedIn"
-              aria-label="LinkedIn"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <LinkedInSvg className="asset-icon" />
-            </a>
+            {linkedin && (
+              <a
+                href={linkedin}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="asset-btn"
+                title="LinkedIn"
+                aria-label="LinkedIn"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <LinkedInSvg className="asset-icon" />
+              </a>
+            )}
 
             <button
               type="button"

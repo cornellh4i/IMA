@@ -1,4 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
+import type {
+  SupabaseAlumniHackInvolvementRow,
+  SupabaseAlumniJobExperienceRow,
+} from '../types/member.ts';
 
 // Type declaration for process.env in browser context
 declare const process: {
@@ -316,6 +320,48 @@ export const supabaseHelpers = {
 
     const results = await Promise.all(allInserts);
     return results;
+  },
+
+  /**
+   * Fetch job experiences for a specific alumni profile.
+   *
+   * @param alumniId - Alumni id used by the Alumni Job Experience table
+   * @returns Ordered list of job experiences for the alumni
+   */
+  async getAlumniJobExperiences(alumniId: string): Promise<SupabaseAlumniJobExperienceRow[]> {
+    const { data, error } = await supabase
+      .from('Alumni Job Experience')
+      .select('*')
+      .eq('alumni_id', alumniId)
+      .order('start_year', { ascending: false })
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      throw new Error(`Failed to fetch alumni job experiences: ${error.message}`);
+    }
+
+    return (data || []) as SupabaseAlumniJobExperienceRow[];
+  },
+
+  /**
+   * Fetch hack involvements for a specific alumni profile.
+   *
+   * @param alumniId - Alumni id used by the Alumni Hack Involvements table
+   * @returns Ordered list of hack involvements for the alumni
+   */
+  async getAlumniHackInvolvements(alumniId: string): Promise<SupabaseAlumniHackInvolvementRow[]> {
+    const { data, error } = await supabase
+      .from('Alumni Hack Involvements')
+      .select('*')
+      .eq('alumni_id', alumniId)
+      .order('start_year', { ascending: false })
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      throw new Error(`Failed to fetch alumni hack involvements: ${error.message}`);
+    }
+
+    return (data || []) as SupabaseAlumniHackInvolvementRow[];
   },
 
   // Get all alumni

@@ -85,6 +85,66 @@ export interface Alumni {
   updatedAt?: string;
 }
 
+// Alumni Job Experience table type
+export interface AlumniJobExperience {
+  id: string;
+  alumniId: string;
+  title: string;
+  employmentType?: string | null;
+  company: string;
+  location?: string | null;
+  startMonth?: string | null;
+  startYear?: number | null;
+  endMonth?: string | null;
+  endYear?: number | null;
+  description?: string | null;
+  createdAt?: string;
+}
+
+// Raw Supabase Alumni Job Experience row type (snake_case)
+export interface SupabaseAlumniJobExperienceRow {
+  id: string;
+  alumni_id: string;
+  title: string;
+  employment_type: string | null;
+  company: string;
+  location: string | null;
+  start_month: string | null;
+  start_year: number | null;
+  end_month: string | null;
+  end_year: number | null;
+  description: string | null;
+  created_at: string;
+}
+
+// Alumni Hack Involvements table type
+export interface AlumniHackInvolvement {
+  id: string;
+  alumniId: string;
+  role: string;
+  startYear?: number | null;
+  startTerm?: string | null;
+  endYear?: number | null;
+  endTerm?: string | null;
+  description?: string | null;
+  projects?: string[] | null;
+  createdAt?: string;
+}
+
+// Raw Supabase Alumni Hack Involvements row type (snake_case)
+export interface SupabaseAlumniHackInvolvementRow {
+  id: string;
+  alumni_id: string;
+  role: string;
+  start_year: number | null;
+  start_term: string | null;
+  end_year: number | null;
+  end_term: string | null;
+  description: string | null;
+  projects: string[] | null;
+  created_at: string;
+}
+
 // Raw Supabase Alumni row type (snake_case)
 export interface SupabaseAlumniRow {
   id: string;
@@ -122,5 +182,43 @@ export function transformSupabaseAlumni(row: SupabaseAlumniRow): Alumni {
     profileUrl: row.profile_url,
     createdAt: row.created_at,
     updatedAt: row.updated_at || undefined,
+  };
+}
+
+// Helper function to transform Supabase Alumni Job Experience rows
+export function transformSupabaseAlumniJobExperience(
+  row: SupabaseAlumniJobExperienceRow
+): AlumniJobExperience {
+  return {
+    id: row.id,
+    alumniId: row.alumni_id,
+    title: row.title,
+    employmentType: row.employment_type,
+    company: row.company,
+    location: row.location,
+    startMonth: row.start_month,
+    startYear: row.start_year,
+    endMonth: row.end_month,
+    endYear: row.end_year,
+    description: row.description,
+    createdAt: row.created_at,
+  };
+}
+
+// Helper function to transform Supabase Alumni Hack Involvements rows
+export function transformSupabaseAlumniHackInvolvement(
+  row: SupabaseAlumniHackInvolvementRow
+): AlumniHackInvolvement {
+  return {
+    id: row.id,
+    alumniId: row.alumni_id,
+    role: row.role,
+    startYear: row.start_year,
+    startTerm: row.start_term,
+    endYear: row.end_year,
+    endTerm: row.end_term,
+    description: row.description,
+    projects: row.projects,
+    createdAt: row.created_at,
   };
 }
