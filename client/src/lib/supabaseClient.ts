@@ -3,7 +3,6 @@ import type {
   SupabaseAlumniHackInvolvementRow,
   SupabaseAlumniJobExperienceRow,
 } from '../types/member.ts';
-import { createClient } from "@supabase/supabase-js";
 
 // Type declaration for process.env in browser context
 declare const process: {
