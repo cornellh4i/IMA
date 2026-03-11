@@ -6,6 +6,7 @@ import { ReactComponent as Comment } from "../assets/card-assets/comment.svg";
 import { ReactComponent as LinkedInSvg } from "../assets/card-assets/linkedin.svg";
 import { ReactComponent as FilledStar } from "../assets/card-assets/filled-star.svg";
 import { ReactComponent as BlankStar } from "../assets/card-assets/blank-star.svg";
+import { supabaseHelpers } from "../lib/supabaseClient";
 import defaultProfilePic from "../assets/defaultprofilepic_icon.png";
 
 interface CardProps {
@@ -13,6 +14,9 @@ interface CardProps {
   year: string;
   role: string;
   image: string;
+  alumni_id: string;
+  user_id: string;
+  isSaved?: boolean;
   email?: string;
   linkedin?: string;
   slack?: string;
@@ -39,28 +43,27 @@ const Card: React.FC<CardProps> = ({
   image,
   email,
   linkedin,
+  user_id,
+  isSaved,
+  alumni_id,
   onClick,
 }) => {
   const displayName =
     name.length > 0 ? name.charAt(0).toUpperCase() + name.slice(1) : "Unknown";
 
   // local storage star toggle logic, replace with user persistence later
-  const [fav, setFav] = useState<boolean>(() => {
-    try {
-      return localStorage.getItem(`fav:${name}`) === "1";
-    } catch (err) {
-      return false;
-    }
-  });
 
   const toggleFav = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const next = !fav;
-    setFav(next);
-    try {
-      localStorage.setItem(`fav:${name}`, next ? "1" : "0");
-    } catch (err) {
-      console.error("Failed to set favorite in localStorage", err);
+    const next = !isSaved;
+    try{
+      if(next){
+        supabaseHelpers.saveProfile({"member_id": user_id, "saved_id": alumni_id})
+      } else{
+        supabaseHelpers.unsaveProfile(user_id, alumni_id);
+      }
+    } catch (e) {
+      console.log(e);
     }
   };
 

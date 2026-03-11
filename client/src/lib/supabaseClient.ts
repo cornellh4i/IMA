@@ -27,6 +27,19 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Typed helper functions for common operations
 export const supabaseHelpers = {
+
+  //Get id of currently logged in user
+  async getLoggedInUser (){
+    const { data: { session }, error } = await supabase.auth.getSession();
+    if(error){
+      throw new Error(error.message);
+    }
+    if(!session){
+      throw new Error("Session was null");
+    }
+    return session.user.id;
+  },
+
   // Get all members
   async getMembers() {
     const { data, error } = await supabase
@@ -116,6 +129,29 @@ export const supabaseHelpers = {
     }
   },
 
+  // Save profile
+  async saveProfile(alumniData: any) {
+    const { data, error } = await supabase
+      .from("saved_profiles")
+      .insert([alumniData])
+      .select();
+
+    if (error) {
+      throw new Error(`Failed to save profile: ${error.message}`);
+    }
+
+    return data?.[0];
+  },
+
+  // Unsave profile
+  async unsaveProfile(member_id: string, saved_id: string) {
+    const { error } = await supabase.from("saved_profiles").delete().eq("member_id", member_id).eq("saved_id", saved_id);
+
+    if (error) {
+      throw new Error(`Failed to unsave profile: ${error.message}`);
+    }
+  },
+
   // Get saved members
   /**
    * Get the members that the member has saved
@@ -138,8 +174,8 @@ export const supabaseHelpers = {
     const ids = (data ?? []).map((r) => r.saved_id);
     if (ids.length === 0) return [];
 
-    const { data: members, error: memErr } = await supabase
-      .from("Members")
+    const { data: alumni, error: memErr } = await supabase
+      .from("Alumni")
       .select("*")
       .in("id", ids)
       .order("created_at", { ascending: false });
@@ -148,7 +184,7 @@ export const supabaseHelpers = {
       throw new Error(`Failed to fetch member profiles: ${memErr.message}`);
     }
 
-    return members ?? [];
+    return alumni ?? [];
   },
 
   /**

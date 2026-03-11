@@ -14,6 +14,7 @@ const Dashboard: React.FC = () => {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [selectedAlumni, setSelectedAlumni] = useState<Alumni | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
+  const [savedAlumni, setSavedAlumni] = useState<Alumni[]>([]);
 
   useEffect(() => {
     const fetchAlumni = async () => {
@@ -24,7 +25,10 @@ const Dashboard: React.FC = () => {
         const transformedAlumni = supabaseAlumni.map((row: any) =>
           transformSupabaseAlumni(row)
         );
+        const id = await supabaseHelpers.getLoggedInUser();
+        const savedAlum = await supabaseHelpers.getSavedMembers(id);
         setAlumni(transformedAlumni);
+        setSavedAlumni(savedAlum);
         setTotalCount(transformedAlumni.length);
       } catch (err) {
         console.error("Failed to fetch alumni:", err);
@@ -57,6 +61,7 @@ const Dashboard: React.FC = () => {
         email={alumnus.emails?.[0] || ""}
         image={alumnus.profileUrl ?? ""}
         onClick={() => openProfileModal(alumnus)}
+        isSaved = {savedAlumni.}
       />
     );
   }

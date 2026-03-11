@@ -4,35 +4,29 @@ import AddMemberPage from "../components/AddMemberPage.tsx";
 import SearchBar from "../components/SearchBar.tsx";
 import SavedHeader from "../components/SavedHeader.tsx";
 import Card from "../components/Card.tsx";
-import { Member, transformSupabaseMember } from "../types/member.ts";
+import { Alumni, transformSupabaseAlumni } from "../types/member.ts";
 import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import "../App.css";
 import Breadcrumbs from "../components/Breadcrumbs.tsx";
 import "../styles/SavedPage.css";
 import SavedSearchBar from "../components/SavedSearchBar.tsx";
 
-function createCard(member: Member) {
+function createCard(alum: Alumni) {
   return (
     <Card
-      name={member.name}
-      year={member.year || member.dateJoined}
-      role={member.role}
-      linkedin={member.linkedin ?? undefined}
-      slack={member.slack ?? undefined}
-      email={member.email}
-      image={(member.imgURL || member.profilePicture) ?? ''}
+      name={alum.name}
     />
   );
 }
 
 const SavedPage: React.FC = () => {
-  const [members, setMembers] = useState<Member[]>([]);
+  const [members, setMembers] = useState<Alumni[]>([]);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // FIXME: Get the id of the current user
-  const id = '6c6d6c2f-74e1-47bf-bde8-b1a6ea91be02'; // Id of "John Doe"
+  // // FIXME: Get the id of the current user
+  // const id = '6c6d6c2f-74e1-47bf-bde8-b1a6ea91be02'; // Id of "John Doe"
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
@@ -43,8 +37,9 @@ const SavedPage: React.FC = () => {
         setLoading(true);
         setError(null);
         
+        const id = await supabaseHelpers.getLoggedInUser();
         const supabaseMembers = await supabaseHelpers.getSavedMembers(id);
-        const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseMember(row));
+        const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseAlumni(row));
         setMembers(transformedMembers);
       } catch (err) {
         console.error('Failed to fetch members:', err);
