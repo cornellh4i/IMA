@@ -6,7 +6,7 @@ import { ReactComponent as Comment } from "../assets/card-assets/comment.svg";
 import { ReactComponent as LinkedInSvg } from "../assets/card-assets/linkedin.svg";
 import { ReactComponent as FilledStar } from "../assets/card-assets/filled-star.svg";
 import { ReactComponent as BlankStar } from "../assets/card-assets/blank-star.svg";
-import { supabaseHelpers } from "../lib/supabaseClient";
+import { supabaseHelpers } from "../lib/supabaseClient.ts";
 import defaultProfilePic from "../assets/defaultprofilepic_icon.png";
 
 interface CardProps {
@@ -56,10 +56,13 @@ const Card: React.FC<CardProps> = ({
   const toggleFav = (e: React.MouseEvent) => {
     e.stopPropagation();
     const next = !isSaved;
-    try{
-      if(next){
-        supabaseHelpers.saveProfile({"member_id": user_id, "saved_id": alumni_id})
-      } else{
+    try {
+      if (next) {
+        supabaseHelpers.saveProfile({
+          member_id: user_id,
+          saved_id: alumni_id,
+        });
+      } else {
         supabaseHelpers.unsaveProfile(user_id, alumni_id);
       }
     } catch (e) {
@@ -87,19 +90,21 @@ const Card: React.FC<CardProps> = ({
         onKeyDown={handleCardKeyDown}
         role={onClick ? "button" : undefined}
         tabIndex={onClick ? 0 : undefined}
-        aria-label={onClick ? `Open profile details for ${displayName}` : undefined}
+        aria-label={
+          onClick ? `Open profile details for ${displayName}` : undefined
+        }
       >
         <Avatar image={image} name={displayName} />
         <div className="text">
           <h1 className="name">{displayName}</h1>
           <button
             type="button"
-            className={`fav-btn ${fav ? "fav" : ""}`}
-            aria-pressed={fav}
+            className={`fav-btn ${isSaved ? "fav" : ""}`}
+            aria-pressed={isSaved}
             onClick={toggleFav}
-            title={fav ? "Unfavorite" : "Favorite"}
+            title={isSaved ? "Unfavorite" : "Favorite"}
           >
-            {fav ? (
+            {isSaved ? (
               <FilledStar className="fav-icon" />
             ) : (
               <BlankStar className="fav-icon" />

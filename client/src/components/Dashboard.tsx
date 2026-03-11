@@ -15,6 +15,7 @@ const Dashboard: React.FC = () => {
   const [selectedAlumni, setSelectedAlumni] = useState<Alumni | null>(null);
   const [isProfileModalOpen, setIsProfileModalOpen] = useState<boolean>(false);
   const [savedAlumni, setSavedAlumni] = useState<Alumni[]>([]);
+  const [userId, setUserID] = useState<string>("");
 
   useEffect(() => {
     const fetchAlumni = async () => {
@@ -23,10 +24,11 @@ const Dashboard: React.FC = () => {
         setError(null);
         const supabaseAlumni = await supabaseHelpers.getAlumni();
         const transformedAlumni = supabaseAlumni.map((row: any) =>
-          transformSupabaseAlumni(row)
+          transformSupabaseAlumni(row),
         );
         const id = await supabaseHelpers.getLoggedInUser();
         const savedAlum = await supabaseHelpers.getSavedMembers(id);
+        setUserID(id);
         setAlumni(transformedAlumni);
         setSavedAlumni(savedAlum);
         setTotalCount(transformedAlumni.length);
@@ -61,7 +63,9 @@ const Dashboard: React.FC = () => {
         email={alumnus.emails?.[0] || ""}
         image={alumnus.profileUrl ?? ""}
         onClick={() => openProfileModal(alumnus)}
-        isSaved = {savedAlumni.}
+        isSaved={savedAlumni.some((a) => a.id === alumnus.id)}
+        user_id={userId}
+        alumni_id={alumnus.id}
       />
     );
   }
@@ -87,7 +91,9 @@ const Dashboard: React.FC = () => {
               Members
             </h1>
             <SearchBar alumni={alumni} setAlumni={setAlumni} />
-            <div style={{ marginTop: "8px", marginLeft: "10px", color: "#6b7280" }}>
+            <div
+              style={{ marginTop: "8px", marginLeft: "10px", color: "#6b7280" }}
+            >
               {`Showing ${alumni.length} of ${totalCount} members`}
             </div>
             {loading && (
@@ -98,7 +104,9 @@ const Dashboard: React.FC = () => {
             {error && (
               <div style={{ color: "red", padding: "1rem" }}>{error}</div>
             )}
-            {!loading && !error && <div className="cards">{alumni.map(createCard)}</div>}
+            {!loading && !error && (
+              <div className="cards">{alumni.map(createCard)}</div>
+            )}
           </div>
         </div>
       </div>

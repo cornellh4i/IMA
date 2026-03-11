@@ -11,51 +11,63 @@ import Breadcrumbs from "../components/Breadcrumbs.tsx";
 import "../styles/SavedPage.css";
 import SavedSearchBar from "../components/SavedSearchBar.tsx";
 
-function createCard(alum: Alumni) {
-  return (
-    <Card
-      name={alum.name}
-    />
-  );
-}
-
 const SavedPage: React.FC = () => {
-  const [members, setMembers] = useState<Alumni[]>([]);
+  const [alumni, setAlumni] = useState<Alumni[]>([]);
   const [isModalOpen, setModalOpen] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  // // FIXME: Get the id of the current user
-  // const id = '6c6d6c2f-74e1-47bf-bde8-b1a6ea91be02'; // Id of "John Doe"
+  const [userId, setUserID] = useState<string>("");
 
   const handleOpenModal = () => setModalOpen(true);
   const handleCloseModal = () => setModalOpen(false);
 
+  function createCard(alumnus: Alumni) {
+    return (
+      <Card
+        key={alumnus.id}
+        name={alumnus.name}
+        year={alumnus.graduationYear?.toString() || ""}
+        role={alumnus.major || ""}
+        linkedin={alumnus.linkedinUrl ?? undefined}
+        email={alumnus.emails?.[0] || ""}
+        image={alumnus.profileUrl ?? ""}
+        isSaved={true}
+        user_id={userId}
+        alumni_id={alumnus.id}
+      />
+    );
+  }
+
   useEffect(() => {
-    const fetchSavedMembers = async () => {
+    const fetchedSavedAlumni = async () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         const id = await supabaseHelpers.getLoggedInUser();
         const supabaseMembers = await supabaseHelpers.getSavedMembers(id);
-        const transformedMembers = supabaseMembers.map((row: any) => transformSupabaseAlumni(row));
-        setMembers(transformedMembers);
+        const transformedMembers = supabaseMembers.map((row: any) =>
+          transformSupabaseAlumni(row),
+        );
+        setAlumni(transformedMembers);
+        setUserID(id);
       } catch (err) {
-        console.error('Failed to fetch members:', err);
-        setError(err instanceof Error ? err.message : 'Failed to fetch members');
+        console.error("Failed to fetch members:", err);
+        setError(
+          err instanceof Error ? err.message : "Failed to fetch members",
+        );
       } finally {
         setLoading(false);
       }
     };
 
-    fetchSavedMembers();
+    fetchedSavedAlumni();
   }, []);
 
   if (loading) {
     return (
       <div className="container">
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div style={{ textAlign: "center", padding: "2rem" }}>
           <h2>Loading members...</h2>
         </div>
       </div>
@@ -65,9 +77,9 @@ const SavedPage: React.FC = () => {
   if (error) {
     return (
       <div className="container">
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
+        <div style={{ textAlign: "center", padding: "2rem" }}>
           <h2>Error loading members</h2>
-          <p style={{ color: 'red' }}>{error}</p>
+          <p style={{ color: "red" }}>{error}</p>
           <button onClick={() => window.location.reload()}>Retry</button>
         </div>
       </div>
@@ -79,15 +91,19 @@ const SavedPage: React.FC = () => {
       <div className="container">
         <SavedHeader onAddMemberClick={handleOpenModal} />
         <div className="top">
-          <Sidebar members={members} setMembers={setMembers} />
+          <Sidebar members={alumni} setMembers={setAlumni} />
           <div className="middle">
-            <SavedSearchBar members={members} setMembers={setMembers} id={id} />
+            <SavedSearchBar
+              members={alumni}
+              setMembers={setAlumni}
+              id={userId}
+            />
             {/* Render cards if members exist */}
             <Breadcrumbs />
-            <div className='display-text'>
-                Showing {members.length} of {members.length} members
+            <div className="display-text">
+              Showing {alumni.length} of {alumni.length} members
             </div>
-            <div className="cards">{members.map(createCard)}</div>
+            <div className="cards">{alumni.map(createCard)}</div>
           </div>
         </div>
         <AddMemberPage isOpen={isModalOpen} onClose={handleCloseModal} />

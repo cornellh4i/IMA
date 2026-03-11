@@ -1,8 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
-import type {
-  SupabaseAlumniHackInvolvementRow,
-  SupabaseAlumniJobExperienceRow,
-} from '../types/member.ts';
+import { createClient } from "@supabase/supabase-js";
 
 // Type declaration for process.env in browser context
 declare const process: {
@@ -27,19 +23,20 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 // Typed helper functions for common operations
 export const supabaseHelpers = {
-
   //Get id of currently logged in user
-  async getLoggedInUser (){
-    const { data: { session }, error } = await supabase.auth.getSession();
-    if(error){
+  async getLoggedInUser() {
+    const {
+      data: { session },
+      error,
+    } = await supabase.auth.getSession();
+    if (error) {
       throw new Error(error.message);
     }
-    if(!session){
+    if (!session) {
       throw new Error("Session was null");
     }
     return session.user.id;
   },
-
   // Get all members
   async getMembers() {
     const { data, error } = await supabase
@@ -145,7 +142,11 @@ export const supabaseHelpers = {
 
   // Unsave profile
   async unsaveProfile(member_id: string, saved_id: string) {
-    const { error } = await supabase.from("saved_profiles").delete().eq("member_id", member_id).eq("saved_id", saved_id);
+    const { error } = await supabase
+      .from("saved_profiles")
+      .delete()
+      .eq("member_id", member_id)
+      .eq("saved_id", saved_id);
 
     if (error) {
       throw new Error(`Failed to unsave profile: ${error.message}`);
@@ -174,8 +175,8 @@ export const supabaseHelpers = {
     const ids = (data ?? []).map((r) => r.saved_id);
     if (ids.length === 0) return [];
 
-    const { data: alumni, error: memErr } = await supabase
-      .from("Alumni")
+    const { data: members, error: memErr } = await supabase
+      .from("Members")
       .select("*")
       .in("id", ids)
       .order("created_at", { ascending: false });
@@ -184,7 +185,7 @@ export const supabaseHelpers = {
       throw new Error(`Failed to fetch member profiles: ${memErr.message}`);
     }
 
-    return alumni ?? [];
+    return members ?? [];
   },
 
   /**
@@ -374,48 +375,6 @@ export const supabaseHelpers = {
     return results;
   },
 
-  /**
-   * Fetch job experiences for a specific alumni profile.
-   *
-   * @param alumniId - Alumni id used by the Alumni Job Experience table
-   * @returns Ordered list of job experiences for the alumni
-   */
-  async getAlumniJobExperiences(alumniId: string): Promise<SupabaseAlumniJobExperienceRow[]> {
-    const { data, error } = await supabase
-      .from('Alumni Job Experience')
-      .select('*')
-      .eq('alumni_id', alumniId)
-      .order('start_year', { ascending: false })
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      throw new Error(`Failed to fetch alumni job experiences: ${error.message}`);
-    }
-
-    return (data || []) as SupabaseAlumniJobExperienceRow[];
-  },
-
-  /**
-   * Fetch hack involvements for a specific alumni profile.
-   *
-   * @param alumniId - Alumni id used by the Alumni Hack Involvements table
-   * @returns Ordered list of hack involvements for the alumni
-   */
-  async getAlumniHackInvolvements(alumniId: string): Promise<SupabaseAlumniHackInvolvementRow[]> {
-    const { data, error } = await supabase
-      .from('Alumni Hack Involvements')
-      .select('*')
-      .eq('alumni_id', alumniId)
-      .order('start_year', { ascending: false })
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      throw new Error(`Failed to fetch alumni hack involvements: ${error.message}`);
-    }
-
-    return (data || []) as SupabaseAlumniHackInvolvementRow[];
-  },
-
   // Get all alumni
   async getAlumni() {
     console.log("Fetching alumni from Supabase...");
@@ -451,30 +410,8 @@ export const supabaseHelpers = {
 
   // Filter alumni by category
   async filterAlumni(filters: Record<string, string[]>) {
-    let query = supabase.from('Alumni').select('*');
+    let query = supabase.from("Alumni").select("*");
 
-    const selectedRoles = filters.role ?? [];
-    if (selectedRoles.length > 0) {
-      const { data: roleMatches, error: roleError } = await supabase
-        .from('Alumni Hack Involvements')
-        .select('alumni_id')
-        .in('role', selectedRoles);
-
-      if (roleError) {
-        throw new Error(`Failed to filter alumni by role: ${roleError.message}`);
-      }
-
-      const alumniIds = Array.from(
-        new Set((roleMatches ?? []).map((row) => row.alumni_id).filter(Boolean))
-      );
-
-      if (alumniIds.length === 0) {
-        return [];
-      }
-
-      query = query.in('id', alumniIds);
-    }
-    
     // Map frontend filter keys to database column names
     const columnMap: Record<string, string> = {
       major: "major",
@@ -497,7 +434,6 @@ export const supabaseHelpers = {
               query = query.in(dbColumn, yearNumbers);
             }
           } else if (dbColumn === "interests") {
-            console.log(dbColumn);
             query = query.overlaps(dbColumn, values);
           } else {
             query = query.in(dbColumn, values);
@@ -505,10 +441,11 @@ export const supabaseHelpers = {
         }
       }
     });
-    
 
-    const { data, error } = await query.order('created_at', { ascending: false });
-    
+    const { data, error } = await query.order("created_at", {
+      ascending: false,
+    });
+
     if (error) {
       throw new Error(`Failed to filter alumni: ${error.message}`);
     }
