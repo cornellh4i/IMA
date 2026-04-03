@@ -3,162 +3,282 @@
 } */
 
 .sidebar {
-  width: 260px;
-  min-height: 90vh;
-  flex-shrink: 0;
-  border: none;
-  border-radius: 0;
-  background: var(--M3-sys-light-on-primary, #fff);
-  display: flex;
-  flex-direction: column;
-  margin-top: 0;
-  padding: 16px 12px;
-  font-family: "Hanken Grotesk", sans-serif;
-  color: #344668;
+    width: 260px;
+    min-height: 90vh;
+    flex-shrink: 0;
+    border: none;
+    border-radius: 0;
+    background: var(--M3-sys-light-on-primary, #fff);
+    display: flex;
+    flex-direction: column;
+    margin-top: 0;
+    padding: 16px 12px;
+    font-family: "Hanken Grotesk", sans-serif;
+    color: #344668;
+    position: relative;
 }
 
 @media (max-width: 768px) {
-  .sidebar {
-    width: 100%;
-    min-height: auto;
-    padding: 12px 16px;
-    flex-direction: column;
-  }
-  
-  .imaLogo {
-    display: none;
-  }
-  
-  .filterTitle {
-    margin: 0 0 8px 0;
-  }
+    .sidebar {
+        width: 100%;
+        min-height: auto;
+        padding: 12px 16px;
+        flex-direction: column;
+    }
+
+    .imaLogo {
+        display: none;
+    }
+
+    .filterTitle {
+        margin: 0 0 8px 0;
+    }
 }
 
 .imaLogo {
-  width: 141px;
-  height: 66px;
-  object-fit: contain;
-  padding: 8px;
-  margin: 0 0 12px 8px;
-  display: block;
+    width: 141px;
+    height: 66px;
+    object-fit: contain;
+    padding: 8px;
+    margin: 0 0 12px 8px;
+    display: block;
 }
 
 /* format for the categories */
 .component {
-  display: flex;
-  justify-content: space-between;
-  padding: 12px 20px;
-  box-sizing: border-box;
-  cursor: pointer;
-  flex-direction: column;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 20px;
+    box-sizing: border-box;
+    cursor: pointer;
+    flex-direction: column;
 }
 
 .filterTitle {
-  margin: 4px 8px 8px 20px;
-  font-family: "Hanken Grotesk", sans-serif;
-  font-weight: 600;
-  font-size: 20px;
-  color: #344668;
+    margin: 4px 8px 8px 20px;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    color: #344668;
 }
 
 
 .chipsContainer {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  padding: 0 4px 8px 4px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 4px 8px 4px;
 }
 
 .chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: #f1f5f9;
-  color: #344668;
-  border: none;
-  border-radius: 9999px;
-  padding: 6px 10px;
-  cursor: pointer;
-  font-family: "Hanken Grotesk", sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f5f9;
+    color: #344668;
+    border: none;
+    border-radius: 9999px;
+    padding: 6px 10px;
+    cursor: pointer;
+    font-family: "Hanken Grotesk", sans-serif;
 }
 
 .chipLabel {
-  font-size: 14px;
-  font-family: "Hanken Grotesk", sans-serif;
-  color: #344668;
+    font-size: 14px;
+    font-family: "Hanken Grotesk", sans-serif;
+    color: #344668;
 }
 
 .chipClose {
-  font-size: 16px;
-  line-height: 1;
+    font-size: 16px;
+    line-height: 1;
 }
 
 .filterRow {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  width: 90%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
 }
 
 .component h2 {
-  margin: 0;
-  font-size: 20px;
-  font-family: "Hanken Grotesk", sans-serif;
-  font-size: 18px;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 48px;
-  color: #344668; /* subsection headings */
+    margin: 0;
+    font-size: 20px;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: normal;
+    line-height: 48px;
+    color: #344668;
+    /* subsection headings */
 }
 
 .testPage .filterTitle {
-  line-height: 28px; /* height for Filter title */
+    line-height: 28px;
+    /* height for Filter title */
 }
 
 .testPage .component h2,
 .testPage .MuiFormControlLabel-label {
-  line-height: 25px; /* height for subsections and items */
+    line-height: 25px;
+    /* height for subsections and items */
 }
 
 /* Dropdown text styling on TestPage */
 .testPage .MuiFormControlLabel-label {
-  color: #344668;
-  font-family: "Hanken Grotesk";
+    color: #344668;
+    font-family: "Hanken Grotesk";
 }
 
 /* TestPage-specific background for sidebar */
 .testPage .sidebar {
-  background: #FFFFFF;
-  border: none;
-  border-radius: 0;
-  margin-top: 0;
+    background: #FFFFFF;
+    border: none;
+    border-radius: 0;
+    margin-top: 0;
 }
 
 .component svg {
-  /* Style for the chevron icon */
-  transition: transform 0.3s ease;
-  width: 24px;
-  height: 24px;
+    /* Style for the chevron icon */
+    transition: transform 0.3s ease;
+    width: 24px;
+    height: 24px;
 }
 
 .component svg.open {
-  transform: rotate(90deg);
+    transform: rotate(90deg);
 }
 
 .dropdown {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: wrap;
-  justify-items: left;
-  margin-left: 0;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-items: left;
+    margin-left: 0;
 }
 
 /* Checkbox styling */
 .sidebar .MuiCheckbox-root.Mui-checked {
-  color: #344668 !important;
+    color: #344668 !important;
 }
 
 .sidebar .MuiCheckbox-root {
-  color: #9ca3af; /* Unchecked color */
+    color: #9ca3af;
+    /* Unchecked color */
+}
+
+.profile-bar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-top: auto;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.profile-bar:hover {
+    background: #f1f5f9;
+}
+
+.profile-bar-name {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+    color: #344668;
+}
+
+.sidebar .avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: #d1d5db;
+    color: #344668;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-weight: 600;
+    flex-shrink: 0;
+    border: none;
+    min-width: 0;
+    max-width: none;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.sidebar .avatar-small {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    max-width: 40px;
+    font-size: 10px;
+}
+
+.sidebar .avatar-large {
+    width: 64px;
+    height: 64px;
+    min-width: 64px;
+    max-width: 64px;
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.popover {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 0;
+    width: 230px;
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px 12px 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+}
+
+.popover-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-bottom: 4px;
+}
+
+.popover-name {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #344668;
+}
+
+.popover-email {
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+.popover-divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 10px 0;
+}
+
+.popover-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 9px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: "Hanken Grotesk", sans-serif;
+    font-size: 15px;
+    color: #344668;
+    text-align: left;
+}
+
+.popover-button:hover {
+    background: #f1f5f9;
 }
